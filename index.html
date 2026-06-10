@@ -546,13 +546,7 @@ window.initData = async function(){
       ];
 
       let baseAssetIds = window.inventory.map(i => i.id);
-      window.testDailyLogs["2026-03-12"] = {}; baseAssetIds.slice(0, 15).forEach(id => window.testDailyLogs["2026-03-12"][id] = "Working");
-      window.testDailyLogs["2026-03-30"] = {}; baseAssetIds.slice(0, 48).forEach(id => window.testDailyLogs["2026-03-30"][id] = "Working");
-      window.testDailyLogs["2026-04-02"] = {}; baseAssetIds.slice(0, 62).forEach(id => window.testDailyLogs["2026-04-02"][id] = "Working");
-      window.testDailyLogs["2026-04-15"] = {}; baseAssetIds.slice(0, 22).forEach(id => window.testDailyLogs["2026-04-15"][id] = "Working");
-      window.testDailyLogs["2026-05-09"] = {}; baseAssetIds.slice(0, 55).forEach(id => window.testDailyLogs["2026-05-09"][id] = "Working");
-      window.testDailyLogs["2026-06-04"] = {}; baseAssetIds.forEach(id => window.testDailyLogs["2026-06-04"][id] = "Working");
-      
+      window.testDailyLogs = {};
       await window.saveToDatabase();
     }
     
