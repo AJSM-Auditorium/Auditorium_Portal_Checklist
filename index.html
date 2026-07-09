@@ -70,7 +70,6 @@
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
     @media (max-width: 1024px) { .two-col { grid-template-columns: 1fr; } }
 
-    /* Category Navigation Tabs */
     .testing-tabs-container { display: flex; gap: 4px; margin-bottom: 16px; background: #f1f5f9; padding: 4px; border-radius: var(--border-radius-md); width: fit-content; flex-wrap: wrap; }
     .tab-btn { padding: 6px 12px; font-size: 12px; font-weight: 600; color: var(--color-text-secondary); border: none; background: transparent; cursor: pointer; border-radius: var(--border-radius-md); transition: all 0.15s ease; }
     .tab-btn:hover { color: var(--color-text-primary); background: rgba(255,255,255,0.5); }
@@ -494,7 +493,7 @@ window.CATS = [
   {name:"Displays",color:"#14b8a6",items:["LED Screen","CONFIDENCE MONITOR TV","REFERENCE MONITOR TV","MULTIVIEW PV TV 1","MULTIVIEW PV TV 2"]},
   {name:"Lighting",color:"#eab308",items:["CANARA LIGHTS","STAR LIGHTS","STEP LIGHTS","IN HOUSE LIGHTS","LIGHT CONTROL ROOM"]},
   {name:"IT & Communication",color:"#64748b",items:["LAPTOP","WALKIE TALKIE","WEB CONFERENCE","COMPUTER UPDATES"]},
-  {name:"Stage Accessories",color:"#a16207",items:["Slider #1","Curtain #Curtain #1"]},
+  {name:"Stage Accessories",color:"#a16207",items:["Slider #1","Curtain #1"]},
   {name:"Siyanat",color:"#6d28d9",items:["Auditorium Chairs & Seating Line #1"]}
 ];
 
@@ -544,7 +543,6 @@ window.initData = async function(){
       window.faults = cloudData.faults || [];
     }
     
-    // Fixed syntax missing semi-colon token here[cite: 1]
     if(window.fullAuditInventory.length === 0) {
       window.fullAuditInventory = [
         {id:"fa_1", desc:"Q-SYS", make:"QSC", model:"QIO-ML2X2", serial:"25C92246700904", qty:1},[cite: 1]
@@ -714,12 +712,12 @@ window.nav = function(page, el) {
   const tb=document.getElementById('topbar-actions'); tb.innerHTML='';
   if(page==='inventory'){tb.innerHTML='<button class="btn btn-primary" onclick="window.openModal(\'modal-inv\')"><i class="ti ti-plus"></i> Introduce Asset Component</button>';}
   if(page==='programs'){tb.innerHTML='<button class="btn btn-primary" onclick="window.openModal(\'modal-prog\')"><i class="ti ti-plus"></i> Log New Scheduled Runtime</button>';}
-  if(page==='faults'){tb.innerHTML='<button class="btn btn-rose" onclick="window.openModal(\'modal-fault\')"><i class="ti ti-alert-triangle"></i> Launch Failure Incident Ticket</button>';}
+  if(page==='faults'){tb.innerHTML='<button class="btn btn-rose" onclick="window.openModal(\ 'modal-fault\')"><i class="ti ti-alert-triangle"></i> Launch Failure Incident Ticket</button>';}
   
   if(page==='dashboard') window.renderDashboard();
   if(page==='inventory'){ window.populateCatFilter(); window.renderInventory(); }
   if(page==='fullinventory') window.renderFullAuditInventoryTable();
-  if(page==='programs') window.renderPrograms();
+  if(page==='programs') window.renderProgramTable();
   if(page==='testing') window.renderTesting();
   if(page==='history') window.renderHistoryPage();
   if(page==='faults') window.renderFaults();
@@ -1080,11 +1078,14 @@ window.renderTesting = function(){
   document.getElementById('test-progress-label').innerHTML = `Log Check Status: <strong style="color:var(--color-primary);">${checkedCounter}/${window.inventory.length} Verified</strong>`;
 };
 
-window.setDeviceTestState = async function(itemId, state){
-  const dateSelected = document.getElementById('testing-date-picker').value;
-  if(state === "") { delete window.testDailyLogs[dateSelected][itemId]; } 
-  else { window.testDailyLogs[dateSelected][itemId] = state; }
-  await window.saveToDatabase();
+window.setTestingTab = function(tabValue) {
+  window.currentTestingActiveTab = tabValue;
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  if(tabValue === 'All') document.getElementById('btn-tab-all').classList.add('active');
+  if(tabValue === 'Audio') document.getElementById('btn-tab-audio').classList.add('active');
+  if(tabValue === 'Video') document.getElementById('btn-tab-video').classList.add('active');
+  if(tabValue === 'IT') document.getElementById('btn-tab-it').classList.add('active');
+  if(tabValue === 'Siyanat') document.getElementById('btn-tab-siyanat').classList.add('active');
   window.renderTesting();
 };
 
@@ -1142,7 +1143,7 @@ window.viewHistoryDetail = function(date, element) {
   document.querySelectorAll('.history-list-item').forEach(item => item.classList.remove('active'));
   if(element) element.classList.add('active');
 
-  document.getElementById('history-detail-title').innerText = `Verification Balance Audit Log: ${date}`;
+  document.getElementById('history-detail-title').innerText = `Verification Session Parameters Check: ${date}`;
   const tbody = document.getElementById('history-detail-body');
   tbody.innerHTML = "";
 
@@ -1167,8 +1168,6 @@ window.viewHistoryDetail = function(date, element) {
     }
   });
 };
-
-window.viewHistoryDetail = window.viewHistoryDetail;
 
 window.populateCatFilter = function(){
   const s=document.getElementById('inv-cat-filter'); s.innerHTML='<option value="">All Categories Filter</option>';
@@ -1210,24 +1209,6 @@ window.cycleAssetStatus = async function(id){
   window.renderInventory();
 };
 
-window.renderPrograms = function(){
-  let durationInMins = 0;
-  window.programs.forEach(p => {
-    let parts = p.dur.split(':').map(Number);
-    if(parts.length === 3) durationInMins += (parts[0] * 60) + parts[1] + (parts[2] / 60);
-  });
-  let totalHoursStr = (durationInMins / 60).toFixed(2);
-
-  document.getElementById('prog-kpis').innerHTML = `
-    <div class="kpi" style="border-top:3px solid var(--color-primary)">
-      <div class="kpi-label">Aggregated Full Registry Logs</div><div class="kpi-value">${window.programs.length}</div><div class="kpi-sub">Total programs cataloged</div>
-    </div>
-    <div class="kpi" style="border-top:3px solid var(--color-success)">
-      <div class="kpi-label">Cumulative Airtime Runs</div><div class="kpi-value">${totalHoursStr} Hours</div><div class="kpi-sub">Calculated runtime duration</div>
-    </div>`;
-  window.renderProgramTable();
-};
-
 window.renderProgramTable = function(){
   const query = document.getElementById('prog-search').value.toLowerCase();
   const filtered = window.programs.filter(p => !query || p.desc.toLowerCase().includes(query) || p.type.toLowerCase().includes(query));
@@ -1244,6 +1225,8 @@ window.renderProgramTable = function(){
       <td style="font-weight:600; color:var(--color-primary);">${p.dur}</td>
     </tr>`).join('');
 };
+
+window.renderProgramTable = window.renderProgramTable;
 
 window.renderFaults = function(){
   document.getElementById('fault-kpis').innerHTML = `
