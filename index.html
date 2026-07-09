@@ -129,7 +129,6 @@
     <div class="nav-item" onclick="nav('testing',this)"><i class="ti ti-checkbox"></i>Equipment Testing</div>
     <div class="nav-item" onclick="nav('history',this)"><i class="ti ti-history"></i>Testing Logs History</div>
     <div class="nav-item" onclick="nav('inventory',this)"><i class="ti ti-box"></i>Functional Registry</div>
-    <!-- NEW TAB MODULE ATTACHED -->
     <div class="nav-item" onclick="nav('fullinventory',this)" style="color:var(--color-primary); font-weight: 600;"><i class="ti ti-clipboard-list"></i>Full Audit Inventory</div>
     <div class="nav-item" onclick="nav('programs',this)"><i class="ti ti-calendar-event"></i>Master Program Log</div>
     <div class="nav-item" onclick="nav('redundancy',this)" style="color:#a855f7;"><i class="ti ti-layers-intersect"></i>Redundancy Matrix</div>
@@ -262,7 +261,6 @@
         </div>
       </div>
 
-      <!-- NEW PAGE: FULL AUDIT INVENTORY LAYOUT DESIGNED FROM IMAGE SCREENSHOT -->
       <div class="page" id="p-fullinventory">
         <div class="card" style="display:flex; gap:12px; flex-wrap:wrap; padding:14px;">
           <input type="text" id="fullinv-search" placeholder="Search Item Description, Make or Model..." oninput="renderFullAuditInventoryTable()" style="flex:1; min-width:200px;">
@@ -378,7 +376,6 @@
   </div>
 </div>
 
-<!-- FRESH MODAL ADD FIELD: ADD AUDIT INVENTORY ELEMENT -->
 <div class="modal-overlay" id="modal-add-fullinv">
   <div class="modal">
     <div class="modal-title"><span>Add New Row To Full Audit Inventory</span><button class="btn" onclick="closeModal('modal-add-fullinv')" style="padding:4px 10px;">×</button></div>
@@ -393,7 +390,6 @@
   </div>
 </div>
 
-<!-- FRESH MODAL EDIT FIELD: MODIFY AUDIT INVENTORY ELEMENT -->
 <div class="modal-overlay" id="modal-edit-fullinv">
   <div class="modal">
     <div class="modal-title"><span>Modify Full Audit Inventory Metadata</span><button class="btn" onclick="closeModal('modal-edit-fullinv')" style="padding:4px 10px;">×</button></div>
@@ -457,8 +453,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-window.STATS_DATA_LOCK = {};
-
 window.CATS = [
   {name:"Wireless Audio",color:"#0ea5e9",items:["HH01","HH02","HH03","HH04","HH05","HH06","SM58 #1","SM58 #2","SM58 #3","SM58 #4","SM58 #5","SM58 #6","SM58 #7","Boundary Mic #1","Boundary Mic #2","HW 01 MIC","HW 02 MIC","HW 03 MIC","HW 04 MIC","HW 05 MIC","HW 06 MIC","LP 01 MIC","LP 02 MIC","AKG P120 #1","AKG P120 #2"]},
   {name:"Wireless Systems",color:"#f59e0b",items:["HW Body Pack #1","HW Body Pack #2","HW Body Pack #3","HW Body Pack #4","LP Body Pack #1","LP Body Pack #2"]},
@@ -476,7 +470,7 @@ window.CATS = [
 window.PROG_TYPES=["Awwala Orientation","Collegiate I","Collegiate II","Janah al tarrannum","Dissertations","Darse Burhani","TGM","Visit","Screening","Rental","Dept of cultural activities","Dept of Quranic Arts","Other"];
 
 window.inventory = [];
-window.fullAuditInventory = []; // Dynamic Cloud Core Link Array
+window.fullAuditInventory = []; 
 window.testDailyLogs = {}; 
 window.programs = [];
 window.faults = [];
@@ -490,7 +484,7 @@ window.saveToDatabase = async function() {
   try {
     await setDoc(doc(db, "AV_OPERATIONS", "MASTER_DATA"), {
       inventory: window.inventory,
-      fullAuditInventory: window.fullAuditInventory, // Pushed state values cleanly
+      fullAuditInventory: window.fullAuditInventory, 
       testDailyLogs: JSON.stringify(window.testDailyLogs), 
       programs: window.programs,
       faults: window.faults
@@ -514,7 +508,7 @@ window.initData = async function(){
       window.faults = cloudData.faults || [];
     }
     
-    // Spread structural mappings from screenshot if cluster is currently empty
+    // Fixed syntax missing semi-colon token here
     if(window.fullAuditInventory.length === 0) {
       window.fullAuditInventory = [
         {id:"fa_1", desc:"Q-SYS", make:"QSC", model:"QIO-ML2X2", serial:"25C92246700904", qty:1},
@@ -529,7 +523,7 @@ window.initData = async function(){
         {id:"fa_10", desc:"Digital Wireless Receiver", make:"SHURE", model:"ULXD4QIN", serial:"3AC17633033", qty:1},
         {id:"fa_11", desc:"Digital Wireless Receiver", make:"SHURE", model:"ULXD4QIN", serial:"3AL09784735", qty:1},
         {id:"fa_12", desc:"Audio DSP", make:"QSC", model:"Core 510i", serial:"12US2233177802", qty:1},
-        {id:"fa_13", desc:"Q-SYS Dante Audio Bridge Card", make:"QSC", model:"CDN64", serial"—", qty:1},
+        {id:"fa_13", desc:"Q-SYS Dante Audio Bridge Card", make:"QSC", model:"CDN64", serial: "—", qty:1},
         {id:"fa_14", desc:"Power Amplifier", make:"QSC", model:"MP-A40V", serial:"25CN2237300173", qty:1},
         {id:"fa_15", desc:"Power Amplifier", make:"QSC", model:"MP-A20V", serial:"253N2247300157", qty:1},
         {id:"fa_16", desc:"Power Amplifier", make:"K Array", model:"KA208", serial:"K147DP0100", qty:1},
@@ -583,7 +577,6 @@ window.nav = function(page, el) {
 window.openModal = function(id){ document.getElementById(id).classList.add('open'); };
 window.closeModal = function(id){ document.getElementById(id).classList.remove('open'); };
 
-// FULL AUDIT INVENTORY LOGICS PIPELINES
 window.renderFullAuditInventoryTable = function() {
   const query = document.getElementById('fullinv-search').value.toLowerCase();
   const tbody = document.getElementById('fullinv-table-body');
@@ -926,86 +919,59 @@ window.renderTesting = function(){
 
 window.setDeviceTestState = async function(itemId, state){
   const dateSelected = document.getElementById('testing-date-picker').value;
-  if(state === "") {
-    delete window.testDailyLogs[dateSelected][itemId];
-  } else {
-    window.testDailyLogs[dateSelected][itemId] = state;
-    const asset = window.inventory.find(i=>i.id === itemId);
-    if(asset) asset.status = state;
-  }
+  if(state === "") { delete window.testDailyLogs[dateSelected][itemId]; } 
+  else { window.testDailyLogs[dateSelected][itemId] = state; }
   await window.saveToDatabase();
   window.renderTesting();
 };
 
-// DYNAMIC TESTING MONTH HISTORY ENGINE FIX (JULY COMPATIBLE)
 window.renderHistoryPage = function(){
-  const select = document.getElementById('history-month-select');
-  const sidebarContainer = document.getElementById('history-dates-container');
+  let sortedDates = Object.keys(window.testDailyLogs).sort((a,b)=>b.localeCompare(a));
+  const datesContainer = document.getElementById('history-dates-container');
   
-  let uniqueMonths = new Set();
-  Object.keys(window.testDailyLogs).forEach(date => {
-    if (date.length >= 7) uniqueMonths.add(date.substring(0, 7));
-  });
-  
-  let sortedMonths = Array.from(uniqueMonths).sort().reverse();
-  let currentSelection = select.value;
-  select.innerHTML = "";
-  
-  if (sortedMonths.length === 0) {
-    select.innerHTML = `<option value="2026-07">July 2026</option><option value="2026-06">June 2026</option>`;
-  } else {
-    sortedMonths.forEach(m => {
-      let [year, month] = m.split('-');
-      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      let monthLabel = `${monthNames[parseInt(month) - 1]} ${year}`;
-      select.innerHTML += `<option value="${m}">${monthLabel}</option>`;
-    });
+  const monthSelected = document.getElementById('history-month-select').value;
+  if(monthSelected) {
+    sortedDates = sortedDates.filter(d => d.startsWith(monthSelected));
   }
-  
-  if (currentSelection && sortedMonths.includes(currentSelection)) select.value = currentSelection;
-  
-  const targetMonth = select.value;
-  let datesFiltered = Object.keys(window.testDailyLogs).filter(d => d.startsWith(targetMonth)).sort().reverse();
 
-  sidebarContainer.innerHTML = "";
-  if(datesFiltered.length === 0){
-    sidebarContainer.innerHTML = `<div style="text-align:center; color:var(--color-text-muted); padding:20px; font-size:13px;">No logs logged this month.</div>`;
-    document.getElementById('history-detail-body').innerHTML = `<tr><td colspan="3" style="text-align:center; padding:40px; color:var(--color-text-secondary)">No sessions stored.</td></tr>`;
-    return;
-  }
-  
-  datesFiltered.forEach(date => {
-    let checkedCount = Object.keys(window.testDailyLogs[date]).length;
-    sidebarContainer.innerHTML += `
-      <div class="history-list-item" id="hist-item-${date}" onclick="window.loadHistoryDetail('${date}')">
+  datesContainer.innerHTML = sortedDates.length === 0 ? `<div style="padding:20px; text-align:center; color:var(--color-text-muted);">No historical metrics logged for this slot.</div>` :
+    sortedDates.map(date => {
+      const unitsCount = Object.keys(window.testDailyLogs[date]).length;
+      return `<div class="history-list-item" onclick="viewHistoryDetail('${date}', this)">
         <div>
           <div style="font-weight:600; font-size:14px;">${date}</div>
-          <div style="font-size:12px; color:var(--color-text-secondary); margin-top:2px;">${checkedCount} Units Checked</div>
+          <div style="font-size:12px; color:var(--color-text-secondary); margin-top:2px;">${unitsCount} Assets Logged</div>
         </div>
-        <i class="ti ti-circle-check" style="color:var(--color-success); font-size:18px;"></i>
+        <i class="ti ti-chevron-right" style="color:var(--color-text-muted)"></i>
       </div>`;
-  });
-  window.loadHistoryDetail(datesFiltered[0]);
+    }).join('');
 };
 
-window.loadHistoryDetail = function(date){
-  document.querySelectorAll('.history-layout .history-list-item').forEach(el=>el.classList.remove('active'));
-  const activeRow = document.getElementById(`hist-item-${date}`);
-  if(activeRow) activeRow.classList.add('active');
-  
-  document.getElementById('history-detail-title').innerText = `Verification Session Parameters Check: [ ${date} ]`;
+window.viewHistoryDetail = function(date, element) {
+  document.querySelectorAll('.history-list-item').forEach(item => item.classList.remove('active'));
+  if(element) element.classList.add('active');
+
+  document.getElementById('history-detail-title').innerText = `Verification Balance Audit Log: ${date}`;
   const tbody = document.getElementById('history-detail-body');
   tbody.innerHTML = "";
-  
-  const logsForDate = window.testDailyLogs[date] || {};
-  window.inventory.forEach(asset => {
-    const status = logsForDate[asset.id];
-    if(status) {
-      let badgeClass = status === 'Working' ? 'badge-green' : status === 'Faulty' ? 'badge-red' : 'badge-amber';
+
+  const logs = window.testDailyLogs[date] || {};
+  const loggedIds = Object.keys(logs);
+
+  if(loggedIds.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:30px; color:var(--color-text-muted);">Empty matrix index logs.</td></tr>`;
+    return;
+  }
+
+  loggedIds.forEach(id => {
+    const asset = window.inventory.find(inv => inv.id === id);
+    if(asset) {
+      let currentSavedState = logs[id];
+      let bClass = currentSavedState === 'Working' ? 'badge-green' : currentSavedState === 'Faulty' ? 'badge-red' : 'badge-amber';
       tbody.innerHTML += `<tr>
         <td><span class="interactive-link" onclick="window.openAssetAnalyticsPopup('${asset.id}')">${asset.name}</span></td>
         <td><span class="badge badge-gray">${asset.cat}</span></td>
-        <td><span class="badge ${badgeClass}">${status}</span></td>
+        <td><span class="badge ${bClass}">${currentSavedState}</span></td>
       </tr>`;
     }
   });
@@ -1013,7 +979,7 @@ window.loadHistoryDetail = function(date){
 
 window.populateCatFilter = function(){
   const s=document.getElementById('inv-cat-filter'); s.innerHTML='<option value="">All Categories Filter</option>';
-  window.CATS.forEach(c=>{ s.innerHTML+=`<option>${c.name}</option>`; });
+  window.CATS.forEach(c=>{ s.innerHTML+=`<option value="${c.name}">${c.name}</option>`; });
 };
 
 window.renderInventory = function(){
