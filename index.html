@@ -28,7 +28,6 @@
     
     #app { display: flex; height: 100vh; position: relative; }
     
-    /* Premium Sidebar Navigation Component */
     .sidebar { width: 260px; min-width: 260px; background: var(--color-bg-sidebar); color: #fff; display: flex; flex-direction: column; transition: all 0.3s ease; z-index: 1000; }
     .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid #1e293b; }
     .sidebar-logo h1 { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: #f8fafc; }
@@ -39,13 +38,11 @@
     .nav-item:hover { background: #1e293b; color: #ffffff !important; }
     .nav-item.active { background: var(--color-primary) !important; color: #ffffff !important; font-weight: 600; }
     
-    /* Workspace Configurations */
     .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
     .topbar { background: var(--color-bg-card); border-bottom: 1px solid var(--color-border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
     .topbar h2 { font-size: 18px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .topbar-right { display: flex; gap: 12px; align-items: center; flex-shrink: 0; }
     
-    /* Control Buttons */
     .btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: var(--border-radius-md); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--color-border); background: #fff; color: var(--color-text-primary); transition: all 0.15s; white-space: nowrap; }
     .btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
     .btn-primary { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
@@ -57,7 +54,6 @@
     .page { display: none; }
     .page.active { display: block; }
     
-    /* Cards Framework Layouts */
     .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
     .kpi { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--border-radius-lg); padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .kpi-label { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
@@ -81,7 +77,6 @@
     .history-list-item { padding: 12px; border-radius: var(--border-radius-md); border: 1px solid var(--color-border); margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
     .history-list-item.active { border-color: var(--color-primary); background: #f0f9ff; }
 
-    /* Responsive Tables Specifications with Overflow Scrollers */
     .responsive-table-container { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; border-radius: var(--border-radius-md); border: 1px solid var(--color-border); }
     table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
     th { padding: 12px 14px; font-size: 11px; font-weight: 600; color: var(--color-text-secondary); background: #f8fafc; border-bottom: 1px solid var(--color-border); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -291,7 +286,7 @@
         </div>
       </div>
 
-      <!-- TAB 1: EQUIPMENT LIST (EXCEL EXPLICIT FILE UPLOADER ENGINE ATTACHED) -->
+      <!-- TAB 1: EQUIPMENT LIST -->
       <div class="page" id="p-fullinventory">
         <div class="card" style="display:flex; gap:16px; flex-wrap:wrap; padding:18px; align-items:center; background:#f0fdf4; border-color:#bbf7d0;">
           <div style="flex:1; min-width:260px;">
@@ -327,7 +322,7 @@
         </div>
       </div>
 
-      <!-- TAB 2: IP LIST & PORT DETAILS -->
+      <!-- TAB 2: IP LIST -->
       <div class="page" id="p-iplist">
         <div class="card" style="display:flex; gap:12px; flex-wrap:wrap; padding:14px;">
           <input type="text" id="iplist-search" placeholder="Search IP Address, Device Name or Switch Port..." oninput="window.renderIPListTable()" style="flex:1; min-width:200px;">
@@ -415,10 +410,9 @@
   </div>
 </div>
 
-<!-- Modals Systems forms -->
 <div class="modal-overlay" id="modal-add-fullinv">
   <div class="modal">
-    <div class="modal-title"><span>Add New Row To Full Audit Inventory</span><button class="btn" onclick="window.closeModal('modal-add-fullinv')" style="padding:4px 10px;">×</button></div>
+    <div class="modal-title"><span>Add New Row To Full Audit Inventory</span><button class="btn" onclick="closeModal('modal-add-fullinv')" style="padding:4px 10px;">×</button></div>
     <div class="form-grid">
       <div class="form-group"><label class="form-label">Item Description</label><input type="text" id="fi-add-desc" placeholder="e.g. Antenna Amplifier"></div>
       <div class="form-group"><label class="form-label">Make</label><input type="text" id="fi-add-make" placeholder="e.g. SHURE"></div>
@@ -445,7 +439,6 @@
   </div>
 </div>
 
-<!-- Add SheetJS Parser Node Library -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -465,19 +458,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-window.CATS = [
-  {name:"Wireless Audio",color:"#0ea5e9",items:["HH01","HH02","HH03","HH04","HH05","HH06"]},
-  {name:"Wireless Systems",color:"#f59e0b",items:["HW Body Pack #1","HW Body Pack #2"]},
-  {name:"Speakers",color:"#ef4444",items:["Stage Speaker L","Stage Speaker R"]},
-  {name:"Audio Processing & Mixing",color:"#8e44ad",items:["SQ6 MIXER"]},
-  {name:"Cameras",color:"#ec4899",items:["Camera 01","Camera 02"]}
-];
-
 window.inventory = [];
 window.fullAuditInventory = []; 
 window.testDailyLogs = {}; 
 window.programs = [];
 window.faults = [];
+window.currentTestingActiveTab = "All"; 
 
 window.fmtDate = function(d){return d.toISOString().split('T')[0]};
 
@@ -514,21 +500,8 @@ window.initData = async function(){
       window.faults = cloudData.faults || [];
     }
 
-    // Set defaults if local functional array is completely clean
-    if(window.inventory.length === 0) {
-      window.CATS.forEach(cat=>{
-        cat.items.forEach(item=>{
-          window.inventory.push({id:String(Date.now()+Math.random()),name:item,cat:cat.name,status:"Working",date:"2026-03-01",notes:""});
-        });
-      });
-      await window.saveToDatabase();
-    }
-
-    // ATTACH REAL-TIME EXCEL EXPORT PARSER STREAM
     const fileInput = document.getElementById('fi-excel-input');
-    if(fileInput) {
-      fileInput.addEventListener('change', handleExcelUploadStreamEngine);
-    }
+    if(fileInput) { fileInput.addEventListener('change', handleExcelUploadStreamEngine); }
 
     const loader = document.getElementById('system-loader');
     if(loader) { loader.style.opacity = '0'; setTimeout(() => loader.remove(), 300); }
@@ -539,7 +512,7 @@ window.initData = async function(){
   }
 };
 
-// EXCEL SHEET READER AUTOMATION ENGINE
+// EXCEL SHEET READER DISPATCH SYNC AUTO COUNTER
 async function handleExcelUploadStreamEngine(e) {
   const file = e.target.files[0];
   if (!file) return;
@@ -550,31 +523,42 @@ async function handleExcelUploadStreamEngine(e) {
     const workbook = XLSX.read(data, { type: 'array' });
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
-    
-    // Parse sheets array into neat programmatic JSON mapping matrices
     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
     
     if(jsonData.length > 1) {
-      // Clear or preserve dependent rows maps based on triggers
       window.fullAuditInventory = []; 
+      window.inventory = []; // Dynamic reset to hook excel fields cleanly
       
-      // Map rows skipping description headers dynamically
       for(let i = 1; i < jsonData.length; i++) {
         const row = jsonData[i];
-        if(row.length > 0 && row[1]) { // If description label token acts initialized
+        if(row.length > 0 && row[1]) {
+          const rowId = "fa_row_" + i + "_" + Date.now();
+          const descriptionName = String(row[1] || "—").trim();
+          const categoryName = String(row[2] || "Unassigned Module").trim();
+          
           window.fullAuditInventory.push({
-            id: "excel_fa_" + Date.now() + "_" + i,
-            desc: String(row[1] || "—").trim(),
-            make: String(row[2] || "—").trim(),
+            id: rowId,
+            desc: descriptionName,
+            make: categoryName,
             model: String(row[3] || "—").trim(),
             serial: String(row[4] || "—").trim(),
             qty: parseInt(row[5]) || 1
+          });
+
+          // Core Synchronization Link to trigger testing list rows safely
+          window.inventory.push({
+            id: rowId,
+            name: descriptionName,
+            cat: categoryName,
+            status: "Working",
+            date: window.fmtDate(new Date()),
+            notes: ""
           });
         }
       }
       await window.saveToDatabase();
       window.renderFullAuditInventoryTable();
-      alert("Excel Spreadsheet Uploaded & Synced successfully with Cloud Database node!");
+      alert("Excel Spreadsheet Synced successfully with Verification History Modules!");
     }
   };
   reader.readAsArrayBuffer(file);
@@ -583,6 +567,7 @@ async function handleExcelUploadStreamEngine(e) {
 window.clearFullAuditInventoryMaster = async function() {
   if(confirm("Wipe complete Audit inventory logs entirely from cloud records?")) {
     window.fullAuditInventory = [];
+    window.inventory = [];
     await window.saveToDatabase();
     window.renderFullAuditInventoryTable();
   }
@@ -619,6 +604,18 @@ window.renderFullAuditInventoryTable = function() {
   });
 };
 
+window.renderIPListTable = function() {
+  const query = document.getElementById('iplist-search').value.toLowerCase();
+  const tbody = document.getElementById('iplist-table-body');
+  tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--color-text-secondary);">Filter tracking: "${query || 'No Active Filter query'}". Use forms injection module.</td></tr>`;
+};
+
+window.renderFloorBoxTable = function() {
+  const query = document.getElementById('floorbox-search').value.toLowerCase();
+  const tbody = document.getElementById('floorbox-table-body');
+  tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--color-text-secondary);">Filter tracking: "${query || 'No Active Filter query'}". Use forms injection module.</td></tr>`;
+};
+
 window.addFullAuditItemRow = async function() {
   const desc = document.getElementById('fi-add-desc').value.trim();
   const make = document.getElementById('fi-add-make').value.trim();
@@ -627,7 +624,9 @@ window.addFullAuditItemRow = async function() {
   const qty = parseInt(document.getElementById('fi-add-qty').value) || 1;
 
   if(!desc) return;
-  window.fullAuditInventory.push({ id: "fa_" + Date.now(), desc, make, model, serial: serial || "—", qty });
+  const rowId = "fa_" + Date.now();
+  window.fullAuditInventory.push({ id: rowId, desc, make, model, serial: serial || "—", qty });
+  window.inventory.push({ id: rowId, name: desc, cat: make, status: "Working", date: window.fmtDate(new Date()), notes: "" });
   window.closeModal('modal-add-fullinv');
   await window.saveToDatabase();
   window.renderFullAuditInventoryTable();
@@ -656,6 +655,9 @@ window.commitFullAuditItemRowChanges = async function() {
   item.serial = document.getElementById('fi-edit-serial').value.trim();
   item.qty = parseInt(document.getElementById('fi-edit-qty').value) || 1;
 
+  const invAsset = window.inventory.find(i => i.id === id);
+  if(invAsset) { invAsset.name = item.desc; invAsset.cat = item.make; }
+
   window.closeModal('modal-edit-fullinv');
   await window.saveToDatabase();
   window.renderFullAuditInventoryTable();
@@ -664,9 +666,143 @@ window.commitFullAuditItemRowChanges = async function() {
 window.deleteFullInvRow = async function(id) {
   if(confirm("Clear row?")) {
     window.fullAuditInventory = window.fullAuditInventory.filter(i => i.id !== id);
+    window.inventory = window.inventory.filter(i => i.id !== id);
     await window.saveToDatabase();
     window.renderFullAuditInventoryTable();
   }
+};
+
+window.renderTesting = function(){
+  const dateSelected = document.getElementById('testing-date-picker').value;
+  const listContainer = document.getElementById('testing-list');
+  if(!dateSelected) { listContainer.innerHTML="<div style='padding:20px; text-align:center;'>Pick context date calendar framework.</div>"; return; }
+  
+  if(!window.testDailyLogs[dateSelected]) window.testDailyLogs[dateSelected] = {};
+  let html = '';
+  let checkedCounter = 0;
+
+  // Extract unique categories from dynamic inventory array
+  let categories = [...new Set(window.inventory.map(i => i.cat))];
+  
+  categories.forEach(catName => {
+    const systemItems = window.inventory.filter(i => i.cat === catName);
+    if(systemItems.length === 0) return;
+    
+    html += `<div class="cat-row-header"><span style="width:8px; height:8px; border-radius:50%; background:#0ea5e9;"></span>${catName.toUpperCase()}</div>`;
+    
+    systemItems.forEach(item => {
+      const currentSavedState = window.testDailyLogs[dateSelected][item.id] || "";
+      if(currentSavedState !== "") checkedCounter++;
+      
+      let badgeMarkup = `<span class="badge badge-gray">Untested Configuration</span>`;
+      if(currentSavedState === 'Working') badgeMarkup = `<span class="badge badge-green"><i class="ti ti-circle-check" style="margin-right:4px;"></i>Working</span>`;
+      if(currentSavedState === 'Faulty') badgeMarkup = `<span class="badge badge-red"><i class="ti ti-circle-x" style="margin-right:4px;"></i>Faulty</span>`;
+      if(currentSavedState === 'Under Repair') badgeMarkup = `<span class="badge badge-amber"><i class="ti ti-tool" style="margin-right:4px;"></i>Repairing</span>`;
+
+      html += `
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; padding:12px 16px; border-bottom:1px solid var(--color-border); align-items:center; background:#fff;">
+          <span style="font-weight:500; font-size:14px; color:var(--color-text-primary);">${item.name}</span>
+          <div>${badgeMarkup}</div>
+          <div style="text-align:right; display:flex; gap:6px; justify-content:flex-end; align-items:center;">
+            <button class="btn" style="padding:4px 8px; font-size:12px; border-color:#10b981; color:#10b981;" onclick="window.setDeviceTestState('${item.id}','Working')">Working</button>
+            <button class="btn" style="padding:4px 8px; font-size:12px; border-color:#ef4444; color:#ef4444;" onclick="window.setDeviceTestState('${item.id}','Faulty')">Faulty</button>
+            <button class="btn" style="padding:4px 8px; font-size:12px; border-color:#f59e0b; color:#f59e0b;" onclick="window.setDeviceTestState('${item.id}','Under Repair')">Repair</button>
+            <button class="btn" style="padding:4px 6px; font-size:12px; border-color:var(--color-text-muted); color:var(--color-text-secondary);" title="Reset Status" onclick="window.setDeviceTestState('${item.id}','')"><i class="ti ti-refresh"></i></button>
+          </div>
+        </div>`;
+    });
+  });
+  
+  listContainer.innerHTML = html === "" ? `<div style="padding:40px; text-align:center; color:var(--color-text-muted);">No infrastructure components registered here.</div>` : html;
+  document.getElementById('test-progress-label').innerHTML = `Log Check Status: <strong style="color:var(--color-primary);">${checkedCounter}/${window.inventory.length} Verified</strong>`;
+};
+
+window.setDeviceTestState = async function(itemId, state){
+  const dateSelected = document.getElementById('testing-date-picker').value;
+  if(state === "") { delete window.testDailyLogs[dateSelected][itemId]; } 
+  else { window.testDailyLogs[dateSelected][itemId] = state; }
+  await window.saveToDatabase();
+  window.renderTesting();
+};
+
+window.renderHistoryPage = function(){
+  const select = document.getElementById('history-month-select');
+  const sidebarContainer = document.getElementById('history-dates-container');
+  
+  let uniqueMonths = new Set();
+  Object.keys(window.testDailyLogs).forEach(date => {
+    if (date.length >= 7) uniqueMonths.add(date.substring(0, 7));
+  });
+  
+  let sortedMonths = Array.from(uniqueMonths).sort().reverse();
+  let currentSelection = select.value;
+  select.innerHTML = "";
+  
+  if (sortedMonths.length === 0) {
+    select.innerHTML = `<option value="2026-07">July 2026</option><option value="2026-06">June 2026</option>`;
+  } else {
+    sortedMonths.forEach(m => {
+      let [year, month] = m.split('-');
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      let monthLabel = `${monthNames[parseInt(month) - 1]} ${year}`;
+      select.innerHTML += `<option value="${m}">${monthLabel}</option>`;
+    });
+  }
+  
+  if (currentSelection && sortedMonths.includes(currentSelection)) select.value = currentSelection;
+  
+  const targetMonth = select.value;
+  let datesFiltered = Object.keys(window.testDailyLogs).filter(d => d.startsWith(targetMonth)).sort().reverse();
+
+  sidebarContainer.innerHTML = "";
+  if(datesFiltered.length === 0){
+    sidebarContainer.innerHTML = `<div style="text-align:center; color:var(--color-text-muted); padding:20px; font-size:13px;">No logs logged this month.</div>`;
+    document.getElementById('history-detail-body').innerHTML = `<tr><td colspan="3" style="text-align:center; padding:40px; color:var(--color-text-secondary)">No sessions stored.</td></tr>`;
+    return;
+  }
+  
+  datesFiltered.forEach(date => {
+    let checkedCount = Object.keys(window.testDailyLogs[date]).length;
+    sidebarContainer.innerHTML += `
+      <div class="history-list-item" id="hist-item-${date}" onclick="window.viewHistoryDetail('${date}', this)">
+        <div>
+          <div style="font-weight:600; font-size:14px;">${date}</div>
+          <div style="font-size:12px; color:var(--color-text-secondary); margin-top:2px;">${checkedCount} Units Checked</div>
+        </div>
+        <i class="ti ti-circle-check" style="color:var(--color-success); font-size:18px;"></i>
+      </div>`;
+  });
+  window.viewHistoryDetail(datesFiltered[0], document.getElementById(`hist-item-${datesFiltered[0]}`));
+};
+
+window.viewHistoryDetail = function(date, element) {
+  document.querySelectorAll('.history-list-item').forEach(item => item.classList.remove('active'));
+  if(element) element.classList.add('active');
+
+  document.getElementById('history-detail-title').innerText = `Verification Session Parameters Check: ${date}`;
+  const tbody = document.getElementById('history-detail-body');
+  tbody.innerHTML = "";
+
+  const logs = window.testDailyLogs[date] || {};
+  const loggedIds = Object.keys(logs);
+
+  if(loggedIds.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:30px; color:var(--color-text-muted);">Empty matrix index logs.</td></tr>`;
+    return;
+  }
+
+  loggedIds.forEach(id => {
+    const asset = window.inventory.find(inv => inv.id === id);
+    if(asset) {
+      let currentSavedState = logs[id];
+      let bClass = currentSavedState === 'Working' ? 'badge-green' : currentSavedState === 'Faulty' ? 'badge-red' : 'badge-amber';
+      tbody.innerHTML += `<tr>
+        <td><span class="interactive-link">${asset.name}</span></td>
+        <td><span class="badge badge-gray">${asset.cat}</span></td>
+        <td><span class="badge ${bClass}">${currentSavedState}</span></td>
+      </tr>`;
+    }
+  });
 };
 
 window.nav = function(page, el) {
@@ -679,6 +815,8 @@ window.nav = function(page, el) {
   document.getElementById('page-title').textContent=titles[page]||page;
   
   if(page==='dashboard') window.renderDashboard();
+  if(page==='testing') window.renderTesting();
+  if(page==='history') window.renderHistoryPage();
   if(page==='fullinventory') window.renderFullAuditInventoryTable();
 };
 
