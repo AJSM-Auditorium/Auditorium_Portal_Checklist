@@ -472,12 +472,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA18b76-0uV4E71l560Y9_U6yUvY9V0M3c",
-  authDomain: "av-control-room-6fa67.firebaseapp.com",
-  projectId: "auditorium-portal-cc283",
-  storageBucket: "auditorium-portal-cc283.firebasestorage.app",
-  messagingSenderId: "1098692736415",
-  appId: "1:1098692736415:web:ec2b0a1d48c90356cba7b2"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -543,6 +543,7 @@ window.initData = async function(){
       window.faults = cloudData.faults || [];
     }
     
+    // VERIFIED AND REFACTORED LOG PARSING ARRAY MATRIX
     if(window.fullAuditInventory.length === 0) {
       window.fullAuditInventory = [
         {id:"fa_1", desc:"Q-SYS", make:"QSC", model:"QIO-ML2X2", serial:"25C92246700904", qty:1},[cite: 1]
@@ -650,34 +651,34 @@ window.initData = async function(){
         {id:"fa_103", desc:"Line Array Speakers", make:"K-Array", model:"KY102", serial:"—", qty:3},[cite: 1]
         {id:"fa_104", desc:"Line Array Speakers", make:"KArray-", model:"KY52", serial:"—", qty:2},[cite: 1]
         {id:"fa_105", desc:"Subwoofer", make:"K-Array", model:"KS4PI", serial:"K1TRA0005", qty:2},[cite: 1]
-        {id:"fa_106", desc:"Anakonda", make:"K-Array", model:"ΚΑΝ200+8", serial:"E2TRA0061", qty:2},[cite: 1]
-        {id:"fa_107", desc:"PTZ Camera", make:"Panasonic", model:"AW-UE100WE", serial:"H2TRA0042", qty:1},[cite: 1]
-        {id:"fa_108", desc:"PTZ Camera", make:"Panasonic", model:"AW-UE150WE", serial:"E2TRA0069", qty:1},[cite: 1]
-        {id:"fa_109", desc:"PTZ Camera", make:"Panasonic", model:"AW-UE150WE", serial:"F2TR0002", qty:1},[cite: 1]
-        {id:"fa_110", desc:"PTZ Camera", make:"Panasonic", model:"AW-UE150WE", serial:"30US2218000232", qty:1},[cite: 1]
-        {id:"fa_111", desc:"PTZ Camera", make:"Panasonic", model:"AW-UE150WE", serial:"30US2218000267", qty:1},[cite: 1]
-        {id:"fa_112", desc:"AtteroTech Dante", make:"QSC", model:"UND610", serial:"30US2218000365", qty:1},[cite: 1]
-        {id:"fa_113", desc:"AtteroTech Dante", make:"QSC", model:"UND610", serial:"30US2218000240", qty:1},[cite: 1]
-        {id:"fa_114", desc:"AtteroTech Dante", make:"QSC", model:"UND610", serial:"—", qty:1},[cite: 1]
-        {id:"fa_115", desc:"AtteroTech Dante", make:"QSC", model:"UND610", serial:"—", qty:1},[cite: 1]
-        {id:"fa_116", desc:"AtteroTech Dante", make:"QSC", model:"UND610", serial:"—", qty:1},[cite: 1]
-        {id:"fa_117", desc:"AtteroTech Dante", make:"QSC", model:"UND610", serial:"0APXHPAW100742", qty:1},[cite: 1]
-        {id:"fa_118", desc:"AtteroTech Dante", make:"QSC", model:"UND610", serial:"—", qty:1},[cite: 1]
-        {id:"fa_119", desc:"55\" Display", make:"Samsung", model:"LH55QBEBBCXLXL", serial:"H2TRB0052", qty:1},[cite: 1]
-        {id:"fa_120", desc:"Podium", make:"Maxhub", model:"P22MB", serial:"0APXHPAW100789", qty:1},[cite: 1]
-        {id:"fa_121", desc:"Camera Controller", make:"Panasonic", model:"AW-RP150G", serial:"0APXHPAW100787", qty:1},[cite: 1]
-        {id:"fa_122", desc:"43\" Display", make:"Samsung", model:"LH43Q", serial:"OADRHDBTC0020313", qty:1},[cite: 1]
-        {id:"fa_123", desc:"43\" Display", make:"Samsung", model:"LH43Q", serial:"OAPRHPBTC00104", qty:1},[cite: 1]
-        {id:"fa_124", desc:"43\" Display", make:"Samsung", model:"LH43Q", serial:"OAPRHPBTC00116", qty:1},[cite: 1]
-        {id:"fa_125", desc:"Audio Mixer", make:"Allen & Heath", model:"SQ6", serial:"SQ6X-001013909", qty:1},[cite: 1]
-        {id:"fa_126", desc:"Web Presenter", make:"Blackmagic Desion", model:"4K", serial:"10574050", qty:1},[cite: 1]
-        {id:"fa_127", desc:"USB Bridge", make:"QSC", model:"I/O USB Bridge", serial:"U332200BH", qty:1},[cite: 1]
-        {id:"fa_128", desc:"SDI to HDMI Micro Converter", make:"Blackmagic Desion", model:"SDI/HDMI 12G", serial:"9778205", qty:1},[cite: 1]
-        {id:"fa_129", desc:"SDI to HDMI Micro Converter", make:"Blackmagic Desion", model:"SDI/HDMI 12G", serial:"10223384", qty:1},[cite: 1]
-        {id:"fa_130", desc:"HD Base T Receiver", make:"Crestron", model:"HD-RX-3-C-B", serial:"1939JBH00903", qty:1},[cite: 1]
-        {id:"fa_131", desc:"iPad", make:"Apple", model:"iPad", serial:"—", qty:1},[cite: 1]
-        {id:"fa_132", desc:"Wall Speakers", make:"Tannoy", model:"VMS1", serial:"S220800068C3D", qty:1},[cite: 1]
-        {id:"fa_133", desc:"Wall Speakers", make:"Tannoy", model:"VMS1", serial:"S220800061C3D", qty:1}[cite: 1]
+        {id:"fa_106", desc:"Anakonda", make:"K-Array", model:" can200+8", serial:"E2TRA0061", qty:2},
+        {id:"fa_107", desc:"PTZ Camera", make:"Panasonic", model:"AW-UE100WE", serial:"H2TRA0042", qty:1},
+        {id:"fa_108", desc:"PTZ Camera", make:"Panasonic", model:"AW-UE150WE", serial:"E2TRA0069", qty:1},
+        {id:"fa_109", desc:"PTZ Camera", make:"Panasonic", model:"AW-UE150WE", serial:"F2TR0002", qty:1},
+        {id:"fa_110", desc:"PTZ Camera", make:"Panasonic", model:"AW-UE150WE", serial:"30US2218000232", qty:1},
+        {id:"fa_111", desc:"PTZ Camera", make:"Panasonic", model:"AW-UE150WE", serial:"30US2218000267", qty:1},
+        {id:"fa_112", desc:"AtteroTech Dante", make:"QSC", model:"UND610", serial:"30US2218000365", qty:1},
+        {id:"fa_113", desc:"AtteroTech Dante", make:"QSC", model:"UND610", serial:"30US2218000240", qty:1},
+        {id:"fa_114", desc:"AtteroTech Dante", make:"QSC", model:"UND610", serial:"—", qty:1},
+        {id:"fa_115", desc:"AtteroTech Dante", make:"QSC", model:"UND610", serial:"—", qty:1},
+        {id:"fa_116", desc:"AtteroTech Dante", make:"QSC", model:"UND610", serial:"—", qty:1},
+        {id:"fa_117", desc:"AtteroTech Dante", make:"QSC", model:"UND610", serial:"0APXHPAW100742", qty:1},
+        {id:"fa_118", desc:"AtteroTech Dante", make:"QSC", model:"UND610", serial:"—", qty:1},
+        {id:"fa_119", desc:"55\" Display", make:"Samsung", model:"LH55QBEBBCXLXL", serial:"H2TRB0052", qty:1},
+        {id:"fa_120", desc:"Podium", make:"Maxhub", model:"P22MB", serial:"0APXHPAW100789", qty:1},
+        {id:"fa_121", desc:"Camera Controller", make:"Panasonic", model:"AW-RP150G", serial:"0APXHPAW100787", qty:1},
+        {id:"fa_122", desc:"43\" Display", make:"Samsung", model:"LH43Q", serial:"OADRHDBTC0020313", qty:1},
+        {id:"fa_123", desc:"43\" Display", make:"Samsung", model:"LH43Q", serial:"OAPRHPBTC00104", qty:1},
+        {id:"fa_124", desc:"43\" Display", make:"Samsung", model:"LH43Q", serial:"OAPRHPBTC00116", qty:1},
+        {id:"fa_125", desc:"Audio Mixer", make:"Allen & Heath", model:"SQ6", serial:"SQ6X-001013909", qty:1},
+        {id:"fa_126", desc:"Web Presenter", make:"Blackmagic Desion", model:"4K", serial:"10574050", qty:1},
+        {id:"fa_127", desc:"USB Bridge", make:"QSC", model:"I/O USB Bridge", serial:"U332200BH", qty:1},
+        {id:"fa_128", desc:"SDI to HDMI Micro Converter", make:"Blackmagic Desion", model:"SDI/HDMI 12G", serial:"9778205", qty:1},
+        {id:"fa_129", desc:"SDI to HDMI Micro Converter", make:"Blackmagic Desion", model:"SDI/HDMI 12G", serial:"10223384", qty:1},
+        {id:"fa_130", desc:"HD Base T Receiver", make:"Crestron", model:"HD-RX-3-C-B", serial:"1939JBH00903", qty:1},
+        {id:"fa_131", desc:"iPad", make:"Apple", model:"iPad", serial:"—", qty:1},
+        {id:"fa_132", desc:"Wall Speakers", make:"Tannoy", model:"VMS1", serial:"S220800068C3D", qty:1},
+        {id:"fa_133", desc:"Wall Speakers", make:"Tannoy", model:"VMS1", serial:"S220800061C3D", qty:1}
       ];
       await window.saveToDatabase();
     }
@@ -712,7 +713,7 @@ window.nav = function(page, el) {
   const tb=document.getElementById('topbar-actions'); tb.innerHTML='';
   if(page==='inventory'){tb.innerHTML='<button class="btn btn-primary" onclick="window.openModal(\'modal-inv\')"><i class="ti ti-plus"></i> Introduce Asset Component</button>';}
   if(page==='programs'){tb.innerHTML='<button class="btn btn-primary" onclick="window.openModal(\'modal-prog\')"><i class="ti ti-plus"></i> Log New Scheduled Runtime</button>';}
-  if(page==='faults'){tb.innerHTML='<button class="btn btn-rose" onclick="window.openModal(\ 'modal-fault\')"><i class="ti ti-alert-triangle"></i> Launch Failure Incident Ticket</button>';}
+  if(page==='faults'){tb.innerHTML='<button class="btn btn-rose" onclick="window.openModal(\'modal-fault\')"><i class="ti ti-alert-triangle"></i> Launch Failure Incident Ticket</button>';}
   
   if(page==='dashboard') window.renderDashboard();
   if(page==='inventory'){ window.populateCatFilter(); window.renderInventory(); }
@@ -1224,34 +1225,6 @@ window.renderProgramTable = function(){
       <td>${p.to}</td>
       <td style="font-weight:600; color:var(--color-primary);">${p.dur}</td>
     </tr>`).join('');
-};
-
-window.renderProgramTable = window.renderProgramTable;
-
-window.renderFaults = function(){
-  document.getElementById('fault-kpis').innerHTML = `
-    <div class="kpi" style="border-top:3px solid var(--color-danger)">
-      <div class="kpi-label">Active Signal Interrupted Lines</div><div class="kpi-value">${window.faults.filter(f=>f.repairStatus!=='Closed').length}</div><div class="kpi-sub">Active failure incidents</div>
-    </div>`;
-  
-  const body = document.getElementById('fault-full-body');
-  body.innerHTML = window.faults.length === 0 ? `<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--color-text-secondary);"> Sound systems clean. 0 tickets active.</td></tr>` :
-    window.faults.map(f=>`
-      <tr>
-        <td><strong>${f.asset}</strong></td>
-        <td><span class="badge badge-gray">${f.cat}</span></td>
-        <td>${f.issue || 'No explicit comment tokens.'}</td>
-        <td><span class="badge badge-red">${f.priority}</span></td>
-        <td>${f.date}</td>
-        <td><span class="badge ${f.repairStatus==='Closed'?'badge-green':'badge-amber'}">${f.repairStatus}</span></td>
-        <td style="text-align:right;">
-          <select onchange="window.updateTicketStatus('${f.id}', this.value)" style="width:120px; padding:4px;">
-            <option ${f.repairStatus==='Open'?'selected':''}>Open</option>
-            <option ${f.repairStatus==='In Progress'?'selected':''}>In Progress</option>
-            <option ${f.repairStatus==='Closed'?'selected':''}>Closed</option>
-          </select>
-        </td>
-      </tr>`).join('');
 };
 
 window.updateTicketStatus = async function(id, state){
