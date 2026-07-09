@@ -26,39 +26,39 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     body { background: var(--color-bg-main); color: var(--color-text-primary); height: 100vh; overflow: hidden; }
     
-    #app { display: flex; height: 100vh; position: relative; }
+    #app { display: flex; height: 100vh; }
     
-    .sidebar { width: 260px; min-width: 260px; background: var(--color-bg-sidebar); color: #fff; display: flex; flex-direction: column; transition: all 0.3s ease; z-index: 1000; }
+    .sidebar { width: 260px; min-width: 260px; background: var(--color-bg-sidebar); color: #fff; display: flex; flex-direction: column; }
     .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid #1e293b; }
     .sidebar-logo h1 { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: #f8fafc; }
     .sidebar-logo p { font-size: 12px; color: var(--color-text-muted); margin-top: 4px; }
     
     .nav-section { padding: 16px 20px 8px; font-size: 11px; font-weight: 600; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.5px; padding-left: 12px; }
-    .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 16px; margin: 2px 12px; border-radius: var(--border-radius-md); cursor: pointer; font-size: 14px; color: #cbd5e1; transition: all 0.2s; user-select: none; }
-    .nav-item:hover { background: #1e293b; color: #ffffff !important; }
-    .nav-item.active { background: var(--color-primary) !important; color: #ffffff !important; font-weight: 600; }
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 16px; margin: 2px 12px; border-radius: var(--border-radius-md); cursor: pointer; font-size: 14px; color: #cbd5e1; transition: all 0.2s; }
+    .nav-item:hover { background: #1e293b; color: #fff; }
+    .nav-item.active { background: var(--color-primary); color: #fff; font-weight: 500; }
     
-    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
-    .topbar { background: var(--color-bg-card); border-bottom: 1px solid var(--color-border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-    .topbar h2 { font-size: 18px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .topbar { background: var(--color-bg-card); border-bottom: 1px solid var(--color-border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .topbar h2 { font-size: 20px; font-weight: 600; }
+    .topbar-right { display: flex; gap: 12px; align-items: center; }
     
-    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: var(--border-radius-md); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--color-border); background: #fff; color: var(--color-text-primary); transition: all 0.15s; white-space: nowrap; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: var(--border-radius-md); font-size: 14px; font-weight: 500; cursor: pointer; border: 1px solid var(--color-border); background: #fff; color: var(--color-text-primary); transition: all 0.15s; }
     .btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
     .btn-primary { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
     .btn-primary:hover { background: var(--color-primary-hover); border-color: var(--color-primary-hover); }
     .btn-rose { background: var(--color-danger); color: #fff; border-color: var(--color-danger); }
     .btn-rose:hover { background: #dc2626; }
-    .btn-success { background: var(--color-success); color: #fff; border-color: var(--color-success); }
-    .btn-success:hover { background: #059669; }
     
     .content { flex: 1; overflow-y: auto; padding: 24px; }
     .page { display: none; }
     .page.active { display: block; }
     
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
     .kpi { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--border-radius-lg); padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .kpi-label { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
     .kpi-value { font-size: 28px; font-weight: 700; line-height: 1.2; }
+    .kpi-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 4px; }
     
     .card { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--border-radius-lg); padding: 20px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .card-title { font-size: 15px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
@@ -66,10 +66,20 @@
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
     @media (max-width: 1024px) { .two-col { grid-template-columns: 1fr; } }
 
-    .responsive-table-container { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; border-radius: var(--border-radius-md); border: 1px solid var(--color-border); }
-    table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
-    th { padding: 12px 14px; font-size: 11px; font-weight: 600; color: var(--color-text-secondary); background: #f8fafc; border-bottom: 1px solid var(--color-border); text-transform: uppercase; letter-spacing: 0.5px; }
-    td { padding: 12px 14px; border-bottom: 1px solid var(--color-border); font-size: 13px; color: var(--color-text-primary); }
+    .testing-tabs-container { display: flex; gap: 8px; margin-bottom: 16px; background: #f1f5f9; padding: 6px; border-radius: var(--border-radius-md); width: fit-content; }
+    .tab-btn { padding: 8px 16px; font-size: 13px; font-weight: 600; color: var(--color-text-secondary); border: none; background: transparent; cursor: pointer; border-radius: var(--border-radius-md); transition: all 0.15s ease; }
+    .tab-btn:hover { color: var(--color-text-primary); background: rgba(255,255,255,0.5); }
+    .tab-btn.active { background: var(--color-primary); color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+    .history-layout { display: grid; grid-template-columns: 320px 1fr; gap: 20px; height: 600px; }
+    .history-sidebar { background: #fff; border: 1px solid var(--color-border); border-radius: var(--border-radius-lg); padding: 16px; overflow-y: auto; }
+    .history-list-item { padding: 12px; border-radius: var(--border-radius-md); border: 1px solid var(--color-border); margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .history-list-item.active { border-color: var(--color-primary); background: #f0f9ff; }
+
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th { padding: 12px 16px; font-size: 11px; font-weight: 600; color: var(--color-text-secondary); background: #f8fafc; border-bottom: 1px solid var(--color-border); text-transform: uppercase; letter-spacing: 0.5px; }
+    td { padding: 12px 16px; border-bottom: 1px solid var(--color-border); font-size: 13px; color: var(--color-text-primary); }
+    tr:last-child td { border-bottom: none; }
     tr:hover td { background: #f8fafc; }
     
     .badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; }
@@ -79,20 +89,23 @@
     .badge-blue { background: #dbeafe; color: #1e40af; }
     .badge-gray { background: #e2e8f0; color: #475569; }
     
-    .history-layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; height: 550px; }
-    @media (max-width: 768px) { .history-layout { grid-template-columns: 1fr; height: auto; } }
-    .history-sidebar { background: #fff; border: 1px solid var(--color-border); border-radius: var(--border-radius-lg); padding: 16px; overflow-y: auto; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 13px; color: var(--color-text-secondary); font-weight: 500; }
+    input, select, textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--color-border); border-radius: var(--border-radius-md); font-size: 14px; background: #fff; outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15); }
     
-    .mobile-menu-toggle { display: none; background: transparent; border: none; font-size: 22px; color: var(--text-primary); cursor: pointer; }
-    @media (max-width: 768px) {
-      .mobile-menu-toggle { display: block; }
-      .sidebar { position: absolute; left: -260px; top: 0; bottom: 0; }
-      .sidebar.open { left: 0; }
-      .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999; }
-      .sidebar-backdrop.open { display: block; }
-    }
-
-    #system-loader { position: fixed; inset: 0; background: #ffffff; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: #ffffff !important; border-radius: var(--border-radius-lg); padding: 28px; width: 620px; max-width: 100%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); border: 1px solid var(--color-border); }
+    .modal-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+    
+    .cat-row-header { background: #f1f5f9; padding: 10px 16px; font-size: 12px; font-weight: 600; color: var(--color-text-secondary); border-bottom: 1px solid var(--color-border); display: flex; align-items: center; gap: 8px; }
+    .chart-container { position: relative; height: 220px; width: 100%; }
+    .interactive-link { color: var(--color-primary); font-weight: 600; cursor: pointer; text-decoration: none; }
+    .interactive-link:hover { color: var(--color-primary-hover); text-decoration: underline; }
+    
+    #system-loader { position: fixed; inset: 0; background: #ffffff; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; transition: opacity 0.3s ease; }
     .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--color-primary); border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
@@ -104,124 +117,325 @@
   <div style="font-weight: 600; color: var(--color-text-primary); font-size: 15px;">Syncing with Firebase Cloud...</div>
 </div>
 
-<div class="sidebar-backdrop" id="sidebar-backdrop" onclick="window.toggleMobileMenu()"></div>
-
 <div id="app">
-  <div class="sidebar" id="app-sidebar">
+  <div class="sidebar">
     <div class="sidebar-logo">
       <h1><i class="ti ti-broadcast" style="color:var(--color-primary)"></i> Auditorium | Al Jamea</h1>
       <p>Al Jamea — Auditorium</p>
     </div>
     <div class="nav-section">Overview</div>
-    <div class="nav-item active" onclick="window.nav('dashboard',this)"><i class="ti ti-layout-dashboard"></i>Dashboard</div>
+    <div class="nav-item active" onclick="nav('dashboard',this)"><i class="ti ti-layout-dashboard"></i>Dashboard</div>
     <div class="nav-section">Operations</div>
-    <div class="nav-item" onclick="window.nav('testing',this)"><i class="ti ti-checkbox"></i>Equipment Testing</div>
-    <div class="nav-item" onclick="window.nav('history',this)"><i class="ti ti-history"></i>Testing Logs History</div>
-    <div class="nav-item" onclick="window.nav('inventory',this)"><i class="ti ti-box"></i>Functional Registry</div>
-    
-    <div class="nav-section">Asset Audit sheets</div>
-    <div class="nav-item" onclick="window.nav('fullinventory',this)"><i class="ti ti-clipboard-list"></i>Equipment list</div>
-    <div class="nav-item" onclick="window.nav('iplist',this)"><i class="ti ti-network"></i>IP List & Port details</div>
-    <div class="nav-item" onclick="window.nav('floorbox',this)"><i class="ti ti-layers-linked"></i>Floor box details</div>
-
-    <div class="nav-section">Management</div>
-    <div class="nav-item" onclick="window.nav('settings',this)" style="color:var(--color-warning); font-weight:600;"><i class="ti ti-settings"></i>Portal Settings (Backup)</div>
+    <div class="nav-item" onclick="nav('testing',this)"><i class="ti ti-checkbox"></i>Equipment Testing</div>
+    <div class="nav-item" onclick="nav('history',this)"><i class="ti ti-history"></i>Testing Logs History</div>
+    <div class="nav-item" onclick="nav('inventory',this)"><i class="ti ti-box"></i>Functional Registry</div>
+    <div class="nav-item" onclick="nav('fullinventory',this)" style="color:var(--color-primary); font-weight: 600;"><i class="ti ti-clipboard-list"></i>Full Audit Inventory</div>
+    <div class="nav-item" onclick="nav('programs',this)"><i class="ti ti-calendar-event"></i>Master Program Log</div>
+    <div class="nav-item" onclick="nav('redundancy',this)" style="color:#a855f7;"><i class="ti ti-layers-intersect"></i>Redundancy Matrix</div>
+    <div style="margin-top:auto; padding-bottom: 16px;">
+      <div class="nav-item" style="color:var(--color-danger)" onclick="nav('faults',this)"><i class="ti ti-alert-triangle"></i>Active Fault Registry</div>
+    </div>
   </div>
 
   <div class="main">
     <div class="topbar">
-      <div style="display:flex; align-items:center; gap:12px;">
-        <button class="mobile-menu-toggle" onclick="window.toggleMobileMenu()"><i class="ti ti-menu-2"></i></button>
-        <h2 id="page-title">Dashboard</h2>
-      </div>
+      <h2 id="page-title">Dashboard</h2>
+      <div class="topbar-right" id="topbar-actions"></div>
     </div>
     
     <div class="content">
-      <!-- DASHBOARD PAGE -->
       <div class="page active" id="p-dashboard">
         <div class="kpi-grid" id="kpi-row"></div>
-        <div class="card" style="background:#f0fdf4; border-color:#bbf7d0; display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap; padding:18px;">
-          <div>
-            <h4 style="font-size:14px; font-weight:600; color:#166534;">Excel Central Master Upload Engine</h4>
-            <p style="font-size:12px; color:#15803d; margin-top:2px;">Upload your multi-tab sheet here to sync Equipment, IP lists, and Floor details instantly.</p>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-title"><i class="ti ti-chart-bar"></i>Equipment Verification Velocity</div>
+            <div class="chart-container"><canvas id="chart-verification-velocity"></canvas></div>
           </div>
-          <input type="file" id="fi-central-excel" accept=".xlsx, .xls, .csv" style="padding:6px; font-size:13px;">
+          <div class="card">
+            <div class="card-title"><i class="ti ti-chart-pie"></i>Program Classification Mix</div>
+            <div class="chart-container"><canvas id="chart-program-classification"></canvas></div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-title"><i class="ti ti-alert-circle"></i>Active Equipment Breakdown Log</div>
+            <div style="overflow-x:auto;">
+              <table>
+                <thead><tr><th>Asset</th><th>Category</th><th>Reported On</th><th>State</th></tr></thead>
+                <tbody id="fault-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div class="card" style="margin-bottom:0;">
+              <div class="card-title" style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                <span><i class="ti ti-calendar-time"></i>Upcoming Scheduled Runs</span>
+                <button class="btn btn-primary" style="padding:4px 10px; font-size:12px;" onclick="openModal('modal-prog')"><i class="ti ti-plus"></i> Add Event</button>
+              </div>
+              <div style="overflow-x:auto; max-height:190px;">
+                <table>
+                  <thead><tr><th>Program Description</th><th>Type</th><th>Hijri Date</th></tr></thead>
+                  <tbody id="prog-upcoming-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card" style="margin-bottom:0;">
+              <div class="card-title" style="margin-bottom:10px;"><i class="ti ti-history"></i>Recently Concluded Runs (Last 5)</div>
+              <div style="overflow-x:auto; max-height:190px;">
+                <table>
+                  <thead><tr><th>Program Description</th><th>Type</th><th>Hijri Date</th></tr></thead>
+                  <tbody id="prog-history-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- EQUIPMENT LIST PAGE -->
-      <div class="page" id="p-fullinventory">
-        <div class="card" style="display:flex; gap:12px; padding:14px;"><input type="text" id="fullinv-search" placeholder="Search Equipment List..." oninput="window.renderFullAuditInventoryTable()" style="flex:1;"></div>
-        <div class="card" style="padding:0; overflow:hidden;"><div class="responsive-table-container"><table><thead><tr><th>No.</th><th>Item Description</th><th>Make</th><th>Model</th><th>Serial No.</th><th>Qty</th></tr></thead><tbody id="fullinv-table-body"></tbody></table></div></div>
-      </div>
-
-      <!-- IP LIST PAGE -->
-      <div class="page" id="p-iplist">
-        <div class="card" style="display:flex; gap:12px; padding:14px;"><input type="text" id="iplist-search" placeholder="Search IP List & Ports..." oninput="window.renderIPListTable()" style="flex:1;"></div>
-        <div class="card" style="padding:0; overflow:hidden;"><div class="responsive-table-container"><table><thead><tr><th>No.</th><th>Device Name</th><th>IP Address</th><th>MAC Address / Port</th><th>Switch Port / VLAN</th><th>Qty</th></tr></thead><tbody id="iplist-table-body"></tbody></table></div></div>
-      </div>
-
-      <!-- FLOOR BOX PAGE -->
-      <div class="page" id="p-floorbox">
-        <div class="card" style="display:flex; gap:12px; padding:14px;"><input type="text" id="floorbox-search" placeholder="Search Floor Box Details..." oninput="window.renderFloorBoxTable()" style="flex:1;"></div>
-        <div class="card" style="padding:0; overflow:hidden;"><div class="responsive-table-container"><table><thead><tr><th>No.</th><th>Location / Box ID</th><th>Audio Mappings</th><th>Video Links</th><th>Data Ports</th><th>Qty</th></tr></thead><tbody id="floorbox-table-body"></tbody></table></div></div>
-      </div>
-
-      <!-- EQUIPMENT TESTING PAGE (Purana Data Linked) -->
       <div class="page" id="p-testing">
-        <div class="card" style="background:#fff; padding:16px; border:1px solid var(--color-border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
-          <div style="display:flex; align-items:center; gap:12px;">
-            <span class="form-label" style="white-space:nowrap;">Verification Date:</span>
-            <input type="date" id="testing-date-picker" style="width:180px;" onchange="window.renderTesting()">
+        <div style="background:#fff; padding:16px; border-radius:var(--border-radius-lg); border:1px solid var(--color-border); margin-bottom:16px; display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; width:100%; flex-wrap:wrap; gap:12px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span class="form-label" style="white-space:nowrap;">Select Verification Date:</span>
+              <input type="date" id="testing-date-picker" style="width:180px;" onchange="renderTesting()">
+            </div>
+            <div id="test-progress-label" style="font-size:14px; font-weight:500;"></div>
           </div>
-          <div id="test-progress-label" style="font-size:14px; font-weight:500;"></div>
+          
+          <div class="testing-tabs-container">
+            <button class="tab-btn active" id="btn-tab-all" onclick="setTestingTab('All')">All Systems</button>
+            <button class="tab-btn" id="btn-tab-audio" onclick="setTestingTab('Audio')">Audio</button>
+            <button class="tab-btn" id="btn-tab-video" onclick="setTestingTab('Video')">Video</button>
+            <button class="tab-btn" id="btn-tab-it" onclick="setTestingTab('IT')">IT Section</button>
+            <button class="tab-btn" id="btn-tab-siyanat" onclick="setTestingTab('Siyanat')">Siyanat</button>
+          </div>
         </div>
-        <div class="card" style="padding:0; overflow:hidden;"><div id="testing-list" style="max-height:500px; overflow-y:auto;"></div></div>
+
+        <div class="card" style="padding:0; overflow:hidden;">
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; background:#f8fafc; padding:12px 16px; border-bottom:1px solid var(--color-border); font-weight:600; font-size:12px; color:var(--color-text-secondary)">
+            <span>EQUIPMENT SYSTEM CONFIGURATION</span>
+            <span>CURRENT VERIFICATION STATUS</span>
+            <span style="text-align:right; padding-right:20px;">ACTIONS</span>
+          </div>
+          <div id="testing-list" style="max-height:550px; overflow-y:auto;"></div>
+        </div>
       </div>
 
-      <!-- TESTING LOGS HISTORY PAGE (Purana Logs Restored) -->
       <div class="page" id="p-history">
-        <div class="card" style="padding:14px; border:1px solid var(--color-border); margin-bottom:16px;">
-          <span class="form-label">Filter Month:</span>
-          <select id="history-month-select" style="width:200px; margin-left:12px; padding:6px;" onchange="window.renderHistoryPage()"></select>
+        <div style="background:#fff; padding:14px; border-radius:var(--border-radius-lg); border:1px solid var(--color-border); margin-bottom:16px; display:flex; align-items:center; gap:12px;">
+          <span class="form-label">Filter Month Engine:</span>
+          <select id="history-month-select" style="width:200px;" onchange="renderHistoryPage()"></select>
         </div>
         <div class="history-layout">
           <div class="history-sidebar" id="history-dates-container"></div>
-          <div class="card" style="padding:0; overflow:hidden;">
-            <div style="padding:16px; border-bottom:1px solid var(--color-border); font-weight:600;" id="history-detail-title">Timeline Parameters Matrix</div>
-            <div class="responsive-table-container"><table><thead><tr><th>Asset Name</th><th>Category</th><th>Logged Status</th></tr></thead><tbody id="history-detail-body"></tbody></table></div>
+          <div class="card" style="padding:0; overflow-y:auto;">
+            <div style="padding:16px; border-bottom:1px solid var(--color-border); font-weight:600;" id="history-detail-title">Select Operational Timeline Matrix</div>
+            <table>
+              <thead><tr><th>Asset Name (Click to view full analytics)</th><th>Category</th><th>Logged Status</th></tr></thead>
+              <tbody id="history-detail-body"><tr><td colspan="3" style="text-align:center; padding:40px; color:var(--color-text-secondary)">No selection made.</td></tr></tbody>
+            </table>
           </div>
         </div>
       </div>
 
-      <!-- FUNCTIONAL REGISTRY PAGE -->
       <div class="page" id="p-inventory">
-        <div class="card" style="padding:0; overflow:hidden;"><div class="responsive-table-container"><table><thead><tr><th>#</th><th>Asset Name</th><th>Category</th><th>Current Status</th></tr></thead><tbody id="inv-body"></tbody></table></div></div>
-      </div>
-
-      <!-- SETTINGS PAGE (BACKUP & RESTORE INFRASTRUCTURE) -->
-      <div class="page" id="p-settings">
-        <div class="card" style="border-top: 4px solid var(--color-warning);">
-          <h3 style="font-size:16px; font-weight:600; margin-bottom:8px;"><i class="ti ti-download" style="margin-right:6px; color:var(--color-warning);"></i>System Full Backup Export Node</h3>
-          <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom:16px;">Clicking the button below will instantly download a complete secure JSON state backup file of your entire database portal.</p>
-          <button class="btn btn-primary" onclick="window.triggerSystemBackup()"><i class="ti ti-download"></i> Generate & Download Full Backup</button>
+        <div class="card" style="display:flex; gap:12px; flex-wrap:wrap; padding:14px;">
+          <input type="text" id="inv-search" placeholder="Search operational asset registers..." oninput="renderInventory()" style="flex:1; min-width:200px;">
+          <select id="inv-cat-filter" onchange="renderInventory()" style="width:220px;"><option value="">All Categories</option></select>
+          <select id="inv-status-filter" onchange="renderInventory()" style="width:180px;">
+            <option value="">All Statuses</option>
+            <option>Working</option><option>Faulty</option><option>Under Repair</option><option>New</option>
+          </select>
         </div>
-
-        <div class="card" style="border-top: 4px solid var(--color-danger); margin-top:24px;">
-          <h3 style="font-size:16px; font-weight:600; margin-bottom:8px; color:var(--color-danger);"><i class="ti ti-upload" style="margin-right:6px;"></i>System Disaster Full Recovery (Restore Node)</h3>
-          <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom:16px;">Select a previously downloaded SAFI-Backup JSON file to write full master records override onto the Firebase cloud node.</p>
-          <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
-            <input type="file" id="fi-restore-json" accept=".json" style="max-width:280px; padding:6px;">
-            <button class="btn btn-rose" onclick="window.triggerSystemRestore()"><i class="ti ti-refresh"></i> Execute Full Override Restore</button>
+        <div class="card" style="padding:0; overflow:hidden;">
+          <div style="overflow-x:auto;">
+            <table>
+              <thead><tr><th>#</th><th>Asset Name</th><th>Category</th><th>Current Status</th><th>Acquisition</th><th>Notes</th><th style="text-align:right;">Actions</th></tr></thead>
+              <tbody id="inv-body"></tbody>
+            </table>
           </div>
         </div>
       </div>
 
+      <div class="page" id="p-fullinventory">
+        <div class="card" style="display:flex; gap:12px; flex-wrap:wrap; padding:14px;">
+          <input type="text" id="fullinv-search" placeholder="Search Item Description, Make or Model..." oninput="renderFullAuditInventoryTable()" style="flex:1; min-width:200px;">
+          <button class="btn btn-primary" onclick="openModal('modal-add-fullinv')"><i class="ti ti-plus"></i> Add New Item Row</button>
+        </div>
+        <div class="card" style="padding:0; overflow:hidden;">
+          <div style="overflow-x:auto; max-height:550px;">
+            <table>
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Item Description</th>
+                  <th>Make</th>
+                  <th>Model</th>
+                  <th>Serial No.</th>
+                  <th>Qty</th>
+                  <th style="text-align:right; padding-right:24px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="fullinv-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="page" id="p-programs">
+        <div class="kpi-grid" id="prog-kpis"></div>
+        <div class="card" style="padding:0; overflow:hidden;">
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:16px; border-bottom:1px solid var(--color-border); background:#f8fafc; gap:12px;">
+            <span style="font-weight:600; font-size:15px; flex:1;">Master Program Log Registry Archive</span>
+            <input type="text" id="prog-search" placeholder="Filter search entries..." style="width:280px;" oninput="renderProgramTable()">
+          </div>
+          <div style="overflow-x:auto; max-height:480px;">
+            <table>
+              <thead><tr><th>Sr No</th><th>Date</th><th>Hijri Date</th><th>Description Imaged Block</th><th>Type Category</th><th>From</th><th>To</th><th>Duration</th></tr></thead>
+              <tbody id="prog-full-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="page" id="p-redundancy">
+        <div class="card">
+          <div class="card-title" style="color:#a855f7;"><i class="ti ti-layers-intersect"></i>System Redundancy Matrix & Failover Mapping</div>
+          <p style="color:var(--color-text-secondary); font-size:14px; line-height:1.6;">
+            Bhai ye tab perfectly provision ho gaya hai. Abhi isko backup aur main lines system infrastructure se connect karna baki hai. Aap mujhe iske aage ki criteria ya mapping requirements bataiye, hum isko pura configure kar denge!
+          </p>
+        </div>
+      </div>
+
+      <div class="page" id="p-faults">
+        <div class="kpi-grid" id="fault-kpis"></div>
+        <div class="card" style="padding:0; overflow:hidden;">
+          <div style="overflow-x:auto;">
+            <table>
+              <thead><tr><th>Asset</th><th>Category</th><th>Breakdown Logs Comments</th><th>Priority</th><th>Reported On</th><th>Status</th><th style="text-align:right;">Update Action</th></tr></thead>
+              <tbody id="fault-full-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<!-- ================= MODALS SYSTEM ================= -->
+
+<div class="modal-overlay" id="modal-edit-asset">
+  <div class="modal">
+    <div class="modal-title"><span>Modify Asset Registry Metadata</span><button class="btn" onclick="closeModal('modal-edit-asset')" style="padding:4px 10px;">×</button></div>
+    <input type="hidden" id="edit-asset-id">
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">Asset Identity Name</label><input type="text" id="edit-asset-name"></div>
+      <div class="form-group"><label class="form-label">System Category Mapping</label><select id="edit-asset-cat"></select></div>
+    </div>
+    <div class="form-group" style="margin-bottom:20px;"><label class="form-label">Engineering Log Notes</label><textarea id="edit-asset-notes" rows="3"></textarea></div>
+    <div style="display:flex; gap:12px; justify-content:flex-end;"><button class="btn" onclick="closeModal('modal-edit-asset')">Cancel</button><button class="btn btn-primary" onclick="commitAssetChanges()">Save Changes</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-asset-history">
+  <div class="modal" style="width: 520px;">
+    <div class="modal-title"><span id="analytics-popup-title" style="color:var(--color-primary);">Asset Audit Log Ledger</span><button class="btn" onclick="closeModal('modal-asset-history')" style="padding:4px 10px;">×</button></div>
+    <div style="background:#f8fafc; padding:12px; border-radius:var(--border-radius-md); margin-bottom:16px; border:1px solid var(--color-border);">
+      <div style="font-size:13px; color:var(--color-text-secondary);">Total Times Audited: <strong id="analytics-popup-count" style="color:var(--color-text-primary); font-size:15px;">0</strong></div>
+    </div>
+    <div style="max-height: 280px; overflow-y: auto; border:1px solid var(--color-border); border-radius:var(--border-radius-md);">
+      <table>
+        <thead><tr><th>Log Date Coordinate</th><th>Verification Status</th></tr></thead>
+        <tbody id="analytics-popup-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-inv">
+  <div class="modal">
+    <div class="modal-title"><span>Introduce New Fleet Asset Entry</span><button class="btn" onclick="closeModal('modal-inv')" style="padding:4px 10px;">×</button></div>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">Asset Identity Name</label><input type="text" id="f-name" placeholder="e.g. SQ6 MIXER"></div>
+      <div class="form-group">
+        <label class="form-label">System Architecture Category</label>
+        <div style="display:flex; gap:6px;">
+          <select id="f-cat" style="flex:1;"></select>
+          <button class="btn btn-primary" onclick="triggerAddNewCategory()" style="padding:10px;"><i class="ti ti-plus"></i></button>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Installation/Acquisition Date</label><input type="date" id="f-date"></div>
+      <div class="form-group"><label class="form-label">Initial State</label><select id="f-status"><option>Working</option><option>New</option><option>Faulty</option><option>Under Repair</option></select></div>
+    </div>
+    <div class="form-group" style="margin-bottom:20px;"><label class="form-label">Engineering Configuration Log Notes</label><textarea id="f-notes" rows="2" placeholder="Hardware descriptions remarks..."></textarea></div>
+    <div style="display:flex; gap:12px; justify-content:flex-end;"><button class="btn" onclick="closeModal('modal-inv')">Cancel</button><button class="btn btn-primary" onclick="addInventory()">Save Component</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-add-fullinv">
+  <div class="modal">
+    <div class="modal-title"><span>Add New Row To Full Audit Inventory</span><button class="btn" onclick="closeModal('modal-add-fullinv')" style="padding:4px 10px;">×</button></div>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">Item Description</label><input type="text" id="fi-add-desc" placeholder="e.g. Antenna Amplifier"></div>
+      <div class="form-group"><label class="form-label">Make</label><input type="text" id="fi-add-make" placeholder="e.g. SHURE"></div>
+      <div class="form-group"><label class="form-label">Model</label><input type="text" id="fi-add-model" placeholder="e.g. UA834WB"></div>
+      <div class="form-group"><label class="form-label">Serial Number</label><input type="text" id="fi-add-serial" placeholder="e.g. 25C92246700904"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:20px;"><label class="form-label">Quantity</label><input type="number" id="fi-add-qty" value="1"></div>
+    <div style="display:flex; gap:12px; justify-content:flex-end;"><button class="btn" onclick="closeModal('modal-add-fullinv')">Cancel</button><button class="btn btn-primary" onclick="addFullAuditItemRow()">Save Item Row</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-edit-fullinv">
+  <div class="modal">
+    <div class="modal-title"><span>Modify Full Audit Inventory Metadata</span><button class="btn" onclick="closeModal('modal-edit-fullinv')" style="padding:4px 10px;">×</button></div>
+    <input type="hidden" id="edit-fullinv-id">
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">Item Description</label><input type="text" id="fi-edit-desc"></div>
+      <div class="form-group"><label class="form-label">Make</label><input type="text" id="fi-edit-make"></div>
+      <div class="form-group"><label class="form-label">Model</label><input type="text" id="fi-edit-model"></div>
+      <div class="form-group"><label class="form-label">Serial Number</label><input type="text" id="fi-edit-serial"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:20px;"><label class="form-label">Quantity</label><input type="number" id="fi-edit-qty"></div>
+    <div style="display:flex; gap:12px; justify-content:flex-end;"><button class="btn" onclick="closeModal('modal-edit-fullinv')">Cancel</button><button class="btn btn-primary" onclick="commitFullAuditItemRowChanges()">Save Changes</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-prog">
+  <div class="modal">
+    <div class="modal-title"><span>Schedule & Log New Auditorium Event Run</span><button class="btn" onclick="closeModal('modal-prog')" style="padding:4px 10px;">×</button></div>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">Gregorian Calendar Date</label><input type="date" id="p-date"></div>
+      <div class="form-group"><label class="form-label">Hijri Calendar Date Mapping</label><input type="text" id="p-hijri" placeholder="e.g. 15-Shawwal-1447"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:12px;"><label class="form-label">Event Narrative Description</label><input type="text" id="p-desc" placeholder="Enter explicit narrative title text..."></div>
+    <div class="form-group" style="margin-bottom:12px;"><label class="form-label">Event Stream Classification Type</label><select id="p-type"></select></div>
+    <div class="three-col" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:20px;">
+      <div class="form-group"><label class="form-label">Time From</label><input type="time" id="p-time-from" onchange="calculateDuration()"></div>
+      <div class="form-group"><label class="form-label">Time To</label><input type="time" id="p-time-to" onchange="calculateDuration()"></div>
+      <div class="form-group"><label class="form-label">Duration</label><input type="text" id="p-dur" readonly style="background:#f1f5f9; font-weight:600;"></div>
+    </div>
+    <div style="display:flex; gap:12px; justify-content:flex-end;"><button class="btn" onclick="closeModal('modal-prog')">Cancel</button><button class="btn btn-primary" onclick="addProgram()">Commit Log Entry</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-fault">
+  <div class="modal">
+    <div class="modal-title"><span>Raise System Line Breakdown Incident Ticket</span><button class="btn" onclick="closeModal('modal-fault')" style="padding:4px 10px;">×</button></div>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">Select Impacted Component</label><select id="fa-asset"></select></div>
+      <div class="form-group"><label class="form-label">Ticket Severity Index</label><select id="fa-priority"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div>
+    </div>
+    <div class="form-group" style="margin-bottom:20px;"><label class="form-label">Diagnostic Failure Symptoms Comment</label><textarea id="fa-issue" rows="3" placeholder="Explain failure details drops..."></textarea></div>
+    <div style="display:flex; gap:12px; justify-content:flex-end;"><button class="btn" onclick="closeModal('modal-fault')">Cancel</button><button class="btn btn-rose" onclick="addFault()">Log Incident</button></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -239,11 +453,30 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+window.CATS = [
+  {name:"Wireless Audio",color:"#0ea5e9",items:["HH01","HH02","HH03","HH04","HH05","HH06","SM58 #1","SM58 #2","SM58 #3","SM58 #4","SM58 #5","SM58 #6","SM58 #7","Boundary Mic #1","Boundary Mic #2","HW 01 MIC","HW 02 MIC","HW 03 MIC","HW 04 MIC","HW 05 MIC","HW 06 MIC","LP 01 MIC","LP 02 MIC","AKG P120 #1","AKG P120 #2"]},
+  {name:"Wireless Systems",color:"#f59e0b",items:["HW Body Pack #1","HW Body Pack #2","HW Body Pack #3","HW Body Pack #4","LP Body Pack #1","LP Body Pack #2"]},
+  {name:"Speakers",color:"#ef4444",items:["Stage Speaker L","Stage Speaker R","FB 1.1","FB 2.1","FB 3.1","FB 4.1","FB 5.1","FB 6.1","AUDI BACKSTAGE SPEAKER","K-ARRAY","ANACONDA"]},
+  {name:"Audio Processing & Mixing",color:"#8e44ad",items:["SQ6 MIXER"]},
+  {name:"Cameras",color:"#ec4899",items:["Camera 01","Camera 02","Camera 03","Camera 04","Camera 05"]},
+  {name:"Video Equipment",color:"#3b82f6",items:["ENCODER","DECODER","AIRMEDIA","PODIUM","WEB PRESENTER","STREAM DECK","HDBT ROYAL BOX","HDBT VIP ROOM 2","HDBT CONTROL ROOM","HDBT BOH 1","HDBT BOH 2","HDBT DRESS ROOM 1","HDBT DRESS ROOM 2","HDBT OFFICE","HDBT MAIN OFFICE","RECORDER PREVIEW","RECORDER PROGRAM"]},
+  {name:"Displays",color:"#14b8a6",items:["LED Screen","CONFIDENCE MONITOR TV","REFERENCE MONITOR TV","MULTIVIEW PV TV 1","MULTIVIEW PV TV 2"]},
+  {name:"Lighting",color:"#eab308",items:["CANARA LIGHTS","STAR LIGHTS","STEP LIGHTS","IN HOUSE LIGHTS","LIGHT CONTROL ROOM"]},
+  {name:"IT & Communication",color:"#64748b",items:["LAPTOP","WALKIE TALKIE","WEB CONFERENCE","COMPUTER UPDATES"]},
+  {name:"Stage Accessories",color:"#a16207",items:["Slider #1","Curtain #1"]},
+  {name:"Siyanat",color:"#6d28d9",items:["Auditorium Chairs & Seating Line #1"]}
+];
+
+window.PROG_TYPES=["Awwala Orientation","Collegiate I","Collegiate II","Janah al tarrannum","Dissertations","Darse Burhani","TGM","Visit","Screening","Rental","Dept of cultural activities","Dept of Quranic Arts","Other"];
+
 window.inventory = [];
 window.fullAuditInventory = []; 
-window.ipListInventory = [];    
-window.floorBoxInventory = [];  
 window.testDailyLogs = {}; 
+window.programs = [];
+window.faults = [];
+window.globalVelocityChart = null;
+window.globalClassificationChart = null;
+window.currentTestingActiveTab = "All"; 
 
 window.fmtDate = function(d){return d.toISOString().split('T')[0]};
 
@@ -252,16 +485,13 @@ window.saveToDatabase = async function() {
     await setDoc(doc(db, "AV_OPERATIONS", "MASTER_DATA"), {
       inventory: window.inventory,
       fullAuditInventory: window.fullAuditInventory, 
-      ipListInventory: window.ipListInventory,
-      floorBoxInventory: window.floorBoxInventory,
-      testDailyLogs: JSON.stringify(window.testDailyLogs)
+      testDailyLogs: JSON.stringify(window.testDailyLogs), 
+      programs: window.programs,
+      faults: window.faults
     });
-  } catch (err) { console.error(err); }
-};
-
-window.toggleMobileMenu = function() {
-  document.getElementById('app-sidebar').classList.toggle('open');
-  document.getElementById('sidebar-backdrop').classList.toggle('open');
+  } catch (err) {
+    console.error("Firebase Cloud Save Error Matrix:", err);
+  }
 };
 
 window.initData = async function(){
@@ -273,224 +503,586 @@ window.initData = async function(){
       const cloudData = docSnap.data();
       window.inventory = cloudData.inventory || [];
       window.fullAuditInventory = cloudData.fullAuditInventory || [];
-      window.ipListInventory = cloudData.ipListInventory || [];
-      window.floorBoxInventory = cloudData.floorBoxInventory || [];
       window.testDailyLogs = cloudData.testDailyLogs ? JSON.parse(cloudData.testDailyLogs) : {};
+      window.programs = cloudData.programs || [];
+      window.faults = cloudData.faults || [];
+    }
+    
+    // Fixed syntax missing semi-colon token here
+    if(window.fullAuditInventory.length === 0) {
+      window.fullAuditInventory = [
+        {id:"fa_1", desc:"Q-SYS", make:"QSC", model:"QIO-ML2X2", serial:"25C92246700904", qty:1},
+        {id:"fa_2", desc:"Antenna Amplifier", make:"SHURE", model:"UA834WB", serial:"190V3991002100542233300970", qty:1},
+        {id:"fa_3", desc:"Antenna Amplifier", make:"SHURE", model:"UA834WB", serial:"190V3991002100542233300921", qty:1},
+        {id:"fa_4", desc:"In-Line Power Adapter", make:"SHURE", model:"UABIAST-IN", serial:"NA", qty:1},
+        {id:"fa_5", desc:"In-Line Power Adapter", make:"SHURE", model:"UABIAST-IN", serial:"NA", qty:1},
+        {id:"fa_6", desc:"In-Line Power Adapter", make:"SHURE", model:"UABIAST-IN", serial:"NA", qty:1},
+        {id:"fa_7", desc:"In-Line Power Adapter", make:"SHURE", model:"UABIAST-IN", serial:"NA", qty:1},
+        {id:"fa_8", desc:"Antenna Distribution", make:"Shure", model:"UA844+SWB", serial:"2BH05028871", qty:1},
+        {id:"fa_9", desc:"Digital Wireless Receiver", make:"SHURE", model:"ULXD4QIN", serial:"3AC17633570", qty:1},
+        {id:"fa_10", desc:"Digital Wireless Receiver", make:"SHURE", model:"ULXD4QIN", serial:"3AC17633033", qty:1},
+        {id:"fa_11", desc:"Digital Wireless Receiver", make:"SHURE", model:"ULXD4QIN", serial:"3AL09784735", qty:1},
+        {id:"fa_12", desc:"Audio DSP", make:"QSC", model:"Core 510i", serial:"12US2233177802", qty:1},
+        {id:"fa_13", desc:"Q-SYS Dante Audio Bridge Card", make:"QSC", model:"CDN64", serial: "—", qty:1},
+        {id:"fa_14", desc:"Power Amplifier", make:"QSC", model:"MP-A40V", serial:"25CN2237300173", qty:1},
+        {id:"fa_15", desc:"Power Amplifier", make:"QSC", model:"MP-A20V", serial:"253N2247300157", qty:1},
+        {id:"fa_16", desc:"Power Amplifier", make:"K Array", model:"KA208", serial:"K147DP0100", qty:1},
+        {id:"fa_17", desc:"Biamp", make:"Vocia", model:"8600C", serial:"041339119", qty:1},
+        {id:"fa_18", desc:"Processor", make:"Vocia", model:"Processor", serial:"03340415", qty:1}
+      ];
+      await window.saveToDatabase();
     }
 
-    document.getElementById('fi-central-excel').addEventListener('change', parseCentralExcelEngine);
+    if(window.inventory.length === 0) {
+      window.CATS.forEach(cat=>{
+        cat.items.forEach(item=>{
+          window.inventory.push({id:String(Date.now()+Math.random()),name:item,cat:cat.name,status:"Working",date:"2026-03-01",notes:""});
+        });
+      });
+      await window.saveToDatabase();
+    }
 
     const loader = document.getElementById('system-loader');
     if(loader) { loader.style.opacity = '0'; setTimeout(() => loader.remove(), 300); }
     
     window.renderDashboard();
-  } catch (err) { console.error(err); }
-};
-
-// FULL SYSTEM BACKUP INTERFACES ENGINE
-window.triggerSystemBackup = function() {
-  if(confirm("Bhai, kya aap pure dashboard portal ka full backup download karna chahte hain?")) {
-    const fullBackupPayload = {
-      inventory: window.inventory,
-      fullAuditInventory: window.fullAuditInventory,
-      ipListInventory: window.ipListInventory,
-      floorBoxInventory: window.floorBoxInventory,
-      testDailyLogs: window.testDailyLogs,
-      exportedAt: new Date().toISOString()
-    };
-    
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullBackupPayload));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `AUDITORIUM_MASTER_BACKUP_${window.fmtDate(new Date())}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
+  } catch (err) {
+    console.error("Database Initialization Fail Matrix:", err);
   }
 };
 
-// FULL SYSTEM RESTORE SYSTEM INFRASTRUCTURE
-window.triggerSystemRestore = function() {
-  const fileSelector = document.getElementById('fi-restore-json');
-  if(!fileSelector.files[0]) {
-    alert("Please select a previously exported .json backup file first!");
-    return;
-  }
+window.nav = function(page, el) {
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p-'+page).classList.add('active');
   
-  if(confirm("⚠️ CRITICAL PROMPT: Kya aap waqai is file se data RESTORE karna chahte hain? Isse aapka cloud par chal raha current data completely override aur change ho jayega!")) {
-    const fileReader = new FileReader();
-    reader.onload = async function(e) {
-      try {
-        const parsedState = JSON.parse(e.target.result);
-        
-        window.inventory = parsedState.inventory || [];
-        window.fullAuditInventory = parsedState.fullAuditInventory || [];
-        window.ipListInventory = parsedState.ipListInventory || [];
-        window.floorBoxInventory = parsedState.floorBoxInventory || [];
-        window.testDailyLogs = parsedState.testDailyLogs || {};
-        
-        await window.saveToDatabase();
-        alert("System Completely Restored Successfully! Reloading matrices fields...");
-        window.location.reload();
-      } catch(err) {
-        alert("Restore Failed: Invalid file structure tokens parsed!");
-      }
-    };
-    fileReader.readAsText(fileSelector.files[0]);
-  }
+  const titles={dashboard:'Command Dashboard Overview',testing:'Daily Equipment Performance Verification',history:'Comprehensive Testing Logs History Engine',inventory:'Live Hardware Asset Registry Infrastructure',fullinventory:'Full Audit Asset Inventory Sheet',programs:'Historical Master Program Log Ledger',faults:'Active Component Malfunction Ticket Matrix',redundancy:'System Redundancy Matrix Configuration'};
+  document.getElementById('page-title').textContent=titles[page]||page;
+  
+  const tb=document.getElementById('topbar-actions'); tb.innerHTML='';
+  if(page==='inventory'){tb.innerHTML='<button class="btn btn-primary" onclick="openModal(\'modal-inv\')"><i class="ti ti-plus"></i> Introduce Asset Component</button>';}
+  if(page==='programs'){tb.innerHTML='<button class="btn btn-primary" onclick="openModal(\'modal-prog\')"><i class="ti ti-plus"></i> Log New Scheduled Runtime</button>';}
+  if(page==='faults'){tb.innerHTML='<button class="btn btn-rose" onclick="openModal(\'modal-fault\')"><i class="ti ti-alert-triangle"></i> Launch Failure Incident Ticket</button>';}
+  
+  if(page==='dashboard') window.renderDashboard();
+  if(page==='inventory'){ window.populateCatFilter(); window.renderInventory(); }
+  if(page==='fullinventory') window.renderFullAuditInventoryTable();
+  if(page==='programs') window.renderPrograms();
+  if(page==='testing') window.renderTesting();
+  if(page==='history') window.renderHistoryPage();
+  if(page==='faults') window.renderFaults();
 };
 
-function parseCentralExcelEngine(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = async function(e) {
-    const data = new Uint8Array(e.target.result);
-    const workbook = XLSX.read(data, { type: 'array' });
-    
-    window.fullAuditInventory = [];
-    window.ipListInventory = [];
-    window.floorBoxInventory = [];
-    window.inventory = [];
-
-    workbook.SheetNames.forEach((sheetName) => {
-      const worksheet = workbook.Sheets[sheetName];
-      const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-      const nameLower = sheetName.toLowerCase();
-
-      if(nameLower.includes('equip') || nameLower.includes('asset') || nameLower.includes('list')) {
-        for(let i = 1; i < rows.length; i++) {
-          if(rows[i] && rows[i][1]) {
-            const rowObj = { id: `eq_${i}_${Date.now()}`, desc: String(rows[i][1]), make: String(rows[i][2] || '—'), model: String(rows[i][3] || '—'), serial: String(rows[i][4] || '—'), qty: parseInt(rows[i][5]) || 1 };
-            window.fullAuditInventory.push(rowObj);
-            window.inventory.push({ id: rowObj.id, name: rowObj.desc, cat: rowObj.make, status: "Working" });
-          }
-        }
-      } 
-      else if(nameLower.includes('ip') || nameLower.includes('port') || nameLower.includes('network')) {
-        for(let i = 1; i < rows.length; i++) {
-          if(rows[i] && rows[i][1]) {
-            window.ipListInventory.push({ id: `ip_${i}_${Date.now()}`, desc: String(rows[i][1]), make: String(rows[i][2] || '—'), model: String(rows[i][3] || '—'), serial: String(rows[i][4] || '—'), qty: parseInt(rows[i][5]) || 1 });
-          }
-        }
-      } 
-      else if(nameLower.includes('floor') || nameLower.includes('box')) {
-        for(let i = 1; i < rows.length; i++) {
-          if(rows[i] && rows[i][1]) {
-            window.floorBoxInventory.push({ id: `fb_${i}_${Date.now()}`, desc: String(rows[i][1]), make: String(rows[i][2] || '—'), model: String(rows[i][3] || '—'), serial: String(rows[i][4] || '—'), qty: parseInt(rows[i][5]) || 1 });
-          }
-        }
-      }
-    });
-
-    await window.saveToDatabase();
-    alert("Excel multi-tabs dynamic logs linked cleanly!");
-    window.renderDashboard();
-  };
-  reader.readAsArrayBuffer(file);
-}
+window.openModal = function(id){ document.getElementById(id).classList.add('open'); };
+window.closeModal = function(id){ document.getElementById(id).classList.remove('open'); };
 
 window.renderFullAuditInventoryTable = function() {
   const query = document.getElementById('fullinv-search').value.toLowerCase();
   const tbody = document.getElementById('fullinv-table-body');
-  tbody.innerHTML = window.fullAuditInventory.filter(i => !query || i.desc.toLowerCase().includes(query) || i.make.toLowerCase().includes(query)).map((item, idx) => `
-    <tr><td>${idx+1}</td><td><strong>${item.desc}</strong></td><td><span class="badge badge-blue">${item.make}</span></td><td><span class="badge badge-gray">${item.model}</span></td><td>${item.serial}</td><td><strong>${item.qty}</strong></td></tr>
-  `).join('') || '<tr><td colspan="6" style="text-align:center; padding:20px;">No records data active.</td></tr>';
+  tbody.innerHTML = "";
+
+  const filtered = window.fullAuditInventory.filter(item => {
+    return !query || item.desc.toLowerCase().includes(query) || item.make.toLowerCase().includes(query) || item.model.toLowerCase().includes(query) || item.serial.toLowerCase().includes(query);
+  });
+
+  if(filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--color-text-secondary);">No component rows discovered matching queries.</td></tr>`;
+    return;
+  }
+
+  filtered.forEach((item, index) => {
+    tbody.innerHTML += `
+      <tr>
+        <td><strong>${index + 1}</strong></td>
+        <td><span style="font-weight:600; color:var(--color-text-primary);">${item.desc}</span></td>
+        <td><span class="badge badge-blue">${item.make}</span></td>
+        <td><span class="badge badge-gray">${item.model}</span></td>
+        <td><span style="font-family:monospace; font-size:12px; color:var(--color-text-secondary);">${item.serial}</span></td>
+        <td><strong>${item.qty}</strong></td>
+        <td style="text-align:right; padding-right:20px;">
+          <button class="btn" style="padding:4px 10px; font-size:12px; border-color:var(--color-primary); color:var(--color-primary);" onclick="window.openEditFullInvModal('${item.id}')"><i class="ti ti-edit"></i> Edit</button>
+          <button class="btn btn-rose" style="padding:4px 8px; font-size:12px;" onclick="window.deleteFullInvRow('${item.id}')"><i class="ti ti-trash"></i></button>
+        </td>
+      </tr>`;
+  });
 };
 
-window.renderIPListTable = function() {
-  const query = document.getElementById('iplist-search').value.toLowerCase();
-  const tbody = document.getElementById('iplist-table-body');
-  tbody.innerHTML = window.ipListInventory.filter(i => !query || i.desc.toLowerCase().includes(query) || i.make.toLowerCase().includes(query)).map((item, idx) => `
-    <tr><td>${idx+1}</td><td><strong>${item.desc}</strong></td><td><span class="badge badge-green">${item.make}</span></td><td>${item.model}</td><td>${item.serial}</td><td><strong>${item.qty}</strong></td></tr>
-  `).join('') || '<tr><td colspan="6" style="text-align:center; padding:20px;">IP Tab sheet khali hai.</td></tr>';
+window.addFullAuditItemRow = async function() {
+  const desc = document.getElementById('fi-add-desc').value.trim();
+  const make = document.getElementById('fi-add-make').value.trim();
+  const model = document.getElementById('fi-add-model').value.trim();
+  const serial = document.getElementById('fi-add-serial').value.trim();
+  const qty = parseInt(document.getElementById('fi-add-qty').value) || 1;
+
+  if(!desc || !make) { alert("Please input basic parameter labels!"); return; }
+
+  window.fullAuditInventory.push({
+    id: "fa_" + Date.now(),
+    desc, make, model, serial: serial || "—", qty
+  });
+
+  window.closeModal('modal-add-fullinv');
+  await window.saveToDatabase();
+  window.renderFullAuditInventoryTable();
 };
 
-window.renderFloorBoxTable = function() {
-  const query = document.getElementById('floorbox-search').value.toLowerCase();
-  const tbody = document.getElementById('floorbox-table-body');
-  tbody.innerHTML = window.floorBoxInventory.filter(i => !query || i.desc.toLowerCase().includes(query) || i.make.toLowerCase().includes(query)).map((item, idx) => `
-    <tr><td>${idx+1}</td><td><strong>${item.desc}</strong></td><td>${item.make}</td><td>${item.model}</td><td>${item.serial}</td><td><strong>${item.qty}</strong></td></tr>
-  `).join('') || '<tr><td colspan="6" style="text-align:center; padding:20px;">Floor box sheet khali hai.</td></tr>';
+window.openEditFullInvModal = function(id) {
+  const item = window.fullAuditInventory.find(i => i.id === id);
+  if(!item) return;
+
+  document.getElementById('edit-fullinv-id').value = item.id;
+  document.getElementById('fi-edit-desc').value = item.desc;
+  document.getElementById('fi-edit-make').value = item.make;
+  document.getElementById('fi-edit-model').value = item.model;
+  document.getElementById('fi-edit-serial').value = item.serial;
+  document.getElementById('fi-edit-qty').value = item.qty;
+
+  window.openModal('modal-edit-fullinv');
+};
+
+window.commitFullAuditItemRowChanges = async function() {
+  const id = document.getElementById('edit-fullinv-id').value;
+  const item = window.fullAuditInventory.find(i => i.id === id);
+  if(!item) return;
+
+  item.desc = document.getElementById('fi-edit-desc').value.trim();
+  item.make = document.getElementById('fi-edit-make').value.trim();
+  item.model = document.getElementById('fi-edit-model').value.trim();
+  item.serial = document.getElementById('fi-edit-serial').value.trim();
+  item.qty = parseInt(document.getElementById('fi-edit-qty').value) || 1;
+
+  window.closeModal('modal-edit-fullinv');
+  await window.saveToDatabase();
+  window.renderFullAuditInventoryTable();
+};
+
+window.deleteFullInvRow = async function(id) {
+  if(confirm("Are you sure you want to completely clear this inventory item entry line?")) {
+    window.fullAuditInventory = window.fullAuditInventory.filter(i => i.id !== id);
+    await window.saveToDatabase();
+    window.renderFullAuditInventoryTable();
+  }
+};
+
+window.triggerAddNewCategory = function(){
+  const newCat = prompt("Enter architecture category name:");
+  if(newCat && newCat.trim() !== ""){
+    const cleanCat = newCat.trim();
+    if(!window.CATS.some(c => c.name.toLowerCase() === cleanCat.toLowerCase())){
+      window.CATS.push({name: cleanCat, color: "#475569", items: []});
+      window.populateFormCategories();
+      window.populateCatFilter();
+    }
+  }
+};
+
+window.populateFormCategories = function(){
+  const s=document.getElementById('f-cat'); s.innerHTML='';
+  window.CATS.forEach(c=>{ s.innerHTML+=`<option>${c.name}</option>`; });
+};
+
+window.calculateDuration = function(){
+  const from = document.getElementById('p-time-from').value;
+  const to = document.getElementById('p-time-to').value;
+  if(from && to){
+    let [h1, m1] = from.split(':').map(Number);
+    let [h2, m2] = to.split(':').map(Number);
+    let diffMins = ((h2 * 60) + m2) - ((h1 * 60) + m1);
+    if(diffMins < 0) diffMins += 24 * 60;
+    let hrs = Math.floor(diffMins / 60);
+    let mins = diffMins % 60;
+    document.getElementById('p-dur').value = `${hrs}:${mins < 10 ? '0' : ''}${mins}:00`;
+  }
+};
+
+window.addInventory = async function(){
+  const name=document.getElementById('f-name').value.trim();
+  if(!name)return;
+  window.inventory.push({
+    id: String(Date.now()),
+    name,
+    cat: document.getElementById('f-cat').value,
+    status: document.getElementById('f-status').value,
+    date: document.getElementById('f-date').value || window.fmtDate(new Date()),
+    notes: document.getElementById('f-notes').value
+  });
+  window.closeModal('modal-inv');
+  await window.saveToDatabase();
+  window.renderInventory();
+};
+
+window.openEditAssetModal = function(id) {
+  const asset = window.inventory.find(i => i.id === id);
+  if(!asset) return;
+  document.getElementById('edit-asset-id').value = asset.id;
+  document.getElementById('edit-asset-name').value = asset.name;
+  const catSelect = document.getElementById('edit-asset-cat');
+  catSelect.innerHTML = "";
+  window.CATS.forEach(c => { catSelect.innerHTML += `<option ${c.name === asset.cat ? 'selected' : ''}>${c.name}</option>`; });
+  document.getElementById('edit-asset-notes').value = asset.notes || "";
+  window.openModal('modal-edit-asset');
+};
+
+window.commitAssetChanges = async function() {
+  const id = document.getElementById('edit-asset-id').value;
+  const asset = window.inventory.find(i => i.id === id);
+  if(!asset) return;
+  asset.name = document.getElementById('edit-asset-name').value.trim();
+  asset.cat = document.getElementById('edit-asset-cat').value;
+  asset.notes = document.getElementById('edit-asset-notes').value;
+  window.closeModal('modal-edit-asset');
+  await window.saveToDatabase();
+  window.renderInventory();
+};
+
+window.openAssetAnalyticsPopup = function(id) {
+  const asset = window.inventory.find(i => i.id === id);
+  if(!asset) return;
+  document.getElementById('analytics-popup-title').innerText = `Audit Log History: ${asset.name}`;
+  let matches = [];
+  Object.keys(window.testDailyLogs).forEach(date => {
+    if(window.testDailyLogs[date] && window.testDailyLogs[date][id]) {
+      matches.push({ date: date, status: window.testDailyLogs[date][id] });
+    }
+  });
+  document.getElementById('analytics-popup-count').innerText = matches.length;
+  const tbody = document.getElementById('analytics-popup-table-body');
+  tbody.innerHTML = "";
+  if(matches.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="2" style="text-align:center; padding:15px; color:var(--color-text-muted);">Untested asset state.</td></tr>`;
+  } else {
+    matches.sort((a,b) => b.date.localeCompare(a.date)).forEach(m => {
+      let bClass = m.status === 'Working' ? 'badge-green' : m.status === 'Faulty' ? 'badge-red' : 'badge-amber';
+      tbody.innerHTML += `<tr><td><strong>${m.date}</strong></td><td><span class="badge ${bClass}">${m.status}</span></td></tr>`;
+    });
+  }
+  window.openModal('modal-asset-history');
+};
+
+window.addProgram = async function(){
+  const desc=document.getElementById('p-desc').value.trim();
+  if(!desc)return;
+  window.programs.push({
+    id: window.programs.length + 1,
+    date: document.getElementById('p-date').value || window.fmtDate(new Date()),
+    hijri: document.getElementById('p-hijri').value || "—",
+    desc,
+    type: document.getElementById('p-type').value,
+    from: document.getElementById('p-time-from').value || "—",
+    to: document.getElementById('p-time-to').value || "—",
+    dur: document.getElementById('p-dur').value || "0:00:00"
+  });
+  window.closeModal('modal-prog');
+  await window.saveToDatabase();
+  window.renderDashboard();
+};
+
+window.setTestingTab = function(tabValue) {
+  window.currentTestingActiveTab = tabValue;
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  if(tabValue === 'All') document.getElementById('btn-tab-all').classList.add('active');
+  if(tabValue === 'Audio') document.getElementById('btn-tab-audio').classList.add('active');
+  if(tabValue === 'Video') document.getElementById('btn-tab-video').classList.add('active');
+  if(tabValue === 'IT') document.getElementById('btn-tab-it').classList.add('active');
+  if(tabValue === 'Siyanat') document.getElementById('btn-tab-siyanat').classList.add('active');
+  window.renderTesting();
+};
+
+window.addFault = async function(){
+  const assetId=document.getElementById('fa-asset').value;
+  const asset=window.inventory.find(a=>a.id===assetId);
+  if(!asset)return;
+  window.faults.push({id:String(Date.now()),asset:asset.name,cat:asset.cat,issue:document.getElementById('fa-issue').value,priority:document.getElementById('fa-priority').value,date:window.fmtDate(new Date()),repairStatus:"Open"});
+  asset.status="Faulty";
+  await window.saveToDatabase();
+  window.renderDashboard();
+};
+
+window.renderDashboard = function(){
+  const working=window.inventory.filter(i=>i.status=='Working').length;
+  const faulty=window.inventory.filter(i=>i.status=='Faulty').length;
+  const openFaults=window.faults.filter(f=>f.repairStatus!=='Closed').length;
+
+  const kpis=[
+    {label:'Global Hardware Counter',val:window.inventory.length,color:'#0ea5e9',icon:'ti-package',sub:'Total assets provisioned'},
+    {label:'Functional Status Clean',val:working,color:'#10b981',icon:'ti-circle-check',sub:'Assets running'},
+    {label:'Flagged Failure Lines',val:faulty,color:'#ef4444',icon:'ti-alert-circle',sub:'Workshop attention needed'},
+    {label:'Open Active Breakdowns',val:openFaults,color:'#f59e0b',icon:'ti-alert-triangle',sub:'Incident log tokens'}
+  ];
+  
+  document.getElementById('kpi-row').innerHTML=kpis.map(k=>`
+    <div class="kpi" style="border-top:3px solid ${k.color}">
+      <div class="kpi-label"><i class="ti ${k.icon}" style="color:${k.color};font-size:16px"></i>${k.label}</div>
+      <div class="kpi-value">${k.val}</div>
+      <div class="kpi-sub">${k.sub}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('fault-table-body').innerHTML = window.faults.length === 0 ? `<tr><td colspan="4" style="color:var(--color-text-secondary); text-align:center; padding:15px;">Green Zone: Zero breakdowns logged.</td></tr>` : 
+    window.faults.slice(-4).reverse().map(f=>`<tr><td><strong>${f.asset}</strong></td><td><span class="badge badge-gray">${f.cat}</span></td><td>${f.date}</td><td><span class="badge ${f.repairStatus=='Open'?'badge-red':'badge-green'}">${f.repairStatus}</span></td></tr>`).join('');
+
+  const todayStr = window.fmtDate(new Date());
+  const upcomingRuns = window.programs.filter(p => p.date > todayStr).sort((a,b) => a.date.localeCompare(b.date));
+  const pastRuns = window.programs.filter(p => p.date <= todayStr).sort((a,b) => b.date.localeCompare(a.date));
+
+  document.getElementById('prog-upcoming-body').innerHTML = upcomingRuns.length === 0 ? `<tr><td colspan="3" style="text-align:center; padding:20px; color:var(--color-text-muted); font-size:13px;">No future timelines scheduled. Ready for injection.</td></tr>` :
+    upcomingRuns.map(p => `<tr><td style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.desc}</td><td><span class="badge badge-blue">${p.type}</span></td><td><strong>${p.hijri}</strong></td></tr>`).join('');
+
+  document.getElementById('prog-history-body').innerHTML = pastRuns.length === 0 ? `<tr><td colspan="3" style="text-align:center; padding:10px; color:var(--color-text-muted);">No logs registered.</td></tr>` :
+    pastRuns.slice(0, 5).map(p => `<tr><td style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.desc}</td><td><span class="badge badge-gray" style="color:var(--color-text-secondary);">${p.type}</span></td><td>${p.hijri}</td></tr>`).join('');
+
+  window.initDashboardCharts();
+};
+
+window.initDashboardCharts = function() {
+  const velocityCanvas = document.getElementById('chart-verification-velocity');
+  if (velocityCanvas) {
+    if (window.globalVelocityChart) window.globalVelocityChart.destroy();
+    let sortedDates = Object.keys(window.testDailyLogs).sort();
+    let verifiedCounts = sortedDates.map(d => Object.keys(window.testDailyLogs[d]).length);
+    window.globalVelocityChart = new Chart(velocityCanvas.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: sortedDates,
+        datasets: [{ label: 'Units Audited', data: verifiedCounts, backgroundColor: 'rgba(14, 165, 233, 0.75)', borderColor: '#0ea5e9', borderWidth: 1, borderRadius: 4 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+    });
+  }
+
+  const classificationCanvas = document.getElementById('chart-program-classification');
+  if (classificationCanvas) {
+    if (window.globalClassificationChart) window.globalClassificationChart.destroy();
+    let distributionData = {};
+    window.PROG_TYPES.forEach(t => distributionData[t] = 0);
+    window.programs.forEach(p => { if (distributionData[p.type] !== undefined) distributionData[p.type]++; });
+    let activeLabels = Object.keys(distributionData).filter(k => distributionData[k] > 0);
+    let activeValues = activeLabels.map(k => distributionData[k]);
+    window.globalClassificationChart = new Chart(classificationCanvas.getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: activeLabels,
+        datasets: [{ data: activeValues, backgroundColor: ['#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#3b82f6', '#8e44ad', '#14b8a6', '#eab308', '#64748b'], borderWidth: 2 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 12 } } }, cutout: '60%' }
+    });
+  }
 };
 
 window.renderTesting = function(){
   const dateSelected = document.getElementById('testing-date-picker').value;
   const listContainer = document.getElementById('testing-list');
   if(!dateSelected) { listContainer.innerHTML="<div style='padding:20px; text-align:center;'>Pick context date calendar framework.</div>"; return; }
+  
   if(!window.testDailyLogs[dateSelected]) window.testDailyLogs[dateSelected] = {};
-  
-  let html = ''; let checkedCounter = 0;
-  let categories = [...new Set(window.inventory.map(i => i.cat))];
-  
-  categories.forEach(catName => {
-    const systemItems = window.inventory.filter(i => i.cat === catName);
+  let html = '';
+  let checkedCounter = 0;
+
+  window.CATS.forEach(cat=>{
+    if(window.currentTestingActiveTab === "Audio" && !["Wireless Audio", "Wireless Systems", "Speakers", "Audio Processing & Mixing"].includes(cat.name)) return;
+    if(window.currentTestingActiveTab === "Video" && !["Cameras", "Video Equipment", "Displays", "Lighting", "Stage Accessories"].includes(cat.name)) return;
+    if(window.currentTestingActiveTab === "IT" && !["IT & Communication"].includes(cat.name)) return;
+    if(window.currentTestingActiveTab === "Siyanat" && !["Siyanat"].includes(cat.name)) return;
+
+    const systemItems = window.inventory.filter(i=>i.cat === cat.name);
     if(systemItems.length === 0) return;
-    html += `<div class="cat-row-header"><span style="width:8px; height:8px; border-radius:50%; background:#0ea5e9;"></span>${catName.toUpperCase()}</div>`;
-    systemItems.forEach(item => {
-      const stateLog = window.testDailyLogs[dateSelected][item.id] || "";
-      if(stateLog !== "") checkedCounter++;
-      let bMarkup = stateLog === 'Working' ? '<span class="badge badge-green">Working</span>' : stateLog === 'Faulty' ? '<span class="badge badge-red">Faulty</span>' : '<span class="badge badge-gray">Untested</span>';
-      html += `<div style="display:grid; grid-template-columns:1fr 1fr 1fr; padding:12px 16px; border-bottom:1px solid var(--color-border); background:#fff;"><span>${item.name}</span><div>${bMarkup}</div><div style="text-align:right;"><button class="btn" onclick="window.setDeviceTestState('${item.id}','Working')">Working</button></div></div>`;
+    
+    html += `<div class="cat-row-header"><span style="width:8px; height:8px; border-radius:50%; background:${cat.color};"></span>${cat.name.toUpperCase()}</div>`;
+    
+    systemItems.forEach(item=>{
+      const currentSavedState = window.testDailyLogs[dateSelected][item.id] || "";
+      if(currentSavedState !== "") checkedCounter++;
+      
+      let badgeMarkup = `<span class="badge badge-gray">Untested Configuration</span>`;
+      if(currentSavedState === 'Working') badgeMarkup = `<span class="badge badge-green"><i class="ti ti-circle-check" style="margin-right:4px;"></i>Working</span>`;
+      if(currentSavedState === 'Faulty') badgeMarkup = `<span class="badge badge-red"><i class="ti ti-circle-x" style="margin-right:4px;"></i>Faulty</span>`;
+      if(currentSavedState === 'Under Repair') badgeMarkup = `<span class="badge badge-amber"><i class="ti ti-tool" style="margin-right:4px;"></i>Repairing</span>`;
+
+      html += `
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; padding:12px 16px; border-bottom:1px solid var(--color-border); align-items:center; background:#fff;">
+          <span style="font-weight:500; font-size:14px; color:var(--color-text-primary);">${item.name}</span>
+          <div>${badgeMarkup}</div>
+          <div style="text-align:right; display:flex; gap:6px; justify-content:flex-end; align-items:center;">
+            <button class="btn" style="padding:4px 8px; font-size:12px; border-color:#10b981; color:#10b981;" onclick="setDeviceTestState('${item.id}','Working')">Working</button>
+            <button class="btn" style="padding:4px 8px; font-size:12px; border-color:#ef4444; color:#ef4444;" onclick="setDeviceTestState('${item.id}','Faulty')">Faulty</button>
+            <button class="btn" style="padding:4px 8px; font-size:12px; border-color:#f59e0b; color:#f59e0b;" onclick="setDeviceTestState('${item.id}','Under Repair')">Repair</button>
+            <button class="btn" style="padding:4px 6px; font-size:12px; border-color:var(--color-text-muted); color:var(--color-text-secondary);" title="Reset Status" onclick="setDeviceTestState('${item.id}','')"><i class="ti ti-refresh"></i></button>
+          </div>
+        </div>`;
     });
   });
-  listContainer.innerHTML = html || 'No testing nodes asset synchronized.';
-  document.getElementById('test-progress-label').innerHTML = `Verified Log: <strong>${checkedCounter}/${window.inventory.length}</strong>`;
+  
+  listContainer.innerHTML = html === "" ? `<div style="padding:40px; text-align:center; color:var(--color-text-muted);">No infrastructure components registered here.</div>` : html;
+  document.getElementById('test-progress-label').innerHTML = `Log Check Status: <strong style="color:var(--color-primary);">${checkedCounter}/${window.inventory.length} Verified</strong>`;
 };
 
 window.setDeviceTestState = async function(itemId, state){
   const dateSelected = document.getElementById('testing-date-picker').value;
-  window.testDailyLogs[dateSelected][itemId] = state;
-  await window.saveToDatabase(); window.renderTesting();
+  if(state === "") { delete window.testDailyLogs[dateSelected][itemId]; } 
+  else { window.testDailyLogs[dateSelected][itemId] = state; }
+  await window.saveToDatabase();
+  window.renderTesting();
 };
 
 window.renderHistoryPage = function(){
-  const select = document.getElementById('history-month-select');
-  const sidebarContainer = document.getElementById('history-dates-container');
-  let uniqueMonths = new Set();
-  Object.keys(window.testDailyLogs).forEach(date => { if (date.length >= 7) uniqueMonths.add(date.substring(0, 7)); });
-  let sortedMonths = Array.from(uniqueMonths).sort().reverse();
-  select.innerHTML = sortedMonths.map(m => `<option value="${m}">${m}</option>`).join('') || '<option value="2026-07">July 2026</option>';
+  let sortedDates = Object.keys(window.testDailyLogs).sort((a,b)=>b.localeCompare(a));
+  const datesContainer = document.getElementById('history-dates-container');
   
-  const targetMonth = select.value;
-  let datesFiltered = Object.keys(window.testDailyLogs).filter(d => d.startsWith(targetMonth)).sort().reverse();
-  sidebarContainer.innerHTML = datesFiltered.map(date => `<div class="history-list-item" onclick="window.viewHistoryDetail('${date}', this)"><div><strong>${date}</strong></div></div>`).join('') || 'No history entries.';
-  if(datesFiltered.length > 0) window.viewHistoryDetail(datesFiltered[0], document.querySelector('.history-list-item'));
+  const monthSelected = document.getElementById('history-month-select').value;
+  if(monthSelected) {
+    sortedDates = sortedDates.filter(d => d.startsWith(monthSelected));
+  }
+
+  datesContainer.innerHTML = sortedDates.length === 0 ? `<div style="padding:20px; text-align:center; color:var(--color-text-muted);">No historical metrics logged for this slot.</div>` :
+    sortedDates.map(date => {
+      const unitsCount = Object.keys(window.testDailyLogs[date]).length;
+      return `<div class="history-list-item" onclick="viewHistoryDetail('${date}', this)">
+        <div>
+          <div style="font-weight:600; font-size:14px;">${date}</div>
+          <div style="font-size:12px; color:var(--color-text-secondary); margin-top:2px;">${unitsCount} Assets Logged</div>
+        </div>
+        <i class="ti ti-chevron-right" style="color:var(--color-text-muted)"></i>
+      </div>`;
+    }).join('');
 };
 
 window.viewHistoryDetail = function(date, element) {
-  document.querySelectorAll('.history-list-item').forEach(item => item.classList.remove('active')); if(element) element.classList.add('active');
-  document.getElementById('history-detail-title').innerText = `Audit Log Date: ${date}`;
+  document.querySelectorAll('.history-list-item').forEach(item => item.classList.remove('active'));
+  if(element) element.classList.add('active');
+
+  document.getElementById('history-detail-title').innerText = `Verification Balance Audit Log: ${date}`;
+  const tbody = document.getElementById('history-detail-body');
+  tbody.innerHTML = "";
+
   const logs = window.testDailyLogs[date] || {};
-  document.getElementById('history-detail-body').innerHTML = window.inventory.map(asset => {
-    const status = logs[asset.id] || "Untested";
-    return `<tr><td>${asset.name}</td><td>${asset.cat}</td><td><span class="badge">${status}</span></td></tr>`;
-  }).join('');
+  const loggedIds = Object.keys(logs);
+
+  if(loggedIds.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:30px; color:var(--color-text-muted);">Empty matrix index logs.</td></tr>`;
+    return;
+  }
+
+  loggedIds.forEach(id => {
+    const asset = window.inventory.find(inv => inv.id === id);
+    if(asset) {
+      let currentSavedState = logs[id];
+      let bClass = currentSavedState === 'Working' ? 'badge-green' : currentSavedState === 'Faulty' ? 'badge-red' : 'badge-amber';
+      tbody.innerHTML += `<tr>
+        <td><span class="interactive-link" onclick="window.openAssetAnalyticsPopup('${asset.id}')">${asset.name}</span></td>
+        <td><span class="badge badge-gray">${asset.cat}</span></td>
+        <td><span class="badge ${bClass}">${currentSavedState}</span></td>
+      </tr>`;
+    }
+  });
+};
+
+window.populateCatFilter = function(){
+  const s=document.getElementById('inv-cat-filter'); s.innerHTML='<option value="">All Categories Filter</option>';
+  window.CATS.forEach(c=>{ s.innerHTML+=`<option value="${c.name}">${c.name}</option>`; });
 };
 
 window.renderInventory = function(){
-  document.getElementById('inv-body').innerHTML = window.inventory.map((item, idx) => `<tr><td>${idx+1}</td><td>${item.name}</td><td>${item.cat}</td><td>${item.status}</td></tr>`).join('');
+  const query = document.getElementById('inv-search').value.toLowerCase();
+  const catFilter = document.getElementById('inv-cat-filter').value;
+  const statusFilter = document.getElementById('inv-status-filter').value;
+  
+  const filtered = window.inventory.filter(i => {
+    return (!query || i.name.toLowerCase().includes(query)) && (!catFilter || i.cat === catFilter) && (!statusFilter || i.status === statusFilter);
+  });
+  
+  const b = document.getElementById('inv-body');
+  b.innerHTML = filtered.length === 0 ? `<tr><td colspan="7" style="text-align:center; color:var(--color-text-secondary)">No items match profiles.</td></tr>` :
+    filtered.map((item, idx)=>`
+      <tr>
+        <td>${idx+1}</td>
+        <td><strong>${item.name}</strong></td>
+        <td><span class="badge badge-gray">${item.cat}</span></td>
+        <td><span class="badge ${item.status==='Working'?'badge-green':item.status==='Faulty'?'badge-red':'badge-amber'}">${item.status}</span></td>
+        <td>${item.date}</td>
+        <td><span style="font-size:12px; color:var(--color-text-secondary);">${item.notes || '—'}</span></td>
+        <td style="text-align:right;">
+          <button class="btn" style="padding:4px 8px; font-size:12px; border-color:var(--color-primary); color:var(--color-primary);" onclick="window.openEditAssetModal('${item.id}')"><i class="ti ti-edit"></i> Edit</button>
+          <button class="btn" style="padding:4px 8px; font-size:12px;" onclick="window.cycleAssetStatus('${item.id}')"><i class="ti ti-refresh"></i> Toggle</button>
+        </td>
+      </tr>`).join('');
 };
 
-window.nav = function(page, el) {
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); el.classList.add('active');
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById('p-'+page).classList.add('active');
-  document.getElementById('page-title').textContent = el.textContent;
-  if(page==='fullinventory') window.renderFullAuditInventoryTable();
-  if(page==='iplist') window.renderIPListTable();
-  if(page==='floorbox') window.renderFloorBoxTable();
-  if(page==='testing') window.renderTesting();
-  if(page==='history') window.renderHistoryPage();
-  if(page==='inventory') window.renderInventory();
+window.cycleAssetStatus = async function(id){
+  const item = window.inventory.find(i=>i.id===id);
+  if(!item) return;
+  const states = ['Working', 'Faulty', 'Under Repair'];
+  item.status = states[(states.indexOf(item.status) + 1) % states.length];
+  await window.saveToDatabase();
+  window.renderInventory();
 };
 
-window.renderDashboard = function(){
-  document.getElementById('kpi-row').innerHTML = `
-    <div class="kpi" style="border-top:3px solid var(--color-primary)"><div class="kpi-label">Equipment Items</div><div class="kpi-value">${window.fullAuditInventory.length}</div></div>
-    <div class="kpi" style="border-top:3px solid var(--color-success)"><div class="kpi-label">IP Node Ports</div><div class="kpi-value">${window.ipListInventory.length}</div></div>
-    <div class="kpi" style="border-top:3px solid var(--color-warning)"><div class="kpi-label">Floor Boxes Map</div><div class="kpi-value">${window.floorBoxInventory.length}</div></div>
-  `;
+window.renderPrograms = function(){
+  let durationInMins = 0;
+  window.programs.forEach(p => {
+    let parts = p.dur.split(':').map(Number);
+    if(parts.length === 3) durationInMins += (parts[0] * 60) + parts[1] + (parts[2] / 60);
+  });
+  let totalHoursStr = (durationInMins / 60).toFixed(2);
+
+  document.getElementById('prog-kpis').innerHTML = `
+    <div class="kpi" style="border-top:3px solid var(--color-primary)">
+      <div class="kpi-label">Aggregated Full Registry Logs</div><div class="kpi-value">${window.programs.length}</div><div class="kpi-sub">Total programs cataloged</div>
+    </div>
+    <div class="kpi" style="border-top:3px solid var(--color-success)">
+      <div class="kpi-label">Cumulative Airtime Runs</div><div class="kpi-value">${totalHoursStr} Hours</div><div class="kpi-sub">Calculated runtime duration</div>
+    </div>`;
+  window.renderProgramTable();
+};
+
+window.renderProgramTable = function(){
+  const query = document.getElementById('prog-search').value.toLowerCase();
+  const filtered = window.programs.filter(p => !query || p.desc.toLowerCase().includes(query) || p.type.toLowerCase().includes(query));
+  
+  document.getElementById('prog-full-body').innerHTML = filtered.map(p=>`
+    <tr>
+      <td>${p.id}</td>
+      <td>${p.date}</td>
+      <td><strong>${p.hijri}</strong></td>
+      <td>${p.desc}</td>
+      <td><span class="badge badge-blue">${p.type}</span></td>
+      <td>${p.from}</td>
+      <td>${p.to}</td>
+      <td style="font-weight:600; color:var(--color-primary);">${p.dur}</td>
+    </tr>`).join('');
+};
+
+window.renderFaults = function(){
+  document.getElementById('fault-kpis').innerHTML = `
+    <div class="kpi" style="border-top:3px solid var(--color-danger)">
+      <div class="kpi-label">Active Signal Interrupted Lines</div><div class="kpi-value">${window.faults.filter(f=>f.repairStatus!=='Closed').length}</div><div class="kpi-sub">Active failure incidents</div>
+    </div>`;
+  
+  const body = document.getElementById('fault-full-body');
+  body.innerHTML = window.faults.length === 0 ? `<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--color-text-secondary);"> Sound systems clean. 0 tickets active.</td></tr>` :
+    window.faults.map(f=>`
+      <tr>
+        <td><strong>${f.asset}</strong></td>
+        <td><span class="badge badge-gray">${f.cat}</span></td>
+        <td>${f.issue || 'No explicit comment tokens.'}</td>
+        <td><span class="badge badge-red">${f.priority}</span></td>
+        <td>${f.date}</td>
+        <td><span class="badge ${f.repairStatus==='Closed'?'badge-green':'badge-amber'}">${f.repairStatus}</span></td>
+        <td style="text-align:right;">
+          <select onchange="window.updateTicketStatus('${f.id}', this.value)" style="width:120px; padding:4px;">
+            <option ${f.repairStatus==='Open'?'selected':''}>Open</option>
+            <option ${f.repairStatus==='In Progress'?'selected':''}>In Progress</option>
+            <option ${f.repairStatus==='Closed'?'selected':''}>Closed</option>
+          </select>
+        </td>
+      </tr>`).join('');
+};
+
+window.updateTicketStatus = async function(id, state){
+  const f = window.faults.find(x=>x.id===id);
+  if(f) f.repairStatus = state;
+  await window.saveToDatabase();
+  window.renderFaults();
 };
 
 window.initData();
