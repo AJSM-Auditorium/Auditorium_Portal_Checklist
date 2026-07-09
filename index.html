@@ -851,9 +851,70 @@ window.setDeviceTestState = async function(itemId, state){
   window.renderTesting();
 };
 
-window.renderHistoryPage = function(){
-  const targetMonth = document.getElementById('history-month-select').value;
+// window.renderHistoryPage = function(){
+//   const targetMonth = document.getElementById('history-month-select').value;
+//   const sidebarContainer = document.getElementById('history-dates-container');
+//   sidebarContainer.innerHTML = "";
+  
+//   let trackedDates = Object.keys(window.testDailyLogs).filter(d => d.startsWith(targetMonth)).sort();
+//   if(trackedDates.length === 0){
+//     sidebarContainer.innerHTML = `<div style="text-align:center; color:var(--color-text-muted); padding:20px; font-size:13px;">No parameters inside matrix.</div>`;
+//     document.getElementById('history-detail-body').innerHTML = `<tr><td colspan="3" style="text-align:center; padding:40px; color:var(--color-text-secondary)">No dates compiled.</td></tr>`;
+//     return;
+//   }
+  
+//   trackedDates.forEach(date => {
+//     let checkedCount = Object.keys(window.testDailyLogs[date]).length;
+//     sidebarContainer.innerHTML += `
+//       <div class="history-list-item" id="hist-item-${date}" onclick="loadHistoryDetail('${date}')">
+//         <div>
+//           <div style="font-weight:600; font-size:14px;">${date}</div>
+//           <div style="font-size:12px; color:var(--color-text-secondary); margin-top:2px;">${checkedCount} Units Checked</div>
+//         </div>
+//         <i class="ti ti-circle-check" style="color:var(--color-success); font-size:18px;"></i>
+//       </div>`;
+//   });
+//   window.loadHistoryDetail(trackedDates[0]);
+// };
+  window.renderHistoryPage = function(){
+  const select = document.getElementById('history-month-select');
   const sidebarContainer = document.getElementById('history-dates-container');
+  
+  // 1. DYNAMIC MONTH GENERATION ENGINE
+  // testDailyLogs se saare unique YYYY-MM (Months) nikalne ke liye logic
+  let uniqueMonths = new Set();
+  Object.keys(window.testDailyLogs).forEach(date => {
+    if (date.length >= 7) {
+      uniqueMonths.add(date.substring(0, 7)); // '2026-07', '2026-06' etc.
+    }
+  });
+  
+  // Mahino ko latest ke hisab se sort karein
+  let sortedMonths = Array.from(uniqueMonths).sort().reverse();
+  
+  // Agar dropdown mein current selected value nahi hai ya options khali hain, toh populate karein
+  let currentSelection = select.value;
+  select.innerHTML = "";
+  
+  if (sortedMonths.length === 0) {
+    // Agar koi data nahi hai toh backup fallback options
+    select.innerHTML = `<option value="2026-07">July 2026</option><option value="2026-06">June 2026</option>`;
+  } else {
+    sortedMonths.forEach(m => {
+      let [year, month] = m.split('-');
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      let monthLabel = `${monthNames[parseInt(month) - 1]} ${year}`;
+      select.innerHTML += `<option value="${m}">${monthLabel}</option>`;
+    });
+  }
+  
+  // Purani selected value ko maintain rakhein, agar wo list mein ho toh
+  if (currentSelection && sortedMonths.includes(currentSelection)) {
+    select.value = currentSelection;
+  }
+  
+  // 2. STANDARD HISTORY VIEW GENERATION
+  const targetMonth = select.value;
   sidebarContainer.innerHTML = "";
   
   let trackedDates = Object.keys(window.testDailyLogs).filter(d => d.startsWith(targetMonth)).sort();
