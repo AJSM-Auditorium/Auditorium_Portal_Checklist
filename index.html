@@ -1807,10 +1807,10 @@ window.renderTesting = function(){
       const currentSavedState = window.testDailyLogs[dateSelected][item.id] || "";
       if(currentSavedState !== "") checkedCounter++;
       
-      let badgeMarkup = `<span class="badge badge-gray">Untested Channel</span>`;
-      if(currentSavedState === 'Working') badgeMarkup = `<span class="badge badge-green"><i class="ti ti-circle-check" style="margin-right:4px;"></i>Operational</span>`;
-      if(currentSavedState === 'Faulty') badgeMarkup = `<span class="badge badge-red"><i class="ti ti-circle-x" style="margin-right:4px;"></i>Interrupted</span>`;
-      if(currentSavedState === 'Under Repair') badgeMarkup = `<span class="badge badge-amber"><i class="ti ti-tool" style="margin-right:4px;"></i>Calibrating</span>`;
+      let badgeMarkup = `<span class="badge badge-gray">Untested</span>`;
+      if(currentSavedState === 'Working') badgeMarkup = `<span class="badge badge-green"><i class="ti ti-circle-check" style="margin-right:4px;"></i>Working</span>`;
+      if(currentSavedState === 'Faulty') badgeMarkup = `<span class="badge badge-red"><i class="ti ti-circle-x" style="margin-right:4px;"></i>Faulty</span>`;
+      if(currentSavedState === 'Under Repair') badgeMarkup = `<span class="badge badge-amber"><i class="ti ti-tool" style="margin-right:4px;"></i>Under Repair</span>`;
 
       html += `
         <div style="display:grid; grid-template-columns:1fr 1fr 1fr; padding:12px 16px; border-bottom:1px solid var(--color-border); align-items:center; background:#fff;">
