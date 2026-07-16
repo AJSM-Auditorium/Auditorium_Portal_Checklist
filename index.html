@@ -45,7 +45,7 @@
     .sidebar.collapsed .sidebar-logo, .sidebar.collapsed .nav-section, .sidebar.collapsed .nav-item, .sidebar.collapsed #inv-submenu, .sidebar.collapsed #eng-submenu { white-space: nowrap; }
     #sidebar-toggle-btn { flex-shrink: 0; }
     .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid var(--color-border); }
-    .sidebar-logo h1 { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--color-text-primary); text-transform: uppercase; letter-spacing: 0.5px; }
+    .sidebar-logo h1 { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--color-text-primary); text-transform: uppercase; letter-spacing: 0.4px; line-height: 1.3; }
     .sidebar-logo p { font-size: 11px; color: var(--color-text-secondary); margin-top: 4px; font-weight: 500; }
     
     .nav-section { padding: 18px 20px 6px; font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.75px; }
@@ -184,36 +184,43 @@
 <!-- Sidebar REPLACE Karein -->
 <div class="sidebar" id="app-sidebar">
     <div class="sidebar-logo">
-      <h1><i class="ti ti-broadcast" style="color:var(--color-primary)"></i> Auditorium | AJSM</h1>
+      <h1><i class="ti ti-broadcast" style="color:var(--color-primary)"></i> AUDITORIUM AJSM PORTAL</h1>
     </div>
     
     <div class="nav-section">Main</div>
     <div class="nav-item" onclick="nav('dashboard',this)"><i class="ti ti-layout-dashboard"></i>DASHBOARD</div>
-    
+    <div class="nav-item" onclick="nav('programs',this)"><i class="ti ti-calendar-event"></i>Program List</div>
+
+    <div class="nav-section">Testing</div>
+    <div class="nav-item" onclick="toggleSubMenu('testing-submenu')">
+        <i class="ti ti-checkbox"></i>Testing <i class="ti ti-chevron-down" style="margin-left:auto;"></i>
+    </div>
+    <div id="testing-submenu" style="display:none; padding-left: 10px;">
+        <div class="nav-item" onclick="nav('testing',this)"><i class="ti ti-clipboard-check"></i>Routine Testing</div>
+        <div class="nav-item" onclick="nav('history',this)"><i class="ti ti-history"></i>Test History</div>
+    </div>
+
     <div class="nav-section">Inventory Tracking</div>
     <div class="nav-item" onclick="toggleSubMenu('inv-submenu')">
         <i class="ti ti-folder"></i>Inventory Tracking <i class="ti ti-chevron-down" style="margin-left:auto;"></i>
     </div>
     <div id="inv-submenu" style="display:none; padding-left: 10px;">
-        <div class="nav-item" onclick="nav('testing',this)"><i class="ti ti-checkbox"></i>Equipment Check</div>
-        <div class="nav-item" onclick="nav('history',this)"><i class="ti ti-history"></i>Test History</div>
-        <div class="nav-item" onclick="nav('inventory',this)"><i class="ti ti-box"></i>AV Devices</div>
-        <div class="nav-item" onclick="nav('fullinventory',this)"><i class="ti ti-clipboard-list"></i>Asset Inventory</div>
+        <div class="nav-item" onclick="nav('inventory',this)"><i class="ti ti-box"></i>Device Status</div>
+        <div class="nav-item" onclick="nav('fullinventory',this)"><i class="ti ti-clipboard-list"></i>Device Database</div>
     </div>
 
-   <!-- AV Engineering Operations section -->
-<div class="nav-section">Maintenance Logs & Program List</div>
+   <!-- Current Issues & Logs section -->
+<div class="nav-section">Current Issues & Logs</div>
 <div class="nav-item" onclick="toggleSubMenu('eng-submenu')">
-    <i class="ti ti-tools"></i>Maintenance Logs & Program List <i class="ti ti-chevron-down" style="margin-left:auto;"></i>
+    <i class="ti ti-tools"></i>Current Issues & Logs <i class="ti ti-chevron-down" style="margin-left:auto;"></i>
 </div>
 <div id="eng-submenu" style="display:none; padding-left: 10px;">
-    <div class="nav-item" onclick="nav('manutelogs',this)"><i class="ti ti-tool"></i>Maintenance</div>
+    <div class="nav-item" onclick="nav('manutelogs',this)"><i class="ti ti-tool"></i>Current Issues</div>
     <div class="nav-item" onclick="nav('systemlogs',this)"><i class="ti ti-file-text"></i>Log Book</div>
-    <div class="nav-item" onclick="nav('programs',this)"><i class="ti ti-calendar-event"></i>Program List</div>
 </div>
 
-<div class="nav-section">Settings</div>
-<div class="nav-item" onclick="nav('settings',this)"><i class="ti ti-settings"></i>Settings</div>
+<div class="nav-section">Settings & Backup</div>
+<div class="nav-item" onclick="nav('settings',this)"><i class="ti ti-settings"></i>Settings & Backup</div>
 </div>
 
 <script>
@@ -1041,7 +1048,7 @@ window.initData = async function(){
 };
 
 window.goToPage = function(page){
-  const submenuMap = {testing:'inv-submenu', history:'inv-submenu', inventory:'inv-submenu', fullinventory:'inv-submenu', manutelogs:'eng-submenu', systemlogs:'eng-submenu', programs:'eng-submenu'};
+  const submenuMap = {testing:'testing-submenu', history:'testing-submenu', inventory:'inv-submenu', fullinventory:'inv-submenu', manutelogs:'eng-submenu', systemlogs:'eng-submenu'};
   const submenuId = submenuMap[page];
   if(submenuId) document.getElementById(submenuId).style.display = 'block';
   const target = document.querySelector(`.nav-item[onclick*="nav('${page}'"]`);
@@ -1054,7 +1061,7 @@ window.nav = function(page, el) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('p-'+page).classList.add('active');
   
-  const titles={dashboard:'Dashboard',testing:'Equipment Check',history:'Test History',inventory:'AV Devices',fullinventory:'Asset Inventory',manutelogs:'Maintenance Logs',systemlogs:'Log Book',programs:'Program List',faults:'Fault Tickets',settings:'Settings'};
+  const titles={dashboard:'Dashboard',testing:'Routine Testing',history:'Test History',inventory:'Device Status',fullinventory:'Device Database',manutelogs:'Current Issues',systemlogs:'Log Book',programs:'Program List',faults:'Fault Tickets',settings:'Settings & Backup'};
   document.getElementById('page-title').textContent=titles[page]||page;
   
   const tb=document.getElementById('topbar-actions'); tb.innerHTML='';
@@ -2054,24 +2061,25 @@ window.addFault = async function(){
 };
 
 window.DASH_CARD_META = {
-  programs:    {icon:'ti-calendar-event',  color:'#86A15C', bg:'var(--palette-sage-bg)',  title:'Program List', cta:'View programs'},
-  systemlogs:  {icon:'ti-notebook',        color:'#A9AE4E', bg:'var(--palette-lime-bg)',  title:'Log Book',     cta:'View log book'},
-  inventory:   {icon:'ti-device-speaker',  color:'#C08E52', bg:'var(--palette-tan-bg)',   title:'AV Devices',   cta:'View devices'},
-  history:     {icon:'ti-history',         color:'#CC9A3E', bg:'var(--palette-wheat-bg)', title:'Test History', cta:'View test history'}
+  programs:   {icon:'ti-calendar-event',   color:'#86A15C', bg:'var(--palette-sage-bg)',  title:'Program List',    cta:'View programs'},
+  testing:    {icon:'ti-clipboard-check',  color:'#A9AE4E', bg:'var(--palette-lime-bg)',  title:'Routine Testing', cta:'Start testing'},
+  inventory:  {icon:'ti-device-speaker',   color:'#C08E52', bg:'var(--palette-tan-bg)',   title:'Device Status',   cta:'View devices'},
+  manutelogs: {icon:'ti-tool',             color:'#CC9A3E', bg:'var(--palette-wheat-bg)', title:'Current Issues',  cta:'View issues'}
 };
 
 window.renderDashboard = function(){
   const working=window.inventory.filter(i=>i.status=='Working').length;
-  let totalTestsLogged = 0;
-  Object.keys(window.testDailyLogs || {}).forEach(d => { totalTestsLogged += Object.keys(window.testDailyLogs[d]).length; });
+  const todayStr = window.fmtDate(new Date());
+  const testedToday = (window.testDailyLogs[todayStr] ? Object.keys(window.testDailyLogs[todayStr]).length : 0);
+  const openIssues = (window.manualMaintenanceLogs || []).length;
 
   const subs = {
     inventory: `${window.inventory.length} devices · ${working} working`,
     programs: `${window.programs.length} programs · schedule & charts`,
-    systemlogs: 'Daily operation & shift logs',
-    history: `${totalTestsLogged} tests recorded · by date`
+    testing: `${testedToday}/${window.inventory.length} tested today`,
+    manutelogs: `${openIssues} maintenance note${openIssues===1?'':'s'} logged`
   };
-  const order = ['programs','systemlogs','inventory','history'];
+  const order = ['programs','testing','inventory','manutelogs'];
   const navCards = order.map(key => ({key, ...window.DASH_CARD_META[key], sub: subs[key]}));
 
   document.getElementById('dash-nav-grid').innerHTML=navCards.map(c=>`
@@ -2103,8 +2111,8 @@ window.renderDashDetailPanel = function(){
   panel.style.setProperty('--nav-card-bg', meta.bg);
   if(key==='inventory') window.renderDashDetailInventory(panel);
   if(key==='programs') window.renderDashDetailPrograms(panel);
-  if(key==='systemlogs') window.renderDashDetailLogbook(panel);
-  if(key==='history') window.renderDashDetailHistory(panel);
+  if(key==='testing') window.renderDashDetailTesting(panel);
+  if(key==='manutelogs') window.renderDashDetailCurrentIssues(panel);
 };
 
 window.renderDashDetailInventory = function(panel){
@@ -2114,7 +2122,7 @@ window.renderDashDetailInventory = function(panel){
   const rows = window.inventory.slice(0, 10);
   panel.innerHTML = `
     <div class="card-title" style="display:flex; justify-content:space-between; align-items:center;">
-      <span><i class="ti ti-device-speaker"></i> AV Devices</span>
+      <span><i class="ti ti-device-speaker"></i> Device Status</span>
       <button class="btn" style="padding:6px 12px; font-size:12px;" onclick="window.goToPage('inventory')">Open Full Page <i class="ti ti-arrow-right"></i></button>
     </div>
     <div class="dash-chip-row">
@@ -2199,6 +2207,85 @@ window.renderDashDetailPrograms = function(panel){
     </div>
   `;
   window.initProgramTypeChart('dash-chart-program-type');
+};
+
+window.renderDashDetailTesting = function(panel){
+  if(!window.dashTestingDate) window.dashTestingDate = window.fmtDate(new Date());
+  panel.innerHTML = `
+    <div class="card-title" style="display:flex; justify-content:space-between; align-items:center;">
+      <span><i class="ti ti-clipboard-check"></i> Routine Testing</span>
+      <button class="btn" style="padding:6px 12px; font-size:12px;" onclick="window.goToPage('testing')">Open Full Page <i class="ti ti-arrow-right"></i></button>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap;">
+      <span class="form-label" style="white-space:nowrap; margin-bottom:0;">Date:</span>
+      <input type="date" id="dash-testing-date" value="${window.dashTestingDate}" style="width:170px;" onchange="window.dashTestingDate=this.value; window.renderDashTestingList();">
+      <span id="dash-testing-progress" style="font-size:13px; font-weight:600; margin-left:auto;"></span>
+    </div>
+    <div id="dash-testing-list"></div>
+  `;
+  window.renderDashTestingList();
+};
+
+window.renderDashTestingList = function(){
+  const container = document.getElementById('dash-testing-list');
+  const progressEl = document.getElementById('dash-testing-progress');
+  if(!container) return;
+  const date = window.dashTestingDate;
+  if(!window.testDailyLogs[date]) window.testDailyLogs[date] = {};
+  const logs = window.testDailyLogs[date];
+  const tested = Object.keys(logs).length;
+  if(progressEl) progressEl.innerHTML = `Tested: <strong style="color:var(--color-primary);">${tested}/${window.inventory.length}</strong>`;
+
+  const untested = window.inventory.filter(item => !logs[item.id]);
+  container.innerHTML = `
+    <div style="overflow-x:auto; max-height:340px;">
+      <table>
+        <thead><tr><th>Device</th><th>Category</th><th style="text-align:right;">Mark As</th></tr></thead>
+        <tbody>
+          ${untested.length===0 ? `<tr><td colspan="3" style="text-align:center; padding:20px; color:var(--color-text-secondary);">All devices tested for this date.</td></tr>` :
+          untested.slice(0, 8).map(item => `
+            <tr>
+              <td>${item.name}</td>
+              <td><span class="badge badge-gray">${item.cat}</span></td>
+              <td style="text-align:right; white-space:nowrap;">
+                <button class="btn" style="padding:4px 8px; font-size:11.5px; border-color:var(--color-success); color:var(--color-success);" onclick="window.setDashTestState('${item.id}','Working')">Working</button>
+                <button class="btn" style="padding:4px 8px; font-size:11.5px; border-color:var(--color-danger); color:var(--color-danger);" onclick="window.setDashTestState('${item.id}','Faulty')">Faulty</button>
+                <button class="btn" style="padding:4px 8px; font-size:11.5px; border-color:var(--color-warning); color:var(--color-warning);" onclick="window.setDashTestState('${item.id}','Under Repair')">Repair</button>
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    ${untested.length > 8 ? `<div style="text-align:center; margin-top:10px; font-size:12px; color:var(--color-text-secondary);">+${untested.length - 8} more untested devices — open full page to see all</div>` : ''}
+  `;
+};
+
+window.setDashTestState = async function(itemId, state){
+  const date = window.dashTestingDate;
+  if(!window.testDailyLogs[date]) window.testDailyLogs[date] = {};
+  window.testDailyLogs[date][itemId] = state;
+  await window.saveToDatabase();
+  window.renderDashboard();
+};
+
+window.renderDashDetailCurrentIssues = function(panel){
+  const rows = (window.manualMaintenanceLogs || []).slice().sort((a,b) => b.date.localeCompare(a.date)).slice(0, 8);
+  panel.innerHTML = `
+    <div class="card-title" style="display:flex; justify-content:space-between; align-items:center;">
+      <span><i class="ti ti-tool"></i> Current Issues</span>
+      <button class="btn" style="padding:6px 12px; font-size:12px;" onclick="window.goToPage('manutelogs')">Open Full Page <i class="ti ti-arrow-right"></i></button>
+    </div>
+    <div style="overflow-x:auto; max-height:360px;">
+      <table>
+        <thead><tr><th>Device</th><th>Date</th><th>Notes</th></tr></thead>
+        <tbody>
+          ${rows.length===0 ? `<tr><td colspan="3" style="text-align:center; padding:20px; color:var(--color-text-secondary);">No maintenance notes yet.</td></tr>` :
+          rows.map(l => `<tr><td>${l.assetName}</td><td>${l.date}</td><td style="max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${l.comment}</td></tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    ${(window.manualMaintenanceLogs || []).length > 8 ? `<div style="text-align:center; margin-top:10px; font-size:12px; color:var(--color-text-secondary);">Showing 8 most recent of ${window.manualMaintenanceLogs.length}</div>` : ''}
+  `;
 };
 
 window.renderDashDetailLogbook = function(panel){
