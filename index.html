@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AUDITORIUM AJSM PORTAL</title>
+  <title>AUDITORIUM AV CONSOLE PANEL</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <style>
     :root {
@@ -210,8 +210,10 @@
     <div class="nav-item" onclick="nav('manutelogs',this)"><i class="ti ti-tool"></i>Maintenance</div>
     <div class="nav-item" onclick="nav('systemlogs',this)"><i class="ti ti-file-text"></i>Log Book</div>
     <div class="nav-item" onclick="nav('programs',this)"><i class="ti ti-calendar-event"></i>Program List</div>
-    <div class="nav-item" onclick="nav('redundancy',this)"><i class="ti ti-layers-intersect"></i>Signal Failover</div>
 </div>
+
+<div class="nav-section">Settings</div>
+<div class="nav-item" onclick="nav('settings',this)"><i class="ti ti-settings"></i>Settings</div>
 </div>
 
 <script>
@@ -230,7 +232,10 @@
         <button class="btn" id="sidebar-toggle-btn" onclick="window.toggleSidebar()" style="padding:8px 10px;" title="Toggle menu"><i class="ti ti-menu-2"></i></button>
         <h2 id="page-title">Dashboard</h2>
       </div>
-      <div class="topbar-right" id="topbar-actions"></div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div class="topbar-right" id="topbar-actions"></div>
+        <button class="btn" onclick="window.openExportImportModal()"><i class="ti ti-file-export"></i> Export / Import</button>
+      </div>
     </div>
     
     <div class="content">
@@ -298,6 +303,13 @@
             <option value="">All Statuses</option>
             <option>Working</option><option>Faulty</option><option>Under Repair</option><option>New</option>
           </select>
+          <select id="inv-sort" onchange="renderInventory()" style="width:170px;">
+            <option value="">Sort by</option>
+            <option value="name-asc">Name (A–Z)</option>
+            <option value="name-desc">Name (Z–A)</option>
+            <option value="date-desc">Date (Newest)</option>
+            <option value="date-asc">Date (Oldest)</option>
+          </select>
         </div>
         <div class="card" style="padding:0; overflow:hidden;">
           <div style="overflow-x:auto;">
@@ -313,6 +325,13 @@
       <div class="page" id="p-fullinventory">
         <div class="card" style="display:flex; gap:12px; flex-wrap:wrap; padding:14px;">
           <input type="text" id="fullinv-search" placeholder="Search item specs, make, model or serials..." oninput="renderFullAuditInventoryTable()" style="flex:1; min-width:200px;">
+          <select id="fullinv-sort" onchange="renderFullAuditInventoryTable()" style="width:180px;">
+            <option value="">Sort by</option>
+            <option value="name-asc">Item (A–Z)</option>
+            <option value="name-desc">Item (Z–A)</option>
+            <option value="qty-desc">Quantity (High–Low)</option>
+            <option value="qty-asc">Quantity (Low–High)</option>
+          </select>
           <button class="btn btn-primary" onclick="openModal('modal-add-fullinv')"><i class="ti ti-plus"></i> Add Item</button>
         </div>
         <div class="card" style="padding:0; overflow:hidden;">
@@ -364,7 +383,15 @@
           </div>
           
           <div class="card">
-            <div class="card-title"><i class="ti ti-notes"></i> Maintenance History</div>
+            <div class="card-title" style="display:flex; align-items:center; justify-content:space-between;">
+              <span><i class="ti ti-notes"></i> Maintenance History</span>
+              <select id="mlog-sort" onchange="renderGlobalMaintenanceLogsTable()" style="width:170px; font-size:12px; padding:6px 10px;">
+                <option value="date-desc">Date (Newest)</option>
+                <option value="date-asc">Date (Oldest)</option>
+                <option value="name-asc">Device (A–Z)</option>
+                <option value="name-desc">Device (Z–A)</option>
+              </select>
+            </div>
             <div style="overflow-y:auto; height: 410px;">
               <table style="width:100%">
                 <thead><tr><th>Device</th><th>Date</th><th>Notes</th><th style="text-align:right;">Actions</th></tr></thead>
@@ -377,7 +404,13 @@
 
       <!-- HISTORICAL SYSTEM SPREADSHEETS LEDGER -->
       <div class="page" id="p-systemlogs">
-        <div class="testing-tabs-container" id="excel-tabs-header-row"></div>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;">
+          <div class="testing-tabs-container" id="excel-tabs-header-row" style="margin-bottom:0;"></div>
+          <select id="systemlogs-sort" onchange="renderExcelSheetSystemLogs()" style="width:170px;">
+            <option value="date-desc">Date (Newest)</option>
+            <option value="date-asc">Date (Oldest)</option>
+          </select>
+        </div>
         <div class="excel-layout">
           <div class="card" style="padding:0; overflow:hidden;">
             <div style="overflow-y:auto; height: calc(100vh - 220px); border-radius: var(--border-radius-lg);">
@@ -396,6 +429,13 @@
         <div class="card" style="padding:0; overflow:hidden;">
           <div style="display:flex; align-items:center; justify-content:space-between; padding:16px; border-bottom:1px solid var(--color-border); background:#FBF6E9; gap:12px;">
             <span style="font-weight:700; font-size:14px; flex:1; text-transform:uppercase; letter-spacing:0.5px;">Program Schedule</span>
+            <select id="prog-sort" onchange="renderProgramTable()" style="width:170px;">
+              <option value="">Sort by</option>
+              <option value="date-desc">Date (Newest)</option>
+              <option value="date-asc">Date (Oldest)</option>
+              <option value="name-asc">Title (A–Z)</option>
+              <option value="name-desc">Title (Z–A)</option>
+            </select>
             <input type="text" id="prog-search" placeholder="Search programs..." style="width:280px;" oninput="renderProgramTable()">
           </div>
           <div style="overflow-x:auto; max-height:480px;">
@@ -407,19 +447,18 @@
         </div>
       </div>
 
-      <!-- ROUTING CORES PANEL -->
-      <div class="page" id="p-redundancy">
-        <div class="card">
-          <div class="card-title" style="color:var(--color-primary);"><i class="ti ti-layers-intersect"></i>Signal Failover Routing</div>
-          <p style="color:var(--color-text-secondary); font-size:14px; line-height:1.6;">
-            Bhai ye tab perfectly provision ho gaya hai. Abhi isko backup aur main lines system infrastructure se connect karna baki hai. Aap mujhe iske aage ki criteria ya mapping requirements bataiye, hum isko pura configure kar denge!
-          </p>
-        </div>
-      </div>
-
       <!-- FAULTS ALERTS TERMINAL -->
       <div class="page" id="p-faults">
         <div class="kpi-grid" id="fault-kpis"></div>
+        <div class="card" style="display:flex; justify-content:flex-end; padding:14px;">
+          <select id="fault-sort" onchange="renderFaults()" style="width:180px;">
+            <option value="">Sort by</option>
+            <option value="date-desc">Date (Newest)</option>
+            <option value="date-asc">Date (Oldest)</option>
+            <option value="name-asc">Device (A–Z)</option>
+            <option value="name-desc">Device (Z–A)</option>
+          </select>
+        </div>
         <div class="card" style="padding:0; overflow:hidden;">
           <div style="overflow-x:auto;">
             <table>
@@ -427,6 +466,24 @@
               <tbody id="fault-full-body"></tbody>
             </table>
           </div>
+        </div>
+      </div>
+
+      <div class="page" id="p-settings">
+        <div class="card">
+          <div class="card-title"><i class="ti ti-database-export"></i> Backup & Restore</div>
+          <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom:18px;">Backup saves a complete snapshot of all your data (AV Devices, Programs, Log Book, Test History, Faults & Maintenance Logs) as a single file. Restore replaces all current data with a backup file.</p>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="window.backupData()"><i class="ti ti-download"></i> Download Backup</button>
+            <button class="btn" style="border-color:var(--color-warning); color:var(--color-warning);" onclick="document.getElementById('restore-file').click()"><i class="ti ti-upload"></i> Restore from Backup</button>
+            <input type="file" id="restore-file" accept=".json" style="display:none;" onchange="window.handleRestoreFile(event)">
+          </div>
+          <div id="restore-status" style="font-size:12.5px; margin-top:12px;"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="ti ti-info-circle"></i> Current Data Summary</div>
+          <div class="kpi-grid" id="settings-summary-grid"></div>
         </div>
       </div>
     </div>
@@ -527,6 +584,33 @@
 </div>
 
 <!-- COMPONENT INJECTOR POPUP -->
+<div class="modal-overlay" id="modal-export-import">
+  <div class="modal" style="width: 560px;">
+    <div class="modal-title"><span><i class="ti ti-file-export"></i> Export / Import</span><button class="btn" onclick="closeModal('modal-export-import')" style="padding:4px 10px;">×</button></div>
+
+    <div style="margin-bottom:22px;">
+      <div style="font-size:12px; font-weight:700; color:var(--color-text-secondary); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">Export Data</div>
+      <p style="font-size:12.5px; color:var(--color-text-secondary); margin-bottom:14px;">Downloads AV Devices, Programs, Faults and Maintenance Logs.</p>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="window.exportDataExcel()"><i class="ti ti-file-spreadsheet"></i> Export as Excel</button>
+        <button class="btn" style="flex:1; border-color:var(--color-primary); color:var(--color-primary);" onclick="window.exportDataPDF()"><i class="ti ti-file-type-pdf"></i> Export as PDF</button>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid var(--color-border); padding-top:20px;">
+      <div style="font-size:12px; font-weight:700; color:var(--color-text-secondary); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">Import AV Devices</div>
+      <p style="font-size:12.5px; color:var(--color-text-secondary); margin-bottom:14px;">Upload an Excel/CSV file with columns: Device Name, Category, Status, Brand, Model, Serial Number, Installation Date, Notes. New rows are added to AV Devices.</p>
+      <div class="upload-dropzone" id="import-dropzone">
+        <i class="ti ti-cloud-upload"></i>
+        <div class="upload-dropzone-text">Drag & drop an Excel/CSV file, or click to browse</div>
+        <div class="upload-dropzone-hint">.xlsx or .csv</div>
+        <input type="file" id="import-file" accept=".xlsx,.xls,.csv" style="position:absolute; inset:0; opacity:0; cursor:pointer;">
+      </div>
+      <div id="import-status" style="font-size:12.5px; color:var(--color-text-secondary); margin-top:10px;"></div>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-inv">
   <div class="modal">
     <div class="modal-title"><span>Add New AV Device</span><button class="btn" onclick="closeModal('modal-inv')" style="padding:4px 10px;">×</button></div>
@@ -638,6 +722,9 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -698,6 +785,21 @@ window.currentActiveExcelSheet = "AOTO LED screen";
 window.currentTestingActiveTab = "All"; 
 
 window.fmtDate = function(d){return d.toISOString().split('T')[0]};
+
+window.applyListSort = function(arr, sortBy, fields){
+  if(!sortBy) return arr;
+  const [field, dir] = sortBy.split('-');
+  const key = fields[field];
+  if(!key) return arr;
+  arr.sort((a,b)=>{
+    const av = (a[key] || '').toString().toLowerCase();
+    const bv = (b[key] || '').toString().toLowerCase();
+    if(av < bv) return dir === 'desc' ? 1 : -1;
+    if(av > bv) return dir === 'desc' ? -1 : 1;
+    return 0;
+  });
+  return arr;
+};
 
 window.saveToDatabase = async function() {
   try {
@@ -962,7 +1064,7 @@ window.initData = async function(){
 };
 
 window.goToPage = function(page){
-  const submenuMap = {testing:'inv-submenu', history:'inv-submenu', inventory:'inv-submenu', fullinventory:'inv-submenu', manutelogs:'eng-submenu', systemlogs:'eng-submenu', programs:'eng-submenu', redundancy:'eng-submenu'};
+  const submenuMap = {testing:'inv-submenu', history:'inv-submenu', inventory:'inv-submenu', fullinventory:'inv-submenu', manutelogs:'eng-submenu', systemlogs:'eng-submenu', programs:'eng-submenu'};
   const submenuId = submenuMap[page];
   if(submenuId) document.getElementById(submenuId).style.display = 'block';
   const target = document.querySelector(`.nav-item[onclick*="nav('${page}'"]`);
@@ -975,7 +1077,7 @@ window.nav = function(page, el) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('p-'+page).classList.add('active');
   
-  const titles={dashboard:'Dashboard',testing:'Equipment Check',history:'Test History',inventory:'AV Devices',fullinventory:'Asset Inventory',manutelogs:'Maintenance Logs',systemlogs:'Log Book',programs:'Program List',faults:'Fault Tickets',redundancy:'Signal Failover'};
+  const titles={dashboard:'Dashboard',testing:'Equipment Check',history:'Test History',inventory:'AV Devices',fullinventory:'Asset Inventory',manutelogs:'Maintenance Logs',systemlogs:'Log Book',programs:'Program List',faults:'Fault Tickets',settings:'Settings'};
   document.getElementById('page-title').textContent=titles[page]||page;
   
   const tb=document.getElementById('topbar-actions'); tb.innerHTML='';
@@ -995,10 +1097,222 @@ window.nav = function(page, el) {
   if(page==='faults') window.renderFaults();
   if(page==='manutelogs') window.renderMaintenanceLogPage();
   if(page==='systemlogs') window.renderExcelSheetSystemLogs();
+  if(page==='settings') window.renderSettingsPage();
 };
 
 window.openModal = function(id){ document.getElementById(id).classList.add('open'); };
 window.closeModal = function(id){ document.getElementById(id).classList.remove('open'); };
+
+window.openExportImportModal = function(){
+  document.getElementById('import-status').innerHTML = '';
+  document.getElementById('import-file').value = '';
+  window.setupImportDropzone();
+  window.openModal('modal-export-import');
+};
+
+window.setupImportDropzone = function(){
+  const dropzone = document.getElementById('import-dropzone');
+  const fileInput = document.getElementById('import-file');
+  if(!dropzone || !fileInput || dropzone.dataset.wired) return;
+  dropzone.dataset.wired = 'true';
+  fileInput.addEventListener('change', (e) => { if(e.target.files[0]) window.handleImportFile(e.target.files[0]); });
+  ['dragenter','dragover'].forEach(evt => dropzone.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); dropzone.classList.add('dragover'); }));
+  ['dragleave','drop'].forEach(evt => dropzone.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); dropzone.classList.remove('dragover'); }));
+  dropzone.addEventListener('drop', (e) => { if(e.dataTransfer.files[0]) window.handleImportFile(e.dataTransfer.files[0]); });
+};
+
+window.exportDataExcel = function(){
+  const wb = XLSX.utils.book_new();
+
+  const invSheet = XLSX.utils.json_to_sheet(window.inventory.map(i => ({
+    "Device Name": i.name, "Category": i.cat, "Status": i.status, "Brand": i.make || '',
+    "Model": i.model || '', "Serial Number": i.serial || '', "Invoice/Bill Ref": i.bill || '',
+    "Installation Date": i.date, "Notes": i.notes || ''
+  })));
+  XLSX.utils.book_append_sheet(wb, invSheet, "AV Devices");
+
+  const progSheet = XLSX.utils.json_to_sheet(window.programs.map(p => ({
+    "Date": p.date, "Hijri Date": p.hijri, "Program": p.desc, "Type": p.type,
+    "From": p.from, "To": p.to, "Duration": p.dur
+  })));
+  XLSX.utils.book_append_sheet(wb, progSheet, "Program List");
+
+  const faultSheet = XLSX.utils.json_to_sheet(window.faults.map(f => ({
+    "Device": f.asset, "Category": f.cat, "Issue": f.desc || '', "Reported On": f.date, "Status": f.repairStatus
+  })));
+  XLSX.utils.book_append_sheet(wb, faultSheet, "Fault Tickets");
+
+  const mlogSheet = XLSX.utils.json_to_sheet((window.manualMaintenanceLogs || []).map(l => ({
+    "Device": l.assetName, "Date": l.date, "Notes": l.comment
+  })));
+  XLSX.utils.book_append_sheet(wb, mlogSheet, "Maintenance Logs");
+
+  XLSX.writeFile(wb, `AV_Data_Export_${window.fmtDate(new Date())}.xlsx`);
+};
+
+window.exportDataPDF = function(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  let y = 16;
+  doc.setFontSize(16);
+  doc.text("Auditorium AV System Report", 14, y);
+  doc.setFontSize(10);
+  doc.setTextColor(120);
+  y += 6;
+  doc.text(`Generated on ${window.fmtDate(new Date())}`, 14, y);
+  doc.setTextColor(0);
+
+  doc.autoTable({
+    startY: y + 8,
+    head: [['Device Name','Category','Status','Brand','Model','Last Tested']],
+    body: window.inventory.map(i => [i.name, i.cat, i.status, i.make || '', i.model || '', i.date]),
+    styles: { fontSize: 8 },
+    headStyles: { fillColor: [192,142,82] },
+    didDrawPage: (data) => { if(data.cursor.y < 20) return; }
+  });
+
+  doc.addPage();
+  doc.setFontSize(13);
+  doc.text("Program List", 14, 16);
+  doc.autoTable({
+    startY: 22,
+    head: [['Date','Hijri Date','Program','Type']],
+    body: window.programs.map(p => [p.date, p.hijri, p.desc, p.type]),
+    styles: { fontSize: 8 },
+    headStyles: { fillColor: [134,161,92] }
+  });
+
+  doc.addPage();
+  doc.setFontSize(13);
+  doc.text("Fault Tickets", 14, 16);
+  doc.autoTable({
+    startY: 22,
+    head: [['Device','Category','Reported On','Status']],
+    body: window.faults.map(f => [f.asset, f.cat, f.date, f.repairStatus]),
+    styles: { fontSize: 8 },
+    headStyles: { fillColor: [204,154,62] }
+  });
+
+  doc.save(`AV_Report_${window.fmtDate(new Date())}.pdf`);
+};
+
+window.handleImportFile = function(file){
+  const statusEl = document.getElementById('import-status');
+  statusEl.innerHTML = `<span style="color:var(--color-text-secondary);">Reading file...</span>`;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const wb = XLSX.read(data, { type: 'array' });
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet);
+      if(rows.length === 0) { statusEl.innerHTML = `<span style="color:var(--color-danger);">No rows found in file.</span>`; return; }
+
+      let added = 0;
+      rows.forEach(row => {
+        const name = (row["Device Name"] || row["Device"] || row["Name"] || '').toString().trim();
+        if(!name) return;
+        window.inventory.push({
+          id: String(Date.now()) + Math.floor(Math.random()*1000),
+          name,
+          cat: (row["Category"] || window.CATS[0].name).toString().trim(),
+          status: (row["Status"] || "Working").toString().trim(),
+          date: (row["Installation Date"] || row["Last Tested"] || row["Date"] || window.fmtDate(new Date())).toString(),
+          make: (row["Brand"] || row["Make"] || '').toString().trim(),
+          model: (row["Model"] || '').toString().trim(),
+          serial: (row["Serial Number"] || '').toString().trim(),
+          bill: (row["Invoice/Bill Ref"] || row["Invoice / Bill Reference"] || '').toString().trim(),
+          img: '',
+          notes: (row["Notes"] || '').toString().trim()
+        });
+        added++;
+      });
+
+      await window.saveToDatabase();
+      window.renderInventory();
+      window.renderDashboard();
+      statusEl.innerHTML = `<span style="color:var(--color-success);"><i class="ti ti-circle-check"></i> Imported ${added} device${added===1?'':'s'} successfully.</span>`;
+    } catch(err) {
+      console.error(err);
+      statusEl.innerHTML = `<span style="color:var(--color-danger);">Could not read this file. Please check the format and try again.</span>`;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+};
+
+window.renderSettingsPage = function(){
+  const totalTests = Object.keys(window.testDailyLogs || {}).reduce((sum,d) => sum + Object.keys(window.testDailyLogs[d]).length, 0);
+  const stats = [
+    {label:'AV Devices', val: window.inventory.length, icon:'ti-device-speaker'},
+    {label:'Programs', val: window.programs.length, icon:'ti-calendar-event'},
+    {label:'Fault Tickets', val: window.faults.length, icon:'ti-alert-triangle'},
+    {label:'Maintenance Notes', val: (window.manualMaintenanceLogs || []).length, icon:'ti-tool'},
+    {label:'Test Dates Recorded', val: Object.keys(window.testDailyLogs || {}).length, icon:'ti-calendar'},
+    {label:'Total Tests Logged', val: totalTests, icon:'ti-checkbox'}
+  ];
+  document.getElementById('settings-summary-grid').innerHTML = stats.map(s => `
+    <div class="kpi">
+      <div class="kpi-label"><i class="ti ${s.icon}" style="color:var(--color-primary); font-size:16px;"></i>${s.label}</div>
+      <div class="kpi-value">${s.val}</div>
+    </div>
+  `).join('');
+  document.getElementById('restore-status').innerHTML = '';
+};
+
+window.backupData = function(){
+  const backup = {
+    backupVersion: 1,
+    exportedAt: new Date().toISOString(),
+    inventory: window.inventory,
+    fullAuditInventory: window.fullAuditInventory,
+    testDailyLogs: window.testDailyLogs,
+    programs: window.programs,
+    faults: window.faults,
+    manualMaintenanceLogs: window.manualMaintenanceLogs || [],
+    excelSystemLogs: window.excelSystemLogs || {}
+  };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `av-system-backup-${window.fmtDate(new Date())}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+window.handleRestoreFile = function(event){
+  const file = event.target.files[0];
+  const statusEl = document.getElementById('restore-status');
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if(!data || typeof data !== 'object' || !Array.isArray(data.inventory)) {
+        throw new Error('Not a valid backup file');
+      }
+      if(!confirm('This will replace ALL current data with this backup file. This cannot be undone. Continue?')) { event.target.value = ''; return; }
+      window.inventory = data.inventory || [];
+      window.fullAuditInventory = data.fullAuditInventory || [];
+      window.testDailyLogs = data.testDailyLogs || {};
+      window.programs = data.programs || [];
+      window.faults = data.faults || [];
+      window.manualMaintenanceLogs = data.manualMaintenanceLogs || [];
+      window.excelSystemLogs = data.excelSystemLogs || {};
+      await window.saveToDatabase();
+      statusEl.innerHTML = `<span style="color:var(--color-success);"><i class="ti ti-circle-check"></i> Backup restored successfully.</span>`;
+      window.renderSettingsPage();
+      window.renderDashboard();
+    } catch(err) {
+      console.error(err);
+      statusEl.innerHTML = `<span style="color:var(--color-danger);"><i class="ti ti-alert-circle"></i> This doesn't look like a valid backup file.</span>`;
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+};
 
 window.renderExcelSheetSystemLogs = function() {
   const tabsRow = document.getElementById('excel-tabs-header-row');
@@ -1020,7 +1334,17 @@ window.renderExcelSheetSystemLogs = function() {
   if(currentRows.length === 0) {
     tableBody.innerHTML = `<tr><td colspan="${currentColumns.length + 1}" style="text-align:center; padding:40px; color:var(--color-text-secondary);">No entries yet in this sheet.</td></tr>`;
   } else {
-    currentRows.forEach((row, index) => {
+    const sortBy = (document.getElementById('systemlogs-sort') || {}).value || 'date-desc';
+    const dir = sortBy === 'date-asc' ? 1 : -1;
+    const indexed = currentRows.map((row, index) => ({row, index}));
+    indexed.sort((a,b) => {
+      const av = (a.row['Date'] || '').toString();
+      const bv = (b.row['Date'] || '').toString();
+      if(av < bv) return -1 * dir;
+      if(av > bv) return 1 * dir;
+      return 0;
+    });
+    indexed.forEach(({row, index}) => {
       let cellsMarkup = currentColumns.map(col => `<td>${row[col] || "—"}</td>`).join('');
       tableBody.innerHTML += `<tr>
         ${cellsMarkup}
@@ -1106,6 +1430,7 @@ window.submitDynamicSheetRow = async function() {
 
 window.renderFullAuditInventoryTable = function() {
   const query = document.getElementById('fullinv-search').value.toLowerCase();
+  const sortBy = document.getElementById('fullinv-sort').value;
   const tbody = document.getElementById('fullinv-table-body');
   tbody.innerHTML = "";
 
@@ -1113,8 +1438,13 @@ window.renderFullAuditInventoryTable = function() {
     return !query || item.desc.toLowerCase().includes(query) || item.make.toLowerCase().includes(query) || item.model.toLowerCase().includes(query) || item.serial.toLowerCase().includes(query);
   });
 
+  if(sortBy === 'name-asc') filtered.sort((a,b)=>a.desc.toLowerCase().localeCompare(b.desc.toLowerCase()));
+  if(sortBy === 'name-desc') filtered.sort((a,b)=>b.desc.toLowerCase().localeCompare(a.desc.toLowerCase()));
+  if(sortBy === 'qty-desc') filtered.sort((a,b)=>(parseFloat(b.qty)||0)-(parseFloat(a.qty)||0));
+  if(sortBy === 'qty-asc') filtered.sort((a,b)=>(parseFloat(a.qty)||0)-(parseFloat(b.qty)||0));
+
   if(filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--color-text-secondary);">No hardware specs rows matches.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--color-text-secondary);">No items match your search.</td></tr>`;
     return;
   }
 
@@ -1439,7 +1769,7 @@ window.submitManualMaintenanceLog = async function() {
   const id = document.getElementById('mlog-asset-select').value;
   const comment = document.getElementById('mlog-text-input').value.trim();
   const selectedDate = document.getElementById('mlog-date-input').value;
-  const editIndexValue = document.getElementById('mlog-edit-index').value;
+  const editLogId = document.getElementById('mlog-edit-index').value;
   const asset = window.inventory.find(i => i.id === id);
   
   if(!comment) { alert("Please type text log before appending database!"); return; }
@@ -1447,13 +1777,13 @@ window.submitManualMaintenanceLog = async function() {
 
   if(!window.manualMaintenanceLogs) window.manualMaintenanceLogs = [];
   
-  if(editIndexValue !== "") {
-    let realTargetIdx = window.manualMaintenanceLogs.length - 1 - parseInt(editIndexValue);
-    if(window.manualMaintenanceLogs[realTargetIdx]) {
-      window.manualMaintenanceLogs[realTargetIdx].assetId = asset.id;
-      window.manualMaintenanceLogs[realTargetIdx].assetName = asset.name;
-      window.manualMaintenanceLogs[realTargetIdx].date = selectedDate || window.fmtDate(new Date());
-      window.manualMaintenanceLogs[realTargetIdx].comment = comment;
+  if(editLogId !== "") {
+    const target = window.manualMaintenanceLogs.find(l => l.id === editLogId);
+    if(target) {
+      target.assetId = asset.id;
+      target.assetName = asset.name;
+      target.date = selectedDate || window.fmtDate(new Date());
+      target.comment = comment;
     }
   } else {
     window.manualMaintenanceLogs.push({
@@ -1466,20 +1796,19 @@ window.submitManualMaintenanceLog = async function() {
   window.renderGlobalMaintenanceLogsTable();
 };
 
-window.openEditManualLogInline = function(visualIndex) {
+window.openEditManualLogInline = function(logId) {
   const logsList = window.manualMaintenanceLogs || [];
-  const reversedLogs = [...logsList].reverse();
-  const targetLogItem = reversedLogs[visualIndex];
+  const targetLogItem = logsList.find(l => l.id === logId);
   if(!targetLogItem) return;
 
-  document.getElementById('manutelog-form-title').innerHTML = `<i class="ti ti-edit"></i> Modify Tuning Log Entry`;
-  document.getElementById('mlog-edit-index').value = visualIndex;
+  document.getElementById('manutelog-form-title').innerHTML = `<i class="ti ti-edit"></i> Edit Maintenance Note`;
+  document.getElementById('mlog-edit-index').value = logId;
   document.getElementById('mlog-asset-select').value = targetLogItem.assetId;
   document.getElementById('mlog-date-input').value = targetLogItem.date || window.fmtDate(new Date());
   document.getElementById('mlog-text-input').value = targetLogItem.comment;
   
   document.getElementById('mlog-cancel-btn').style.display = "inline-flex";
-  document.getElementById('mlog-submit-btn').innerHTML = `<i class="ti ti-check"></i> Save Tuning Edits`;
+  document.getElementById('mlog-submit-btn').innerHTML = `<i class="ti ti-check"></i> Save Changes`;
 };
 
 window.clearManualLogForm = function() {
@@ -1496,16 +1825,18 @@ window.renderGlobalMaintenanceLogsTable = function() {
   tbody.innerHTML = "";
   const logsList = window.manualMaintenanceLogs || [];
   if(logsList.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--color-text-secondary);">Archive is clean.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--color-text-secondary);">No maintenance logs yet.</td></tr>`;
     return;
   }
-  [...logsList].reverse().forEach((log, idx) => {
+  const sortBy = document.getElementById('mlog-sort').value || 'date-desc';
+  const sorted = window.applyListSort([...logsList], sortBy, {name:'assetName', date:'date'});
+  sorted.forEach((log) => {
     tbody.innerHTML += `<tr>
       <td><span class="interactive-link" onclick="window.openAssetDeepDive('${log.assetId}')"><strong>${log.assetName}</strong></span></td>
       <td style="white-space:nowrap;">${log.date}</td>
       <td style="font-size:12px;">${log.comment}</td>
       <td style="text-align:right;">
-        <button class="btn" style="padding:2px 6px; font-size:11px; color:var(--color-primary);" onclick="window.openEditManualLogInline(${idx})"><i class="ti ti-edit"></i> Edit</button>
+        <button class="btn" style="padding:2px 6px; font-size:11px; color:var(--color-primary);" onclick="window.openEditManualLogInline('${log.id}')"><i class="ti ti-edit"></i> Edit</button>
       </td>
     </tr>`;
   });
@@ -1993,10 +2324,12 @@ window.renderInventory = function(){
   const query = document.getElementById('inv-search').value.toLowerCase();
   const catFilter = document.getElementById('inv-cat-filter').value;
   const statusFilter = document.getElementById('inv-status-filter').value;
+  const sortBy = document.getElementById('inv-sort').value;
   
   const filtered = window.inventory.filter(i => {
     return (!query || i.name.toLowerCase().includes(query)) && (!catFilter || i.cat === catFilter) && (!statusFilter || i.status === statusFilter);
   });
+  window.applyListSort(filtered, sortBy, {name:'name', date:'date'});
   
   const b = document.getElementById('inv-body');
   b.innerHTML = filtered.length === 0 ? `<tr><td colspan="7" style="text-align:center; color:var(--color-text-secondary)">No devices match your search.</td></tr>` :
@@ -2051,7 +2384,9 @@ window.renderPrograms = function(){
 
 window.renderProgramTable = function(){
   const query = document.getElementById('prog-search').value.toLowerCase();
+  const sortBy = document.getElementById('prog-sort').value;
   const filtered = window.programs.filter(p => !query || p.desc.toLowerCase().includes(query) || p.type.toLowerCase().includes(query));
+  window.applyListSort(filtered, sortBy, {name:'desc', date:'date'});
   
   document.getElementById('prog-full-body').innerHTML = filtered.map(p=>`
     <tr>
@@ -2073,8 +2408,10 @@ window.renderFaults = function(){
     </div>`;
   
   const body = document.getElementById('fault-full-body');
-  body.innerHTML = window.faults.length === 0 ? `<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--color-text-secondary);">All clear. No active faults.</td></tr>` :
-    window.faults.map(f=>`
+  const sortBy = document.getElementById('fault-sort').value;
+  const sortedFaults = window.applyListSort([...window.faults], sortBy, {name:'asset', date:'date'});
+  body.innerHTML = sortedFaults.length === 0 ? `<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--color-text-secondary);">All clear. No active faults.</td></tr>` :
+    sortedFaults.map(f=>`
       <tr>
         <td><strong>${f.asset}</strong></td>
         <td><span class="badge badge-gray">${f.cat}</span></td>
