@@ -585,30 +585,7 @@
 
 <!-- COMPONENT INJECTOR POPUP -->
 <div class="modal-overlay" id="modal-export-import">
-  <div class="modal" style="width: 560px;">
-    <div class="modal-title"><span><i class="ti ti-file-export"></i> Export / Import</span><button class="btn" onclick="closeModal('modal-export-import')" style="padding:4px 10px;">×</button></div>
-
-    <div style="margin-bottom:22px;">
-      <div style="font-size:12px; font-weight:700; color:var(--color-text-secondary); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">Export Data</div>
-      <p style="font-size:12.5px; color:var(--color-text-secondary); margin-bottom:14px;">Downloads AV Devices, Programs, Faults and Maintenance Logs.</p>
-      <div style="display:flex; gap:10px;">
-        <button class="btn btn-primary" style="flex:1;" onclick="window.exportDataExcel()"><i class="ti ti-file-spreadsheet"></i> Export as Excel</button>
-        <button class="btn" style="flex:1; border-color:var(--color-primary); color:var(--color-primary);" onclick="window.exportDataPDF()"><i class="ti ti-file-type-pdf"></i> Export as PDF</button>
-      </div>
-    </div>
-
-    <div style="border-top:1px solid var(--color-border); padding-top:20px;">
-      <div style="font-size:12px; font-weight:700; color:var(--color-text-secondary); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">Import AV Devices</div>
-      <p style="font-size:12.5px; color:var(--color-text-secondary); margin-bottom:14px;">Upload an Excel/CSV file with columns: Device Name, Category, Status, Brand, Model, Serial Number, Installation Date, Notes. New rows are added to AV Devices.</p>
-      <div class="upload-dropzone" id="import-dropzone">
-        <i class="ti ti-cloud-upload"></i>
-        <div class="upload-dropzone-text">Drag & drop an Excel/CSV file, or click to browse</div>
-        <div class="upload-dropzone-hint">.xlsx or .csv</div>
-        <input type="file" id="import-file" accept=".xlsx,.xls,.csv" style="position:absolute; inset:0; opacity:0; cursor:pointer;">
-      </div>
-      <div id="import-status" style="font-size:12.5px; color:var(--color-text-secondary); margin-top:10px;"></div>
-    </div>
-  </div>
+  <div class="modal" style="width: 560px;" id="export-import-modal-body"></div>
 </div>
 
 <div class="modal-overlay" id="modal-inv">
@@ -1103,11 +1080,86 @@ window.nav = function(page, el) {
 window.openModal = function(id){ document.getElementById(id).classList.add('open'); };
 window.closeModal = function(id){ document.getElementById(id).classList.remove('open'); };
 
+window.EXPORT_PAGE_CONFIG = {
+  inventory:     {label:'AV Devices',      color:[192,142,82]},
+  fullinventory: {label:'Asset Inventory', color:[192,142,82]},
+  manutelogs:    {label:'Maintenance Logs',color:[134,161,92]},
+  systemlogs:    {label:'Log Book',        color:[169,174,78], multiSheet:true},
+  programs:      {label:'Program List',    color:[134,161,92]},
+  faults:        {label:'Fault Tickets',   color:[204,154,62]},
+  history:       {label:'Test History',    color:[204,154,62]},
+  testing:       {label:'Test History',    color:[204,154,62]}
+};
+
 window.openExportImportModal = function(){
-  document.getElementById('import-status').innerHTML = '';
-  document.getElementById('import-file').value = '';
-  window.setupImportDropzone();
+  const activePage = document.querySelector('.page.active');
+  window.currentExportPageKey = activePage ? activePage.id.replace('p-','') : 'all';
+  window.renderExportImportModal(window.currentExportPageKey);
   window.openModal('modal-export-import');
+};
+
+window.renderExportImportModal = function(pageKey){
+  window.currentExportPageKey = pageKey;
+  const config = window.EXPORT_PAGE_CONFIG[pageKey];
+  const label = config ? config.label : 'All Data';
+  const body = document.getElementById('export-import-modal-body');
+
+  let sheetPickerHtml = '';
+  if(config && config.multiSheet){
+    const sheets = Object.keys(window.EXCEL_SHEETS);
+    sheetPickerHtml = `
+      <div style="margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:11.5px; font-weight:700; color:var(--color-text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Select Tabs</span>
+          <label style="font-size:12px; display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:600;"><input type="checkbox" id="export-sheet-all" checked onchange="window.toggleAllExportSheets(this.checked)"> All Tabs</label>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          ${sheets.map(s=>`<label style="font-size:12.5px; display:flex; align-items:center; gap:6px; background:#FBF6E9; border:1px solid var(--color-border); padding:6px 10px; border-radius:20px; cursor:pointer;"><input type="checkbox" class="export-sheet-checkbox" value="${s}" checked onchange="window.syncExportSheetAllToggle()"> ${s}</label>`).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  body.innerHTML = `
+    <div class="modal-title"><span><i class="ti ti-file-export"></i> Export / Import — ${label}</span><button class="btn" onclick="closeModal('modal-export-import')" style="padding:4px 10px;">×</button></div>
+
+    <div style="margin-bottom:22px;">
+      <div style="font-size:12px; font-weight:700; color:var(--color-text-secondary); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">Export ${label}</div>
+      <p style="font-size:12.5px; color:var(--color-text-secondary); margin-bottom:14px;">Only exports what's on this page.</p>
+      ${sheetPickerHtml}
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="window.runExport('excel')"><i class="ti ti-file-spreadsheet"></i> Export as Excel</button>
+        <button class="btn" style="flex:1; border-color:var(--color-primary); color:var(--color-primary);" onclick="window.runExport('pdf')"><i class="ti ti-file-type-pdf"></i> Export as PDF</button>
+      </div>
+      ${config ? `<div style="margin-top:10px; font-size:11.5px; color:var(--color-text-muted);">Need everything? <a href="#" onclick="window.renderExportImportModal('all'); return false;" style="color:var(--color-primary); font-weight:600;">Export all data instead</a></div>` : ''}
+    </div>
+
+    ${pageKey === 'inventory' ? `
+    <div style="border-top:1px solid var(--color-border); padding-top:20px;">
+      <div style="font-size:12px; font-weight:700; color:var(--color-text-secondary); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">Import AV Devices</div>
+      <p style="font-size:12.5px; color:var(--color-text-secondary); margin-bottom:14px;">Upload an Excel/CSV file with columns: Device Name, Category, Status, Brand, Model, Serial Number, Installation Date, Notes. New rows are added to AV Devices.</p>
+      <div class="upload-dropzone" id="import-dropzone">
+        <i class="ti ti-cloud-upload"></i>
+        <div class="upload-dropzone-text">Drag & drop an Excel/CSV file, or click to browse</div>
+        <div class="upload-dropzone-hint">.xlsx or .csv</div>
+        <input type="file" id="import-file" accept=".xlsx,.xls,.csv" style="position:absolute; inset:0; opacity:0; cursor:pointer;">
+      </div>
+      <div id="import-status" style="font-size:12.5px; color:var(--color-text-secondary); margin-top:10px;"></div>
+    </div>` : ''}
+  `;
+
+  if(pageKey === 'inventory') window.setupImportDropzone();
+};
+
+window.toggleAllExportSheets = function(checked){
+  document.querySelectorAll('.export-sheet-checkbox').forEach(cb => cb.checked = checked);
+};
+
+window.syncExportSheetAllToggle = function(){
+  const boxes = document.querySelectorAll('.export-sheet-checkbox');
+  const allChecked = Array.from(boxes).every(cb => cb.checked);
+  const allToggle = document.getElementById('export-sheet-all');
+  if(allToggle) allToggle.checked = allChecked;
 };
 
 window.setupImportDropzone = function(){
@@ -1121,79 +1173,199 @@ window.setupImportDropzone = function(){
   dropzone.addEventListener('drop', (e) => { if(e.dataTransfer.files[0]) window.handleImportFile(e.dataTransfer.files[0]); });
 };
 
-window.exportDataExcel = function(){
-  const wb = XLSX.utils.book_new();
+window.getAVDevicesRows = () => window.inventory.map(i => ({
+  "Device Name": i.name, "Category": i.cat, "Status": i.status, "Brand": i.make || '',
+  "Model": i.model || '', "Serial Number": i.serial || '', "Invoice/Bill Ref": i.bill || '',
+  "Installation Date": i.date, "Notes": i.notes || ''
+}));
 
-  const invSheet = XLSX.utils.json_to_sheet(window.inventory.map(i => ({
-    "Device Name": i.name, "Category": i.cat, "Status": i.status, "Brand": i.make || '',
-    "Model": i.model || '', "Serial Number": i.serial || '', "Invoice/Bill Ref": i.bill || '',
-    "Installation Date": i.date, "Notes": i.notes || ''
-  })));
-  XLSX.utils.book_append_sheet(wb, invSheet, "AV Devices");
+window.getAssetInventoryRows = () => window.fullAuditInventory.map(i => ({
+  "Item Description": i.desc, "Brand": i.make || '', "Model": i.model || '', "Serial Number": i.serial || '', "Quantity": i.qty
+}));
 
-  const progSheet = XLSX.utils.json_to_sheet(window.programs.map(p => ({
-    "Date": p.date, "Hijri Date": p.hijri, "Program": p.desc, "Type": p.type,
-    "From": p.from, "To": p.to, "Duration": p.dur
-  })));
-  XLSX.utils.book_append_sheet(wb, progSheet, "Program List");
+window.getMaintenanceRows = () => (window.manualMaintenanceLogs || []).map(l => ({
+  "Device": l.assetName, "Date": l.date, "Notes": l.comment
+}));
 
-  const faultSheet = XLSX.utils.json_to_sheet(window.faults.map(f => ({
-    "Device": f.asset, "Category": f.cat, "Issue": f.desc || '', "Reported On": f.date, "Status": f.repairStatus
-  })));
-  XLSX.utils.book_append_sheet(wb, faultSheet, "Fault Tickets");
+window.getProgramRows = () => window.programs.map(p => ({
+  "Date": p.date, "Hijri Date": p.hijri, "Program": p.desc, "Type": p.type, "From": p.from, "To": p.to, "Duration": p.dur
+}));
 
-  const mlogSheet = XLSX.utils.json_to_sheet((window.manualMaintenanceLogs || []).map(l => ({
-    "Device": l.assetName, "Date": l.date, "Notes": l.comment
-  })));
-  XLSX.utils.book_append_sheet(wb, mlogSheet, "Maintenance Logs");
+window.getFaultRows = () => window.faults.map(f => ({
+  "Device": f.asset, "Category": f.cat, "Issue": f.desc || '', "Reported On": f.date, "Status": f.repairStatus
+}));
 
-  XLSX.writeFile(wb, `AV_Data_Export_${window.fmtDate(new Date())}.xlsx`);
+window.getTestHistoryRows = () => {
+  const rows = [];
+  Object.keys(window.testDailyLogs || {}).sort().forEach(date => {
+    Object.keys(window.testDailyLogs[date]).forEach(id => {
+      const item = window.inventory.find(i => i.id === id);
+      rows.push({ "Date": date, "Device": item ? item.name : id, "Category": item ? item.cat : '', "Result": window.testDailyLogs[date][id] });
+    });
+  });
+  return rows;
 };
 
-window.exportDataPDF = function(){
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  let y = 16;
-  doc.setFontSize(16);
-  doc.text("Auditorium AV System Report", 14, y);
-  doc.setFontSize(10);
-  doc.setTextColor(120);
-  y += 6;
-  doc.text(`Generated on ${window.fmtDate(new Date())}`, 14, y);
-  doc.setTextColor(0);
-
-  doc.autoTable({
-    startY: y + 8,
-    head: [['Device Name','Category','Status','Brand','Model','Last Tested']],
-    body: window.inventory.map(i => [i.name, i.cat, i.status, i.make || '', i.model || '', i.date]),
-    styles: { fontSize: 8 },
-    headStyles: { fillColor: [192,142,82] },
-    didDrawPage: (data) => { if(data.cursor.y < 20) return; }
+window.getLogBookSheetRows = (sheetName) => {
+  const cols = window.EXCEL_SHEETS[sheetName] || [];
+  return (window.excelSystemLogs[sheetName] || []).map(row => {
+    const obj = {};
+    cols.forEach(c => obj[c] = row[c] || '');
+    return obj;
   });
+};
 
-  doc.addPage();
-  doc.setFontSize(13);
-  doc.text("Program List", 14, 16);
-  doc.autoTable({
-    startY: 22,
-    head: [['Date','Hijri Date','Program','Type']],
-    body: window.programs.map(p => [p.date, p.hijri, p.desc, p.type]),
-    styles: { fontSize: 8 },
-    headStyles: { fillColor: [134,161,92] }
-  });
+window.exportSingle = function(title, rows, format, color){
+  if(!rows || rows.length === 0){ alert('No data to export on this page yet.'); return; }
+  if(format === 'excel'){
+    const wb = XLSX.utils.book_new();
+    const sheet = XLSX.utils.json_to_sheet(rows);
+    XLSX.utils.book_append_sheet(wb, sheet, title.substring(0,31));
+    XLSX.writeFile(wb, `${title.replace(/\s+/g,'_')}_${window.fmtDate(new Date())}.xlsx`);
+  } else {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text(title, 14, 16);
+    doc.setFontSize(10); doc.setTextColor(120);
+    doc.text(`Generated on ${window.fmtDate(new Date())}`, 14, 22);
+    doc.setTextColor(0);
+    const columns = Object.keys(rows[0]);
+    doc.autoTable({
+      startY: 28,
+      head: [columns],
+      body: rows.map(r => columns.map(c => r[c])),
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: color || [192,142,82] }
+    });
+    doc.save(`${title.replace(/\s+/g,'_')}_${window.fmtDate(new Date())}.pdf`);
+  }
+  window.closeModal('modal-export-import');
+};
 
-  doc.addPage();
-  doc.setFontSize(13);
-  doc.text("Fault Tickets", 14, 16);
-  doc.autoTable({
-    startY: 22,
-    head: [['Device','Category','Reported On','Status']],
-    body: window.faults.map(f => [f.asset, f.cat, f.date, f.repairStatus]),
-    styles: { fontSize: 8 },
-    headStyles: { fillColor: [204,154,62] }
-  });
+window.exportLogBookSheets = function(format){
+  const checked = Array.from(document.querySelectorAll('.export-sheet-checkbox:checked')).map(cb => cb.value);
+  if(checked.length === 0){ alert('Select at least one tab to export.'); return; }
 
-  doc.save(`AV_Report_${window.fmtDate(new Date())}.pdf`);
+  if(format === 'excel'){
+    const wb = XLSX.utils.book_new();
+    let anyRows = false;
+    checked.forEach(sheetName => {
+      const rows = window.getLogBookSheetRows(sheetName);
+      if(rows.length === 0) return;
+      anyRows = true;
+      const sheet = XLSX.utils.json_to_sheet(rows);
+      XLSX.utils.book_append_sheet(wb, sheet, sheetName.substring(0,31));
+    });
+    if(!anyRows){ alert('No entries in the selected tab(s) yet.'); return; }
+    XLSX.writeFile(wb, `Log_Book_${window.fmtDate(new Date())}.xlsx`);
+  } else {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    let first = true;
+    let anyRows = false;
+    checked.forEach(sheetName => {
+      const rows = window.getLogBookSheetRows(sheetName);
+      if(rows.length === 0) return;
+      anyRows = true;
+      if(!first) doc.addPage();
+      first = false;
+      doc.setFontSize(14);
+      doc.text(sheetName, 14, 16);
+      const columns = Object.keys(rows[0]);
+      doc.autoTable({
+        startY: 22,
+        head: [columns],
+        body: rows.map(r => columns.map(c => r[c])),
+        styles: { fontSize: 7 },
+        headStyles: { fillColor: [169,174,78] }
+      });
+    });
+    if(!anyRows){ alert('No entries in the selected tab(s) yet.'); return; }
+    doc.save(`Log_Book_${window.fmtDate(new Date())}.pdf`);
+  }
+  window.closeModal('modal-export-import');
+};
+
+window.exportEverything = function(format){
+  if(format === 'excel'){
+    const wb = XLSX.utils.book_new();
+    const sections = [
+      ['AV Devices', window.getAVDevicesRows()],
+      ['Asset Inventory', window.getAssetInventoryRows()],
+      ['Program List', window.getProgramRows()],
+      ['Fault Tickets', window.getFaultRows()],
+      ['Maintenance Logs', window.getMaintenanceRows()],
+      ['Test History', window.getTestHistoryRows()]
+    ];
+    sections.forEach(([name, rows]) => {
+      if(rows.length === 0) return;
+      const sheet = XLSX.utils.json_to_sheet(rows);
+      XLSX.utils.book_append_sheet(wb, sheet, name.substring(0,31));
+    });
+    Object.keys(window.EXCEL_SHEETS).forEach(sheetName => {
+      const rows = window.getLogBookSheetRows(sheetName);
+      if(rows.length === 0) return;
+      const sheet = XLSX.utils.json_to_sheet(rows);
+      XLSX.utils.book_append_sheet(wb, sheet, ('LB - '+sheetName).substring(0,31));
+    });
+    XLSX.writeFile(wb, `AV_Data_Export_${window.fmtDate(new Date())}.xlsx`);
+  } else {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("Auditorium AV System Report", 14, 16);
+    doc.setFontSize(10); doc.setTextColor(120);
+    doc.text(`Generated on ${window.fmtDate(new Date())}`, 14, 22);
+    doc.setTextColor(0);
+    doc.autoTable({
+      startY: 28,
+      head: [['Device Name','Category','Status','Brand','Model','Last Tested']],
+      body: window.inventory.map(i => [i.name, i.cat, i.status, i.make || '', i.model || '', i.date]),
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [192,142,82] }
+    });
+    doc.addPage();
+    doc.setFontSize(13);
+    doc.text("Program List", 14, 16);
+    doc.autoTable({
+      startY: 22,
+      head: [['Date','Hijri Date','Program','Type']],
+      body: window.programs.map(p => [p.date, p.hijri, p.desc, p.type]),
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [134,161,92] }
+    });
+    doc.addPage();
+    doc.setFontSize(13);
+    doc.text("Fault Tickets", 14, 16);
+    doc.autoTable({
+      startY: 22,
+      head: [['Device','Category','Reported On','Status']],
+      body: window.faults.map(f => [f.asset, f.cat, f.date, f.repairStatus]),
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [204,154,62] }
+    });
+    doc.save(`AV_Report_${window.fmtDate(new Date())}.pdf`);
+  }
+  window.closeModal('modal-export-import');
+};
+
+window.runExport = function(format){
+  const pageKey = window.currentExportPageKey;
+  const config = window.EXPORT_PAGE_CONFIG[pageKey];
+  if(!config){ window.exportEverything(format); return; }
+  if(config.multiSheet){ window.exportLogBookSheets(format); return; }
+  const rowsMap = {
+    inventory: window.getAVDevicesRows,
+    fullinventory: window.getAssetInventoryRows,
+    manutelogs: window.getMaintenanceRows,
+    programs: window.getProgramRows,
+    faults: window.getFaultRows,
+    history: window.getTestHistoryRows,
+    testing: window.getTestHistoryRows
+  };
+  const rows = rowsMap[pageKey] ? rowsMap[pageKey]() : [];
+  window.exportSingle(config.label, rows, format, config.color);
 };
 
 window.handleImportFile = function(file){
