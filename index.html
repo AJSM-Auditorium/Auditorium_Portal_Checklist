@@ -40,19 +40,19 @@
     
     #app { display: flex; height: 100vh; }
     
-    .sidebar { width: 260px; min-width: 260px; background: var(--color-bg-sidebar); border-right: 1px solid var(--color-border); display: flex; flex-direction: column; transition: width 0.2s ease, min-width 0.2s ease; overflow: hidden; }
+    .sidebar { width: 260px; min-width: 260px; background: #2F2A1D; border-right: 1px solid #221E14; display: flex; flex-direction: column; transition: width 0.2s ease, min-width 0.2s ease; overflow: hidden; }
     .sidebar.collapsed { width: 0; min-width: 0; border-right: none; }
     .sidebar.collapsed .sidebar-logo, .sidebar.collapsed .nav-section, .sidebar.collapsed .nav-item, .sidebar.collapsed #inv-submenu, .sidebar.collapsed #eng-submenu { white-space: nowrap; }
     #sidebar-toggle-btn { flex-shrink: 0; }
-    .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid var(--color-border); }
-    .sidebar-logo h1 { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--color-text-primary); text-transform: uppercase; letter-spacing: 0.4px; line-height: 1.3; }
-    .sidebar-logo p { font-size: 11px; color: var(--color-text-secondary); margin-top: 4px; font-weight: 500; }
+    .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .sidebar-logo h1 { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: #F7F1E1; text-transform: uppercase; letter-spacing: 0.4px; line-height: 1.3; }
+    .sidebar-logo p { font-size: 11px; color: #B9AD8A; margin-top: 4px; font-weight: 500; }
     
-    .nav-section { padding: 18px 20px 6px; font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.75px; }
-    .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 16px; margin: 2px 12px; border-radius: var(--border-radius-md); cursor: pointer; font-size: 13px; font-weight: 600; color: var(--color-text-secondary); transition: all 0.15s ease-in-out; text-transform: uppercase; }
+    .nav-section { padding: 18px 20px 6px; font-size: 11px; font-weight: 700; color: #9A8E6C; text-transform: uppercase; letter-spacing: 0.75px; }
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 16px; margin: 2px 12px; border-radius: var(--border-radius-md); cursor: pointer; font-size: 13px; font-weight: 600; color: #DCD2B4; transition: all 0.15s ease-in-out; text-transform: uppercase; }
     
-    .nav-item:hover { background: var(--color-bg-main); color: var(--color-text-primary); }
-    .nav-item.active { background: var(--color-primary-light); color: var(--color-primary); }
+    .nav-item:hover { background: rgba(255,255,255,0.07); color: #FFFFFF; }
+    .nav-item.active { background: rgba(192,142,82,0.28); color: #F0C989; }
     
     .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--color-bg-main); }
     .topbar { background: var(--color-bg-sidebar); border-bottom: 1px solid var(--color-border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
@@ -286,7 +286,7 @@
       <!-- HISTORY ENGINE TRACKER -->
       <div class="page" id="p-history">
         <div style="background:#fff; padding:14px; border-radius:var(--border-radius-lg); border:1px solid var(--color-border); margin-bottom:16px; display:flex; align-items:center; gap:12px;">
-          <span class="form-label">Filter by Date:</span>
+          <span class="form-label" style="margin-bottom:0;">Filter by Month:</span>
           <select id="history-month-select" style="width:200px;" onchange="renderHistoryPage()"></select>
         </div>
         <div class="history-layout">
@@ -433,6 +433,7 @@
       <!-- SCHEDULE TRACKER -->
       <div class="page" id="p-programs">
         <div class="kpi-grid" id="prog-kpis"></div>
+        <div id="prog-year-tabs" class="testing-tabs-container"></div>
         <div class="card" style="padding:0; overflow:hidden;">
           <div style="display:flex; align-items:center; justify-content:space-between; padding:16px; border-bottom:1px solid var(--color-border); background:#FBF6E9; gap:12px;">
             <span style="font-weight:700; font-size:14px; flex:1; text-transform:uppercase; letter-spacing:0.5px;">Program Schedule</span>
@@ -447,7 +448,7 @@
           </div>
           <div style="overflow-x:auto; max-height:480px;">
             <table>
-              <thead><tr><th>Sr No</th><th>Date</th><th>Hijri Date</th><th>Program Title</th><th>Type</th><th>From</th><th>To</th><th>Duration</th></tr></thead>
+              <thead><tr><th>Sr No</th><th>Date</th><th>Hijri Date</th><th>Program Title</th><th>Type</th><th>From</th><th>To</th><th>Duration</th><th style="text-align:right;">Actions</th></tr></thead>
               <tbody id="prog-full-body"></tbody>
             </table>
           </div>
@@ -677,31 +678,32 @@
 
 <div class="modal-overlay" id="modal-prog">
   <div class="modal">
-    <div class="modal-title"><span>Schedule & Log New Auditorium Event Run</span><button class="btn" onclick="closeModal('modal-prog')" style="padding:4px 10px;">×</button></div>
+    <div class="modal-title"><span id="prog-modal-title-text">Add Program</span><button class="btn" onclick="closeModal('modal-prog')" style="padding:4px 10px;">×</button></div>
+    <input type="hidden" id="p-edit-id">
     <div class="form-grid">
-      <div class="form-group"><label class="form-label">Gregorian Calendar Date</label><input type="date" id="p-date"></div>
-      <div class="form-group"><label class="form-label">Hijri Calendar Date Mapping</label><input type="text" id="p-hijri" placeholder="e.g. 15-Shawwal-1447"></div>
+      <div class="form-group"><label class="form-label">Date</label><input type="date" id="p-date"></div>
+      <div class="form-group"><label class="form-label">Hijri Date</label><input type="text" id="p-hijri" placeholder="e.g. 15-Shawwal-1447"></div>
     </div>
-    <div class="form-group" style="margin-bottom:12px;"><label class="form-label">Event Narrative Description</label><input type="text" id="p-desc" placeholder="Enter explicit narrative title text..."></div>
-    <div class="form-group" style="margin-bottom:12px;"><label class="form-label">Event Stream Classification Type</label><select id="p-type"></select></div>
+    <div class="form-group" style="margin-bottom:12px;"><label class="form-label">Program Title</label><input type="text" id="p-desc" placeholder="Enter program title..."></div>
+    <div class="form-group" style="margin-bottom:12px;"><label class="form-label">Program Type</label><select id="p-type"></select></div>
     <div class="three-col" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:20px;">
       <div class="form-group"><label class="form-label">Time From</label><input type="time" id="p-time-from" onchange="calculateDuration()"></div>
       <div class="form-group"><label class="form-label">Time To</label><input type="time" id="p-time-to" onchange="calculateDuration()"></div>
       <div class="form-group"><label class="form-label">Duration</label><input type="text" id="p-dur" readonly style="background:#F5EEDC; font-weight:600;"></div>
     </div>
-    <div style="display:flex; gap:12px; justify-content:flex-end;"><button class="btn" onclick="closeModal('modal-prog')">Cancel</button><button class="btn btn-primary" onclick="addProgram()">Commit Log Entry</button></div>
+    <div style="display:flex; gap:12px; justify-content:flex-end;"><button class="btn" onclick="closeModal('modal-prog')">Cancel</button><button class="btn btn-primary" id="prog-modal-submit-btn" onclick="saveProgram()">Save Program</button></div>
   </div>
 </div>
 
 <div class="modal-overlay" id="modal-fault">
   <div class="modal">
-    <div class="modal-title"><span>Raise System Line Breakdown Incident Ticket</span><button class="btn" onclick="closeModal('modal-fault')" style="padding:4px 10px;">×</button></div>
+    <div class="modal-title"><span>Report Fault</span><button class="btn" onclick="closeModal('modal-fault')" style="padding:4px 10px;">×</button></div>
     <div class="form-grid">
-      <div class="form-group"><label class="form-label">Select Impacted Component</label><select id="fa-asset"></select></div>
-      <div class="form-group"><label class="form-label">Ticket Severity Index</label><select id="fa-priority"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div>
+      <div class="form-group"><label class="form-label">Device</label><select id="fa-asset"></select></div>
+      <div class="form-group"><label class="form-label">Priority</label><select id="fa-priority"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div>
     </div>
-    <div class="form-group" style="margin-bottom:20px;"><label class="form-label">Diagnostic Failure Symptoms Comment</label><textarea id="fa-issue" rows="3" placeholder="Explain failure details drops..."></textarea></div>
-    <div style="display:flex; gap:12px; justify-content:flex-end;"><button class="btn" onclick="closeModal('modal-fault')">Cancel</button><button class="btn btn-rose" onclick="addFault()">Log Incident</button></div>
+    <div class="form-group" style="margin-bottom:20px;"><label class="form-label">Issue Description</label><textarea id="fa-issue" rows="3" placeholder="Describe the issue..."></textarea></div>
+    <div style="display:flex; gap:12px; justify-content:flex-end;"><button class="btn" onclick="closeModal('modal-fault')">Cancel</button><button class="btn btn-rose" onclick="addFault()">Submit</button></div>
   </div>
 </div>
 
@@ -1066,8 +1068,8 @@ window.nav = function(page, el) {
   
   const tb=document.getElementById('topbar-actions'); tb.innerHTML='';
   if(page==='inventory'){tb.innerHTML='<button class="btn btn-primary" onclick="window.openAddDeviceModal()"><i class="ti ti-plus"></i> Add Device</button>';}
-  if(page==='programs'){tb.innerHTML='<button class="btn btn-primary" onclick="openModal(\'modal-prog\')"><i class="ti ti-plus"></i> Add Program</button>';}
-  if(page==='faults'){tb.innerHTML='<button class="btn btn-rose" onclick="openModal(\'modal-fault\')"><i class="ti ti-alert-triangle"></i> Report Fault</button>';}
+  if(page==='programs'){tb.innerHTML='<button class="btn btn-primary" onclick="window.openAddProgramModal()"><i class="ti ti-plus"></i> Add Program</button>';}
+  if(page==='faults'){tb.innerHTML='<button class="btn btn-rose" onclick="window.openReportFaultModal()"><i class="ti ti-alert-triangle"></i> Report Fault</button>';}
   if(page==='systemlogs'){
     tb.innerHTML='<button class="btn btn-primary" style="background:#7c3aed; border-color:#7c3aed;" onclick="window.openAddExcelRowModal()"><i class="ti ti-file-plus"></i> Add Row</button>';
   }
@@ -2021,11 +2023,49 @@ window.renderGlobalMaintenanceLogsTable = function() {
   });
 };
 
-window.addProgram = async function(){
-  const desc=document.getElementById('p-desc').value.trim();
-  if(!desc)return;
-  window.programs.push({
-    id: window.programs.length + 1,
+window.PROGRAM_YEARS = ['1447-48H','1446-47H'];
+window.currentProgramYearTab = '1447-48H';
+
+window.populateProgramTypeSelect = function(selected){
+  const select = document.getElementById('p-type');
+  select.innerHTML = window.PROG_TYPES.map(t => `<option value="${t}" ${t===selected?'selected':''}>${t}</option>`).join('');
+};
+
+window.openAddProgramModal = function(){
+  document.getElementById('p-edit-id').value = '';
+  document.getElementById('p-date').value = '';
+  document.getElementById('p-hijri').value = '';
+  document.getElementById('p-desc').value = '';
+  document.getElementById('p-time-from').value = '';
+  document.getElementById('p-time-to').value = '';
+  document.getElementById('p-dur').value = '';
+  window.populateProgramTypeSelect();
+  document.getElementById('prog-modal-title-text').innerText = 'Add Program';
+  document.getElementById('prog-modal-submit-btn').innerText = 'Save Program';
+  window.openModal('modal-prog');
+};
+
+window.openEditProgramModal = function(id){
+  const p = window.programs.find(pr => String(pr.id) === String(id));
+  if(!p) return;
+  document.getElementById('p-edit-id').value = p.id;
+  document.getElementById('p-date').value = p.date || '';
+  document.getElementById('p-hijri').value = (p.hijri && p.hijri !== '—') ? p.hijri : '';
+  document.getElementById('p-desc').value = p.desc || '';
+  document.getElementById('p-time-from').value = (p.from && p.from !== '—') ? p.from : '';
+  document.getElementById('p-time-to').value = (p.to && p.to !== '—') ? p.to : '';
+  document.getElementById('p-dur').value = p.dur || '';
+  window.populateProgramTypeSelect(p.type);
+  document.getElementById('prog-modal-title-text').innerText = 'Edit Program';
+  document.getElementById('prog-modal-submit-btn').innerText = 'Save Changes';
+  window.openModal('modal-prog');
+};
+
+window.saveProgram = async function(){
+  const desc = document.getElementById('p-desc').value.trim();
+  if(!desc) return;
+  const editId = document.getElementById('p-edit-id').value;
+  const data = {
     date: document.getElementById('p-date').value || window.fmtDate(new Date()),
     hijri: document.getElementById('p-hijri').value || "—",
     desc,
@@ -2033,10 +2073,29 @@ window.addProgram = async function(){
     from: document.getElementById('p-time-from').value || "—",
     to: document.getElementById('p-time-to').value || "—",
     dur: document.getElementById('p-dur').value || "0:00:00"
-  });
+  };
+  if(editId){
+    const existing = window.programs.find(p => String(p.id) === String(editId));
+    if(existing) Object.assign(existing, data);
+  } else {
+    window.programs.push({
+      id: Date.now(),
+      year: window.currentProgramYearTab || '1447-48H',
+      ...data
+    });
+  }
   window.closeModal('modal-prog');
   await window.saveToDatabase();
   window.renderDashboard();
+  window.renderProgramTable();
+};
+
+window.deleteProgram = async function(id){
+  if(!confirm('Delete this program entry? This cannot be undone.')) return;
+  window.programs = window.programs.filter(p => String(p.id) !== String(id));
+  await window.saveToDatabase();
+  window.renderDashboard();
+  window.renderProgramTable();
 };
 
 window.setTestingTab = function(tabValue) {
@@ -2050,14 +2109,24 @@ window.setTestingTab = function(tabValue) {
   window.renderTesting();
 };
 
+window.openReportFaultModal = function(){
+  const select = document.getElementById('fa-asset');
+  select.innerHTML = window.inventory.map(i => `<option value="${i.id}">${i.name}</option>`).join('');
+  document.getElementById('fa-priority').value = 'Low';
+  document.getElementById('fa-issue').value = '';
+  window.openModal('modal-fault');
+};
+
 window.addFault = async function(){
   const assetId=document.getElementById('fa-asset').value;
   const asset=window.inventory.find(a=>a.id===assetId);
   if(!asset)return;
   window.faults.push({id:String(Date.now()),asset:asset.name,cat:asset.cat,issue:document.getElementById('fa-issue').value,priority:document.getElementById('fa-priority').value,date:window.fmtDate(new Date()),repairStatus:"Open"});
   asset.status="Faulty";
+  window.closeModal('modal-fault');
   await window.saveToDatabase();
   window.renderDashboard();
+  window.renderFaults();
 };
 
 window.DASH_CARD_META = {
@@ -2170,14 +2239,15 @@ window.renderDashDetailInventory = function(panel){
 
 window.renderDashDetailPrograms = function(panel){
   const todayStr = window.fmtDate(new Date());
-  const upcomingRuns = window.programs.filter(p => p.date > todayStr).sort((a,b) => a.date.localeCompare(b.date));
-  const pastRuns = window.programs.filter(p => p.date <= todayStr).sort((a,b) => b.date.localeCompare(a.date));
+  const currentYearPrograms = window.programs.filter(p => (p.year || '1447-48H') === '1447-48H');
+  const upcomingRuns = currentYearPrograms.filter(p => p.date > todayStr).sort((a,b) => a.date.localeCompare(b.date));
+  const pastRuns = currentYearPrograms.filter(p => p.date <= todayStr).sort((a,b) => b.date.localeCompare(a.date));
 
   panel.innerHTML = `
     <div class="card-title" style="display:flex; justify-content:space-between; align-items:center;">
       <span><i class="ti ti-calendar-event"></i> Program List</span>
       <div style="display:flex; gap:8px;">
-        <button class="btn btn-primary" style="padding:6px 12px; font-size:12px;" onclick="openModal('modal-prog')"><i class="ti ti-plus"></i> Add Program</button>
+        <button class="btn btn-primary" style="padding:6px 12px; font-size:12px;" onclick="window.openAddProgramModal()"><i class="ti ti-plus"></i> Add Program</button>
         <button class="btn" style="padding:6px 12px; font-size:12px;" onclick="window.goToPage('programs')">Open Full Page <i class="ti ti-arrow-right"></i></button>
       </div>
     </div>
@@ -2454,7 +2524,7 @@ window.initProgramTypeChart = function(canvasId){
   if(window.globalClassificationChart) window.globalClassificationChart.destroy();
   let distributionData = {};
   window.PROG_TYPES.forEach(t => distributionData[t] = 0);
-  window.programs.forEach(p => { if (distributionData[p.type] !== undefined) distributionData[p.type]++; });
+  window.programs.filter(p => (p.year || '1447-48H') === '1447-48H').forEach(p => { if (distributionData[p.type] !== undefined) distributionData[p.type]++; });
   let activeLabels = Object.keys(distributionData).filter(k => distributionData[k] > 0);
   let activeValues = activeLabels.map(k => distributionData[k]);
   window.globalClassificationChart = new Chart(canvas.getContext('2d'), {
@@ -2522,7 +2592,21 @@ window.setDeviceTestState = async function(itemId, state){
   window.renderTesting();
 };
 
+window.populateHistoryMonthSelect = function(){
+  const select = document.getElementById('history-month-select');
+  const prevValue = select.value;
+  const months = Array.from(new Set(Object.keys(window.testDailyLogs).map(d => d.substring(0,7)))).sort().reverse();
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  select.innerHTML = `<option value="">All Months</option>` + months.map(m => {
+    const [y, mo] = m.split('-');
+    const label = `${monthNames[parseInt(mo,10)-1]}-${y.slice(2)}`;
+    return `<option value="${m}">${label}</option>`;
+  }).join('');
+  if(months.includes(prevValue)) select.value = prevValue;
+};
+
 window.renderHistoryPage = function(){
+  window.populateHistoryMonthSelect();
   let sortedDates = Object.keys(window.testDailyLogs).sort((a,b)=>b.localeCompare(a));
   const datesContainer = document.getElementById('history-dates-container');
   
@@ -2537,7 +2621,7 @@ window.renderHistoryPage = function(){
       return `<div class="history-list-item" onclick="viewHistoryDetail('${date}', this)">
         <div>
           <div style="font-weight:700; font-size:14px; color:var(--color-text-primary);">${date}</div>
-          <div style="font-size:12px; color:var(--color-text-secondary); margin-top:2px; font-weight:500;">${unitsCount} Channels Tracked</div>
+          <div style="font-size:12px; color:var(--color-text-secondary); margin-top:2px; font-weight:500;">${unitsCount} devices tested</div>
         </div>
         <i class="ti ti-chevron-right" style="color:var(--color-text-muted)"></i>
       </div>`;
@@ -2548,7 +2632,7 @@ window.viewHistoryDetail = function(date, element) {
   document.querySelectorAll('.history-list-item').forEach(item => item.classList.remove('active'));
   if(element) element.classList.add('active');
 
-  document.getElementById('history-detail-title').innerText = `Operational Calibration Balance Audit Log: ${date}`;
+  document.getElementById('history-detail-title').innerText = `Test Results: ${date}`;
   const tbody = document.getElementById('history-detail-body');
   tbody.innerHTML = "";
 
@@ -2624,8 +2708,10 @@ window.cycleAssetStatus = async function(id){
 };
 
 window.renderPrograms = function(){
+  const yearFilter = window.currentProgramYearTab || '1447-48H';
+  const yearPrograms = window.programs.filter(p => (p.year || '1447-48H') === yearFilter);
   let durationInMins = 0;
-  window.programs.forEach(p => {
+  yearPrograms.forEach(p => {
     let parts = p.dur.split(':').map(Number);
     if(parts.length === 3) durationInMins += (parts[0] * 60) + parts[1] + (parts[2] / 60);
   });
@@ -2633,7 +2719,7 @@ window.renderPrograms = function(){
 
   document.getElementById('prog-kpis').innerHTML = `
     <div class="kpi" style="border-top:3px solid var(--color-primary)">
-      <div class="kpi-label">Total Programs</div><div class="kpi-value">${window.programs.length}</div><div class="kpi-sub">Programs scheduled so far</div>
+      <div class="kpi-label">Total Programs (${yearFilter})</div><div class="kpi-value">${yearPrograms.length}</div><div class="kpi-sub">Programs scheduled so far</div>
     </div>
     <div class="kpi" style="border-top:3px solid var(--color-success)">
       <div class="kpi-label">Total Airtime</div><div class="kpi-value">${totalHoursStr} Hours</div><div class="kpi-sub">Combined runtime of all programs</div>
@@ -2641,13 +2727,33 @@ window.renderPrograms = function(){
   window.renderProgramTable();
 };
 
+window.renderProgramYearTabs = function(){
+  const container = document.getElementById('prog-year-tabs');
+  if(!container) return;
+  container.innerHTML = window.PROGRAM_YEARS.map(y => {
+    const count = window.programs.filter(p => (p.year || '1447-48H') === y).length;
+    return `<button class="tab-btn ${y===window.currentProgramYearTab?'active':''}" onclick="window.selectProgramYearTab('${y}')">${y} <span style="opacity:0.65; font-weight:500;">(${count})</span></button>`;
+  }).join('');
+};
+
+window.selectProgramYearTab = function(year){
+  window.currentProgramYearTab = year;
+  window.renderProgramYearTabs();
+  window.renderProgramTable();
+};
+
 window.renderProgramTable = function(){
+  window.renderProgramYearTabs();
   const query = document.getElementById('prog-search').value.toLowerCase();
   const sortBy = document.getElementById('prog-sort').value;
-  const filtered = window.programs.filter(p => !query || p.desc.toLowerCase().includes(query) || p.type.toLowerCase().includes(query));
+  const yearFilter = window.currentProgramYearTab || '1447-48H';
+  const filtered = window.programs.filter(p =>
+    (p.year || '1447-48H') === yearFilter &&
+    (!query || p.desc.toLowerCase().includes(query) || p.type.toLowerCase().includes(query))
+  );
   window.applyListSort(filtered, sortBy, {name:'desc', date:'date'});
   
-  document.getElementById('prog-full-body').innerHTML = filtered.map(p=>`
+  document.getElementById('prog-full-body').innerHTML = filtered.length === 0 ? `<tr><td colspan="9" style="text-align:center; padding:30px; color:var(--color-text-secondary);">No programs found for ${yearFilter}.</td></tr>` : filtered.map(p=>`
     <tr>
       <td>${p.id}</td>
       <td>${p.date}</td>
@@ -2657,6 +2763,10 @@ window.renderProgramTable = function(){
       <td>${p.from}</td>
       <td>${p.to}</td>
       <td style="font-weight:700; color:var(--color-primary);">${p.dur}</td>
+      <td style="text-align:right; white-space:nowrap;">
+        <button class="btn" style="padding:4px 8px; font-size:11.5px;" onclick="window.openEditProgramModal('${p.id}')"><i class="ti ti-pencil"></i></button>
+        <button class="btn" style="padding:4px 8px; font-size:11.5px; border-color:var(--color-danger); color:var(--color-danger);" onclick="window.deleteProgram('${p.id}')"><i class="ti ti-trash"></i></button>
+      </td>
     </tr>`).join('');
 };
 
