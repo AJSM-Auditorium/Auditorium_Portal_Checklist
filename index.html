@@ -207,62 +207,16 @@
       <input type="password" id="login-password" placeholder="Enter password" onkeydown="if(event.key==='Enter'){ window.attemptLogin(); }">
     </div>
     <div id="login-error" style="color:#ffb4b4; font-size:12.5px; margin-top:8px; min-height:16px;"></div>
-    <button class="btn btn-primary" style="width:100%; margin-top:10px; padding:12px;" onclick="window.attemptLogin()"><i class="ti ti-login-2"></i> Sign In</button>
+    <button class="btn btn-primary" id="login-submit-btn" style="width:100%; margin-top:10px; padding:12px;" onclick="window.attemptLogin()"><i class="ti ti-login-2"></i> Sign In</button>
     <div style="margin-top:16px; font-size:11.5px; color:rgba(255,255,255,0.55); text-align:center;">Admin has full edit access &middot; Viewer has read-only access</div>
   </div>
 </div>
 <script>
-(function(){
-  var savedRole = localStorage.getItem('ajsm_portal_role');
-  if(savedRole === 'admin' || savedRole === 'viewer'){
-    window.currentUserRole = savedRole;
-    document.body.classList.add('authenticated');
-    if(savedRole === 'viewer') document.body.classList.add('role-viewer');
-    document.getElementById('login-screen').style.display = 'none';
-    var badge = document.getElementById('role-badge');
-    if(badge) badge.textContent = savedRole === 'admin' ? 'Admin' : 'Viewer';
-  }
-})();
-
-window.ADMIN_PASSWORD = 'ajsm@admin';
-window.VIEWER_PASSWORD = 'ajsm@viewer';
 window.selectedLoginRole = 'admin';
 
 window.selectLoginRole = function(role){
   window.selectedLoginRole = role;
   document.querySelectorAll('.login-role-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.role === role); });
-};
-
-window.attemptLogin = function(){
-  var pw = document.getElementById('login-password').value;
-  var role = window.selectedLoginRole;
-  var correct = role === 'admin' ? window.ADMIN_PASSWORD : window.VIEWER_PASSWORD;
-  if(pw !== correct){
-    document.getElementById('login-error').textContent = 'Incorrect password. Please try again.';
-    return;
-  }
-  window.setUserRole(role);
-};
-
-window.setUserRole = function(role){
-  window.currentUserRole = role;
-  localStorage.setItem('ajsm_portal_role', role);
-  document.body.classList.add('authenticated');
-  document.body.classList.toggle('role-viewer', role === 'viewer');
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('login-password').value = '';
-  document.getElementById('login-error').textContent = '';
-  var badge = document.getElementById('role-badge');
-  if(badge) badge.textContent = role === 'admin' ? 'Admin' : 'Viewer';
-  if(window.renderDashboard && document.getElementById('dash-nav-grid')) window.renderDashboard();
-};
-
-window.logoutUser = function(){
-  localStorage.removeItem('ajsm_portal_role');
-  window.currentUserRole = null;
-  document.body.classList.remove('authenticated', 'role-viewer');
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('login-password').value = '';
 };
 
 window.requireAdmin = function(){
@@ -838,23 +792,86 @@ window.requireAdmin = function(){
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const getEncryptedKey = () => {
   const customParam = new URLSearchParams(window.location.search).get("_avconf");
-  return customParam ? atob(customParam) : "AIzaSyA18b76-0uV4E71l560Y9_U6yUvY9V0M3c";
+  return customParam ? atob(customParam) : "AIzaSyBqsCqbSDmmRI5EecK9v0s-KfIsF24RS44";
 };
 
 const firebaseConfig = {
   apiKey: getEncryptedKey(),
-  authDomain: "av-control-room-6fa67.firebaseapp.com",
+  authDomain: "auditorium-portal-cc283.firebaseapp.com",
   projectId: "auditorium-portal-cc283",
   storageBucket: "auditorium-portal-cc283.firebasestorage.app",
-  messagingSenderId: "1098692736415",
-  appId: "1:1098692736415:web:ec2b0a1d48c90356cba7b2"
+  messagingSenderId: "563306971521",
+  appId: "1:563306971521:web:69c1c7c41131a9c8736880"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
+
+// These two accounts must be created once in Firebase Console -> Authentication -> Users.
+// The ADMIN_EMAIL account gets full edit access; any other valid account is treated as Viewer (read-only).
+const ADMIN_EMAIL = "admin@ajsmportal.app";
+const VIEWER_EMAIL = "viewer@ajsmportal.app";
+
+window.attemptLogin = async function(){
+  const password = document.getElementById('login-password').value;
+  const role = window.selectedLoginRole;
+  const email = role === 'admin' ? ADMIN_EMAIL : VIEWER_EMAIL;
+  const errorEl = document.getElementById('login-error');
+  const btn = document.getElementById('login-submit-btn');
+  errorEl.textContent = '';
+  if(!password){ errorEl.textContent = 'Please enter a password.'; return; }
+  if(btn){ btn.disabled = true; btn.innerHTML = 'Signing in...'; }
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    // onAuthStateChanged handles showing the app once sign-in succeeds
+  } catch(err) {
+    console.error(err);
+    if(err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found'){
+      errorEl.textContent = 'Incorrect password. Please try again.';
+    } else if(err.code === 'auth/too-many-requests'){
+      errorEl.textContent = 'Too many attempts. Please wait a moment and try again.';
+    } else {
+      errorEl.textContent = 'Sign in failed. Please check your connection and try again.';
+    }
+  } finally {
+    if(btn){ btn.disabled = false; btn.innerHTML = '<i class="ti ti-login-2"></i> Sign In'; }
+  }
+};
+
+window.logoutUser = async function(){
+  try { await signOut(auth); } catch(err) { console.error(err); }
+};
+
+onAuthStateChanged(auth, (user) => {
+  const loginScreen = document.getElementById('login-screen');
+  const badge = document.getElementById('role-badge');
+  if(user){
+    const role = user.email === ADMIN_EMAIL ? 'admin' : 'viewer';
+    window.currentUserRole = role;
+    document.body.classList.add('authenticated');
+    document.body.classList.toggle('role-viewer', role === 'viewer');
+    if(loginScreen) loginScreen.style.display = 'none';
+    if(badge) badge.textContent = role === 'admin' ? 'Admin' : 'Viewer';
+    document.getElementById('login-password').value = '';
+    if(!window._dataInitialized){
+      window._dataInitialized = true;
+      window.initData();
+    } else if(window.renderDashboard && document.getElementById('dash-nav-grid')){
+      window.renderDashboard();
+    }
+  } else {
+    window.currentUserRole = null;
+    document.body.classList.remove('authenticated', 'role-viewer');
+    if(loginScreen) loginScreen.style.display = 'flex';
+    const loader = document.getElementById('system-loader');
+    if(loader) loader.remove();
+  }
+});
 
 window.CATS = [
   {name:"Wireless Audio",color:"#0ea5e9",items:["HH01","HH02","HH03","HH04","HH05","HH06","SM58 #1","SM58 #2","SM58 #3","SM58 #4","SM58 #5","SM58 #6","SM58 #7","Boundary Mic #1","Boundary Mic #2","HW 01 MIC","HW 02 MIC","HW 03 MIC","HW 04 MIC","HW 05 MIC","HW 06 MIC","LP 01 MIC","LP 02 MIC","AKG P120 #1","AKG P120 #2"]},
@@ -1168,7 +1185,10 @@ window.initData = async function(){
     
     window.renderDashboard();
   } catch (err) {
-    console.error("Database Initialization Fail Matrix:", err);
+    console.error("Database initialization failed:", err);
+    const loader = document.getElementById('system-loader');
+    if(loader) loader.remove();
+    alert("Could not load data from the database. Please check your internet connection and Firestore security rules, then reload the page.");
   }
 };
 
@@ -3061,7 +3081,8 @@ window.updateTicketStatus = async function(id, state){
   window.renderFaults();
 };
 
-window.initData();
+// initData() is now triggered from onAuthStateChanged above, only after a successful login,
+// since Firestore rules require an authenticated user to read data.
 </script>
 </body>
 </html>
