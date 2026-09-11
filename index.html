@@ -177,7 +177,7 @@
     .year-tab-delete:hover { color: var(--color-danger) !important; }
 
     #login-screen { position: fixed; inset: 0; z-index: 100000; display: flex; align-items: center; justify-content: center; font-family: inherit; }
-    #login-screen .login-bg { position: absolute; inset: 0; background-image: url('/Audi.jpeg'); background-size: cover; background-position: center 98%; filter: saturate(1.05); }
+    #login-screen .login-bg { position: absolute; inset: 0; background-image: url('./Audi.jpeg'); background-size: cover; background-position: center 98%; filter: saturate(1.05); }
     #login-screen .login-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(30,24,14,0.55) 0%, rgba(20,16,10,0.75) 60%, rgba(15,12,8,0.88) 100%); }
     #login-screen .login-card { position: relative; z-index: 1; width: 380px; max-width: 90vw; background: rgba(28,23,15,0.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.15); border-radius: 18px; padding: 34px 30px; box-shadow: 0 24px 60px -12px rgba(0,0,0,0.6); }
     #login-screen .login-logo { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 26px; text-align: center; }
@@ -200,7 +200,7 @@
   <div class="login-bg"></div>
   <div class="login-overlay"></div>
   <div class="login-card">
-    <div class="login-logo"><img src="/AUDILOGOFINAL.jpg" alt="Logo" style="height:72px; width:auto; border-radius:14px;"><span>Auditorium AJSM Portal</span></div>
+    <div class="login-logo"><img src="./AUDILOGOFINAL.jpg" alt="Logo" style="height:72px; width:auto; border-radius:14px;"><span>Auditorium AJSM Portal</span></div>
     <div class="login-role-toggle">
       <button type="button" class="login-role-btn active" data-role="admin" onclick="window.selectLoginRole('admin')">Admin</button>
       <button type="button" class="login-role-btn" data-role="viewer" onclick="window.selectLoginRole('viewer')">Viewer</button>
@@ -240,12 +240,13 @@ window.requireAdmin = function(){
 <!-- Sidebar REPLACE Karein -->
 <div class="sidebar" id="app-sidebar">
     <div class="sidebar-logo">
-      <h1><img src="/AUDILOGOFINAL.jpg" alt="Logo" style="height:28px; width:auto; border-radius:6px;"> AUDITORIUM AJSM PORTAL</h1>
+      <h1><img src="./AUDILOGOFINAL.jpg" alt="Logo" style="height:28px; width:auto; border-radius:6px;"> AUDITORIUM AJSM PORTAL</h1>
     </div>
     
     <div class="nav-section">Main</div>
     <div class="nav-item" onclick="nav('dashboard',this)"><i class="ti ti-layout-dashboard"></i>DASHBOARD</div>
     <div class="nav-item" onclick="nav('programs',this)"><i class="ti ti-calendar-event"></i>Program List</div>
+    <div class="nav-item" onclick="nav('todo',this)"><i class="ti ti-checkbox"></i>To-Do List</div>
 
     <!-- <div class="nav-section">Testing</div> -->
     <div class="nav-item" onclick="toggleSubMenu('testing-submenu')">
@@ -570,6 +571,25 @@ window.requireAdmin = function(){
         </div>
       </div>
 
+      <!-- TO-DO LIST -->
+      <div class="page" id="p-todo">
+        <div class="card" style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:14px;">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="tab-btn active" id="todo-tab-all" onclick="window.setTodoFilter('all')">All</button>
+            <button class="tab-btn" id="todo-tab-pending" onclick="window.setTodoFilter('pending')">Pending</button>
+            <button class="tab-btn" id="todo-tab-completed" onclick="window.setTodoFilter('completed')">Completed</button>
+          </div>
+          <button class="btn btn-primary admin-only" onclick="window.openTodoModal()"><i class="ti ti-plus"></i> Add Task</button>
+        </div>
+        <div class="card">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; gap:12px; flex-wrap:wrap;">
+            <div><div class="card-title" style="margin-bottom:4px;"><i class="ti ti-checkbox"></i> To-Do List</div><div id="todo-progress-text" style="font-size:12px; color:var(--color-text-secondary);"></div></div>
+            <div style="width:220px; height:8px; background:#EDE3C8; border-radius:10px; overflow:hidden;"><div id="todo-progress-bar" style="height:100%; width:0%; background:var(--color-success); transition:width .2s;"></div></div>
+          </div>
+          <div id="todo-list"></div>
+        </div>
+      </div>
+
       <!-- FAULTS ALERTS TERMINAL -->
       <div class="page" id="p-faults">
         <div class="kpi-grid" id="fault-kpis"></div>
@@ -859,6 +879,18 @@ window.requireAdmin = function(){
   </div>
 </div>
 
+<!-- TO-DO MODAL -->
+<div class="modal-overlay" id="modal-todo">
+  <div class="modal" style="width:560px;">
+    <div class="modal-title"><span id="todo-modal-title"><i class="ti ti-checkbox"></i> Add To-Do Task</span><button class="btn" onclick="closeModal('modal-todo')" style="padding:4px 10px;">×</button></div>
+    <input type="hidden" id="todo-edit-id">
+    <div class="form-group"><label class="form-label">Task</label><input type="text" id="todo-task" placeholder="e.g. Check all stage microphones"></div>
+    <div class="form-grid"><div class="form-group"><label class="form-label">Priority</label><select id="todo-priority"><option>Low</option><option selected>Medium</option><option>High</option><option>Critical</option></select></div><div class="form-group"><label class="form-label">Due Date</label><input type="date" id="todo-due-date"></div></div>
+    <div class="form-group" style="margin-bottom:20px;"><label class="form-label">Notes</label><textarea id="todo-notes" rows="3" placeholder="Optional notes..."></textarea></div>
+    <div style="display:flex; gap:12px; justify-content:flex-end;"><button class="btn" onclick="closeModal('modal-todo')">Cancel</button><button class="btn btn-primary" onclick="window.saveTodoTask()"><i class="ti ti-device-floppy"></i> Save Task</button></div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-fault">
   <div class="modal">
     <div class="modal-title"><span>Report Fault</span><button class="btn" onclick="closeModal('modal-fault')" style="padding:4px 10px;">×</button></div>
@@ -1139,6 +1171,8 @@ window.manualMaintenanceLogs = [];
 window.excelSystemLogs = {}; 
 window.troubleshootingEntries = [];
 window.testingDayRemarks = {};
+window.todoTasks = [];
+window.currentTodoFilter = 'all';
 
 window.currentActiveExcelSheet = "AOTO LED screen";
 window.currentTestingActiveTab = "All"; 
@@ -1241,7 +1275,8 @@ window.saveToDatabase = async function() {
       viewerPageConfig: window.viewerPageConfig || {},
       troubleshootingEntries: window.troubleshootingEntries || [],
       websitePortalImported: window._websitePortalImported || false,
-      testingDayRemarks: window.testingDayRemarks || {}
+      testingDayRemarks: window.testingDayRemarks || {},
+      todoTasks: window.todoTasks || []
     });
   } catch (err) {
     console.error("Save failed (MASTER_DATA):", err);
@@ -1283,6 +1318,7 @@ window.initData = async function(){
       window.troubleshootingEntries = cloudData.troubleshootingEntries || [];
       window._websitePortalImported = !!cloudData.websitePortalImported;
       window.testingDayRemarks = cloudData.testingDayRemarks || {};
+      window.todoTasks = cloudData.todoTasks || [];
     }
 
     // Backward-compatible read: older saves kept inventory inside MASTER_DATA.
@@ -1558,12 +1594,13 @@ window.nav = function(page, el) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('p-'+page).classList.add('active');
   
-  const titles={dashboard:'Dashboard',testing:'Routine Testing',history:'Test History',inventory:'Device Status',fullinventory:'Device Database',manutelogs:'Current Issues',systemlogs:'Log Book',troubleshooting:'Troubleshooting',poweruplist:'Power-Up Checklist',programs:'Program List',faults:'Fault Tickets',settings:'Settings & Backup'};
+  const titles={dashboard:'Dashboard',testing:'Routine Testing',history:'Test History',inventory:'Device Status',fullinventory:'Device Database',manutelogs:'Current Issues',systemlogs:'Log Book',troubleshooting:'Troubleshooting',poweruplist:'Power-Up Checklist',programs:'Program List',todo:'To-Do List',faults:'Fault Tickets',settings:'Settings & Backup'};
   document.getElementById('page-title').textContent=titles[page]||page;
   
   const tb=document.getElementById('topbar-actions'); tb.innerHTML='';
   if(page==='inventory'){tb.innerHTML='<button class="btn btn-primary admin-only" onclick="window.openAddDeviceModal()"><i class="ti ti-plus"></i> Add Device</button>';}
   if(page==='programs'){tb.innerHTML='<button class="btn btn-primary admin-only" onclick="window.openAddProgramModal()"><i class="ti ti-plus"></i> Add Program</button>';}
+  if(page==='todo'){tb.innerHTML='<button class="btn btn-primary admin-only" onclick="window.openTodoModal()"><i class="ti ti-plus"></i> Add Task</button>';}
   if(page==='faults'){tb.innerHTML='<button class="btn btn-rose admin-only" onclick="window.openReportFaultModal()"><i class="ti ti-alert-triangle"></i> Report Fault</button>';}
   if(page==='systemlogs'){
     tb.innerHTML='<button class="btn btn-primary admin-only" style="background:#7c3aed; border-color:#7c3aed;" onclick="window.openAddExcelRowModal()"><i class="ti ti-file-plus"></i> Add Row</button>';
@@ -1573,6 +1610,7 @@ window.nav = function(page, el) {
   if(page==='inventory'){ window.populateCatFilter(); window.renderInventory(); }
   if(page==='fullinventory') window.renderFullAuditInventoryTable();
   if(page==='programs') window.renderPrograms();
+  if(page==='todo') window.renderTodoList();
   if(page==='testing') window.renderTesting();
   if(page==='history') window.renderHistoryPage();
   if(page==='faults') window.renderFaults();
@@ -1886,7 +1924,12 @@ window.runExport = function(format){
     inventory: window.getAVDevicesRows,
     fullinventory: window.getAssetInventoryRows,
     manutelogs: window.getMaintenanceRows,
-    programs: window.getProgramRows,
+    programs: function(){
+      const yearFilter = window.currentProgramYearTab || '1447-48H';
+      return window.programs.filter(p => (p.year || '1447-48H') === yearFilter).map(p => ({
+        "Date": p.date, "Hijri Date": p.hijri, "Program": p.desc, "Type": p.type, "From": p.from, "To": p.to, "Duration": p.dur
+      }));
+    },
     faults: window.getFaultRows,
     history: window.getTestHistoryRows,
     testing: window.getTestHistoryRows,
@@ -2045,7 +2088,8 @@ window.backupData = function(){
     programs: window.programs,
     faults: window.faults,
     manualMaintenanceLogs: window.manualMaintenanceLogs || [],
-    excelSystemLogs: window.excelSystemLogs || {}
+    excelSystemLogs: window.excelSystemLogs || {},
+    todoTasks: window.todoTasks || []
   };
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -2078,6 +2122,7 @@ window.handleRestoreFile = function(event){
       window.faults = data.faults || [];
       window.manualMaintenanceLogs = data.manualMaintenanceLogs || [];
       window.excelSystemLogs = data.excelSystemLogs || {};
+      window.todoTasks = data.todoTasks || [];
       await window.saveToDatabase();
       statusEl.innerHTML = `<span style="color:var(--color-success);"><i class="ti ti-circle-check"></i> Backup restored successfully.</span>`;
       window.renderSettingsPage();
@@ -2902,11 +2947,70 @@ window.addFault = async function(){
   window.renderFaults();
 };
 
+/* ================= TO-DO LIST ================= */
+window.escapeTodoHtml = function(value){ return String(value || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); };
+window.openTodoModal = function(id){
+  if(!window.requireAdmin()) return;
+  const task = id ? (window.todoTasks || []).find(t => String(t.id) === String(id)) : null;
+  document.getElementById('todo-edit-id').value = task ? task.id : '';
+  document.getElementById('todo-task').value = task ? task.task : '';
+  document.getElementById('todo-priority').value = task ? (task.priority || 'Medium') : 'Medium';
+  document.getElementById('todo-due-date').value = task ? (task.dueDate || '') : '';
+  document.getElementById('todo-notes').value = task ? (task.notes || '') : '';
+  document.getElementById('todo-modal-title').innerHTML = task ? '<i class="ti ti-edit"></i> Edit To-Do Task' : '<i class="ti ti-checkbox"></i> Add To-Do Task';
+  window.openModal('modal-todo');
+};
+window.saveTodoTask = async function(){
+  if(!window.requireAdmin()) return;
+  const taskText = document.getElementById('todo-task').value.trim();
+  if(!taskText){ alert('Please enter a task.'); return; }
+  const editId = document.getElementById('todo-edit-id').value;
+  const data = {task:taskText, priority:document.getElementById('todo-priority').value, dueDate:document.getElementById('todo-due-date').value, notes:document.getElementById('todo-notes').value.trim()};
+  if(editId){ const existing=(window.todoTasks||[]).find(t=>String(t.id)===String(editId)); if(existing) Object.assign(existing,data); }
+  else window.todoTasks.push({id:String(Date.now()),...data,completed:false,createdAt:new Date().toISOString(),completedAt:''});
+  window.closeModal('modal-todo'); await window.saveToDatabase(); window.renderTodoList(); window.renderDashboard();
+};
+window.toggleTodoTask = async function(id){
+  if(!window.requireAdmin()) return;
+  const task=(window.todoTasks||[]).find(t=>String(t.id)===String(id)); if(!task) return;
+  task.completed=!task.completed; task.completedAt=task.completed?new Date().toISOString():'';
+  await window.saveToDatabase(); window.renderTodoList(); window.renderDashboard();
+};
+window.deleteTodoTask = async function(id){
+  if(!window.requireAdmin()) return; if(!confirm('Delete this task?')) return;
+  window.todoTasks=(window.todoTasks||[]).filter(t=>String(t.id)!==String(id));
+  await window.saveToDatabase(); window.renderTodoList(); window.renderDashboard();
+};
+window.setTodoFilter = function(filter){
+  window.currentTodoFilter=filter; document.querySelectorAll('#p-todo .tab-btn').forEach(btn=>btn.classList.remove('active'));
+  const b=document.getElementById('todo-tab-'+filter); if(b)b.classList.add('active'); window.renderTodoList();
+};
+window.renderTodoList = function(){
+  const container=document.getElementById('todo-list'); if(!container)return;
+  const tasks=window.todoTasks||[]; let filtered=tasks;
+  if(window.currentTodoFilter==='pending')filtered=tasks.filter(t=>!t.completed);
+  if(window.currentTodoFilter==='completed')filtered=tasks.filter(t=>t.completed);
+  const pending=tasks.filter(t=>!t.completed).length, completed=tasks.filter(t=>t.completed).length, total=tasks.length, percent=total?Math.round(completed/total*100):0;
+  const pt=document.getElementById('todo-progress-text'), pb=document.getElementById('todo-progress-bar');
+  if(pt)pt.textContent=`${completed} completed · ${pending} pending · ${total} total`; if(pb)pb.style.width=percent+'%';
+  if(!filtered.length){ container.innerHTML=`<div style="text-align:center;padding:50px 20px;color:var(--color-text-secondary);"><i class="ti ti-checkbox" style="font-size:40px;color:var(--color-text-muted);display:block;margin-bottom:12px;"></i><div style="font-weight:700;color:var(--color-text-primary);margin-bottom:4px;">No tasks here</div><div style="font-size:12.5px;">${window.currentTodoFilter==='completed'?'No completed tasks yet.':'Add a task to get started.'}</div></div>`; return; }
+  const pc={Critical:'badge-red',High:'badge-amber',Medium:'badge-blue',Low:'badge-gray'};
+  container.innerHTML=filtered.slice().sort((a,b)=>{if(a.completed!==b.completed)return a.completed?1:-1;const o={Critical:1,High:2,Medium:3,Low:4};return(o[a.priority]||5)-(o[b.priority]||5);}).map(t=>{
+    const due=t.dueDate?`Due: ${t.dueDate}`:'No due date'; const overdue=t.dueDate&&!t.completed&&t.dueDate<new Date().toISOString().slice(0,10);
+    return `<div style="display:flex;align-items:flex-start;gap:12px;padding:14px 4px;border-bottom:1px solid var(--color-border);opacity:${t.completed?.65:1};"><input type="checkbox" ${t.completed?'checked':''} ${window.currentUserRole!=='admin'?'disabled':''} onchange="window.toggleTodoTask('${t.id}')" style="width:20px;height:20px;margin-top:2px;flex-shrink:0;cursor:${window.currentUserRole==='admin'?'pointer':'default'};"><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--color-text-primary);${t.completed?'text-decoration:line-through;':''}">${window.escapeTodoHtml(t.task)}</div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:7px;"><span class="badge ${pc[t.priority]||'badge-gray'}">${window.escapeTodoHtml(t.priority||'Medium')}</span><span style="font-size:11px;color:${overdue?'var(--color-danger)':'var(--color-text-muted)'};font-weight:${overdue?'700':'500'};">${due}${overdue?' · OVERDUE':''}</span></div>${t.notes?`<div style="font-size:11.5px;color:var(--color-text-secondary);margin-top:6px;">${window.escapeTodoHtml(t.notes)}</div>`:''}</div>${window.currentUserRole==='admin'?`<div style="display:flex;gap:5px;flex-shrink:0;"><button class="btn" style="padding:5px 8px;" onclick="window.openTodoModal('${t.id}')"><i class="ti ti-edit"></i></button><button class="btn" style="padding:5px 8px;color:var(--color-danger);" onclick="window.deleteTodoTask('${t.id}')"><i class="ti ti-trash"></i></button></div>`:''}</div>`;
+  }).join('');
+};
+window.renderDashDetailTodo = function(panel){
+  const tasks=window.todoTasks||[], pending=tasks.filter(t=>!t.completed), completed=tasks.filter(t=>t.completed);
+  panel.innerHTML=`<div class="card-title" style="display:flex;justify-content:space-between;align-items:center;"><span><i class="ti ti-checkbox"></i> To-Do List</span><div style="display:flex;gap:8px;"><button class="btn btn-primary admin-only" style="padding:6px 12px;font-size:12px;" onclick="window.openTodoModal()"><i class="ti ti-plus"></i> Add Task</button><button class="btn" style="padding:6px 12px;font-size:12px;" onclick="window.goToPage('todo')">Open Full Page <i class="ti ti-arrow-right"></i></button></div></div><div class="dash-chip-row"><span class="badge badge-amber">${pending.length} Pending</span><span class="badge badge-green">${completed.length} Completed</span><span class="badge badge-blue">${tasks.length} Total</span></div><div style="max-height:300px;overflow-y:auto;">${pending.length===0?`<div style="text-align:center;padding:35px 20px;color:var(--color-text-secondary);"><i class="ti ti-circle-check" style="font-size:36px;display:block;margin-bottom:10px;color:var(--color-success);"></i><strong>All tasks completed!</strong></div>`:pending.slice(0,8).map(t=>`<div style="display:flex;align-items:center;gap:10px;padding:11px 4px;border-bottom:1px solid var(--color-border);"><input type="checkbox" ${window.currentUserRole!=='admin'?'disabled':''} onchange="window.toggleTodoTask('${t.id}')" style="width:18px;height:18px;"><div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:600;">${window.escapeTodoHtml(t.task)}</div><div style="font-size:10.5px;color:var(--color-text-muted);margin-top:3px;">${window.escapeTodoHtml(t.priority||'Medium')}${t.dueDate?' · Due: '+t.dueDate:''}</div></div></div>`).join('')}</div>${pending.length>8?`<div style="text-align:center;margin-top:10px;font-size:11.5px;color:var(--color-text-secondary);">Showing 8 of ${pending.length} pending tasks</div>`:''}`;
+};
+
 window.DASH_CARD_META = {
   programs:   {icon:'ti-calendar-event',   color:'#86A15C', bg:'var(--palette-sage-bg)',  title:'Program List',    cta:'View programs'},
   testing:    {icon:'ti-clipboard-check',  color:'#A9AE4E', bg:'var(--palette-lime-bg)',  title:'Routine Testing', cta:'Start testing'},
   inventory:  {icon:'ti-device-speaker',   color:'#C08E52', bg:'var(--palette-tan-bg)',   title:'Device Status',   cta:'View devices'},
-  manutelogs: {icon:'ti-tool',             color:'var(--palette-red)', bg:'var(--palette-red-bg)', title:'Current Issues',  cta:'View issues'}
+  manutelogs: {icon:'ti-tool',             color:'var(--palette-red)', bg:'var(--palette-red-bg)', title:'Current Issues',  cta:'View issues'},
+  todo:       {icon:'ti-checkbox',          color:'#7C9A54', bg:'var(--palette-sage-bg)', title:'To-Do List',       cta:'View tasks'}
 };
 
 window.renderDashboard = function(){
@@ -2914,14 +3018,17 @@ window.renderDashboard = function(){
   const todayStr = window.fmtDate(new Date());
   const testedToday = (window.testDailyLogs[todayStr] ? Object.keys(window.testDailyLogs[todayStr]).length : 0);
   const openIssues = (window.manualMaintenanceLogs || []).length;
+  const todoPending = (window.todoTasks || []).filter(t => !t.completed).length;
+  const todoCompleted = (window.todoTasks || []).filter(t => t.completed).length;
 
   const subs = {
     inventory: `${window.inventory.length} devices · ${working} working`,
     programs: `${window.programs.filter(p => (p.year || '1447-48H') === '1447-48H').length} programs · Current Academic Year`,
     testing: `${testedToday}/${window.inventory.length} tested today`,
-    manutelogs: `${openIssues} maintenance note${openIssues===1?'':'s'} logged`
+    manutelogs: `${openIssues} maintenance note${openIssues===1?'':'s'} logged`,
+    todo: `${todoPending} pending · ${todoCompleted} completed`
   };
-  const order = ['programs','testing','inventory','manutelogs'].filter(key => {
+  const order = ['programs','testing','inventory','manutelogs','todo'].filter(key => {
     if(window.currentUserRole !== 'viewer') return true;
     window.ensureViewerPageConfig();
     return window.viewerPageConfig[key] !== false;
@@ -2965,6 +3072,7 @@ window.renderDashDetailPanel = function(){
   if(key==='programs') window.renderDashDetailPrograms(panel);
   if(key==='testing') window.renderDashDetailTesting(panel);
   if(key==='manutelogs') window.renderDashDetailCurrentIssues(panel);
+  if(key==='todo') window.renderDashDetailTodo(panel);
 };
 
 window.renderDashDetailInventory = function(panel){
